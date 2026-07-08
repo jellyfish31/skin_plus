@@ -528,24 +528,7 @@ class Product {
         return $products;
     }
 
-    /**
-     * Caches Gemini AI detailed breakdown results.
-     */
-    public static function getCachedAiDetailedBreakdown($signature) {
-        $pdo = Database::getPdo();
-        $stmt = $pdo->prepare("SELECT skin_type, apply_time, benefits, ingredients FROM ai_summaries WHERE visual_signature = ?");
-        $stmt->execute([$signature]);
-        return $stmt->fetch();
-    }
 
-    /**
-     * Saves detailed breakdown results to database cache.
-     */
-    public static function cacheAiDetailedBreakdown($signature, $skin_type, $apply_time, $benefits, $ingredients) {
-        $pdo = Database::getPdo();
-        $stmt = $pdo->prepare("INSERT INTO ai_summaries (visual_signature, skin_type, apply_time, benefits, ingredients) VALUES (?, ?, ?, ?, ?)");
-        return $stmt->execute([$signature, $skin_type, $apply_time, $benefits, $ingredients]);
-    }
 
     /**
      * Gets the latest products for a brand, filtering out Shopee/Lazada and ignoring old history.

@@ -82,26 +82,7 @@ class ApiController {
             exit();
         }
 
-        // Cache Check
-        if (!empty($visual_signature)) {
-            $cached = Product::getCachedAiDetailedBreakdown($visual_signature);
-            if ($cached) {
-                $output = [
-                    'success'          => true,
-                    'cached'           => true,
-                    'skin_concerns'    => $cached['skin_type'],
-                    'texture_feel'     => $cached['benefits'],
-                    'routine_layering' => $cached['apply_time'],
-                    'precautions'      => $cached['ingredients']
-                ];
-                
-                usleep(750000); // Fluid loader delay
-                echo json_encode($output);
-                exit();
-            }
-        }
-
-        // Cache Miss -> call Gemini API
+        // Call Gemini API in real-time
         $keys = file_exists(__DIR__ . '/../config/Keys.php') ? include __DIR__ . '/../config/Keys.php' : [];
         $apiKey = $keys['gemini_key_2'] ?? '';
         $endpointUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" . $apiKey;
@@ -183,17 +164,6 @@ class ApiController {
         $parsed = json_decode(trim($cleaned_json), true);
 
         if (json_last_error() === JSON_ERROR_NONE && !empty($parsed)) {
-            // Write to database cache
-            if (!empty($visual_signature)) {
-                Product::cacheAiDetailedBreakdown(
-                    $visual_signature,
-                    $parsed['skin_concerns'],
-                    $parsed['routine_layering'],
-                    $parsed['texture_feel'],
-                    $parsed['precautions']
-                );
-            }
-
             echo json_encode([
                 'success'          => true,
                 'cached'           => false,
