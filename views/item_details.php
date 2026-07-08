@@ -707,10 +707,10 @@ if (!function_exists('format_store_name')) {
         }
 
         function renderFallbackDetailedModal() {
-            document.getElementById('detailConcerns').innerHTML = "🤖 SKIN+ AI is currently busy.<br>Recommended for general hydration and barrier support.";
-            document.getElementById('detailTexture').innerText = "🤖 SKIN+ AI is currently busy.\nTypically a gentle, nourishing skin-comforting texture.";
-            document.getElementById('detailRoutine').innerText = "🤖 SKIN+ AI is currently busy.\nApply to clean skin after cleansing, then seal with SPF or moisturizer.";
-            document.getElementById('detailPrecautions').innerText = "🤖 SKIN+ AI is currently busy.\nPerform a patch test first and avoid direct contact with eyes.";
+            document.getElementById('detailConcerns').innerHTML = "🤖 SKIN+ AI is currently busy. Please try again later.";
+            document.getElementById('detailTexture').innerText = "🤖 SKIN+ AI is currently busy. Please try again later.";
+            document.getElementById('detailRoutine').innerText = "🤖 SKIN+ AI is currently busy. Please try again later.";
+            document.getElementById('detailPrecautions').innerText = "🤖 SKIN+ AI is currently busy. Please try again later.";
         }
 
         closeBtn.addEventListener("click", function() { modal.style.display = "none"; });
