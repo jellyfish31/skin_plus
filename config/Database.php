@@ -2,12 +2,12 @@
 // config/Database.php
 
 class Database {
-    private static $host = null;
-    private static $user = null;
-    private static $pass = null;
-    private static $dbname = null;
-    private static $mysqli = null;
-    private static $pdo = null;
+    private static ?string $host = null;
+    private static ?string $user = null;
+    private static ?string $pass = null;
+    private static ?string $dbname = null;
+    private static ?mysqli $mysqli = null;
+    private static ?PDO $pdo = null;
 
     /**
      * Initializes connection parameters from config/Keys.php or defaults.
