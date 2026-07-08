@@ -95,18 +95,26 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 3rem;
+            gap: 2.5rem;
             margin-bottom: 1.5rem;
             flex-wrap: wrap;
         }
+        .partner-logo-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 110px;
+            height: 40px;
+        }
         .partner-logo {
-            height: 38px;
+            max-height: 100%;
+            max-width: 100%;
             object-fit: contain;
             filter: grayscale(100%);
             opacity: 0.65;
             transition: all 0.3s ease;
         }
-        .partner-logo:hover {
+        .partner-logo-wrapper:hover .partner-logo {
             filter: grayscale(0%);
             opacity: 1;
             transform: scale(1.05);
@@ -320,11 +328,12 @@
             .grid-layout { grid-template-columns: repeat(2, 1fr); }
             .hero h2 { font-size: 2rem; }
             .partner-logos-row {
-                gap: 1.5rem;
+                gap: 1.2rem;
                 margin-bottom: 1rem;
             }
-            .partner-logo {
-                height: 28px;
+            .partner-logo-wrapper {
+                width: 90px;
+                height: 30px;
             }
         }
         @media (max-width: 480px) {
@@ -426,9 +435,15 @@
 
     <footer>
         <div class="partner-logos-row">
-            <img src="guard.webp" alt="Guardian" class="partner-logo">
-            <img src="caring.png" alt="Caring Pharmacy" class="partner-logo">
-            <img src="watsons-logo.png" alt="Watsons" class="partner-logo">
+            <div class="partner-logo-wrapper">
+                <img src="guard.webp" alt="Guardian" class="partner-logo">
+            </div>
+            <div class="partner-logo-wrapper">
+                <img src="caring.png" alt="Caring Pharmacy" class="partner-logo">
+            </div>
+            <div class="partner-logo-wrapper">
+                <img src="watsons-logo.png" alt="Watsons" class="partner-logo">
+            </div>
         </div>
         <p>Comparing prices from Watsons, Guardian, Caring Pharmacy and so much more</p>
         <p style="margin-top: 0.5rem; font-size: 0.75rem;">Data updated everyday via web scraping</p>
