@@ -55,12 +55,18 @@
             background-position: calc(100% - 1.2rem) center;
         }
         .dropdown-select:hover {
-            background-color: #F8F6FF;
+            background-color: #FFFFFF;
+            border-color: #4A2E9F;
             box-shadow: 0 4px 12px rgba(93, 62, 188, 0.12);
         }
         .dropdown-select:focus {
-            background-color: #F1EDFF;
+            background-color: #FFFFFF;
             border-color: #4A2E9F;
+            box-shadow: 0 0 0 3px rgba(93, 62, 188, 0.15);
+        }
+        .dropdown-select option {
+            background-color: #FFFFFF;
+            color: var(--primary-color);
         }
         .search-form { display: flex; gap: 0.5rem; width: 100%; max-width: 400px; position: relative; }
         .search-input { width: 100%; padding: 0.75rem 3rem 0.75rem 1.2rem; border: 1px solid var(--border-color); border-radius: 30px; font-size: 0.95rem; outline: none; background: #FFFFFF; transition: all 0.2s; color: var(--text-dark); }
