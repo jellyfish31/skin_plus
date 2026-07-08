@@ -80,30 +80,36 @@ if (!function_exists('format_product_title')) {
             letter-spacing: -0.5px;
         }
 
-        /* Master Layout Structure (2-Column Desktop layout) */
-        .detail-header-section {
-            display: flex;
+        /* Master Layout Structure (Grid-based 2-Column Desktop layout) */
+        .detail-container {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            grid-template-areas:
+                "image title"
+                "buttons description";
             max-width: 1000px;
             margin: 3rem auto 2rem auto;
             background: var(--card-bg);
             border-radius: 24px;
             padding: 2.5rem;
             border: 1px solid var(--border-color);
-            gap: 3rem;
-            align-items: flex-start;
+            gap: 1.5rem 3rem;
+            align-items: start;
             box-shadow: var(--shadow-md);
         }
         
-        /* Left Column (Image & Under-Buttons) */
-        .left-media-column {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 280px;
-            flex-shrink: 0;
-            gap: 1.2rem;
+        .detail-title {
+            grid-area: title;
+            font-size: 2rem;
+            font-weight: 800;
+            line-height: 1.3;
+            color: var(--text-dark);
+            letter-spacing: -0.5px;
+            text-align: left;
         }
+        
         .img-box {
+            grid-area: image;
             width: 280px;
             height: 280px;
             background: #FFFFFF;
@@ -129,6 +135,7 @@ if (!function_exists('format_product_title')) {
         
         /* Action Buttons Block */
         .action-button-group {
+            grid-area: buttons;
             width: 100%;
             display: flex;
             flex-direction: column;
@@ -169,25 +176,10 @@ if (!function_exists('format_product_title')) {
             transform: translateY(-2px);
             box-shadow: var(--shadow-sm);
         }
-
-        /* Right Column (Meta Title & AI Board) */
-        .product-meta-details {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 1.2rem;
-        }
-        .product-meta-details h2 {
-            font-size: 2rem;
-            font-weight: 800;
-            line-height: 1.3;
-            color: var(--text-dark);
-            letter-spacing: -0.5px;
-            text-align: left;
-        }
         
         /* AI breakdown items */
         .ai-breakdown-card {
+            grid-area: description;
             background: linear-gradient(135deg, #FDFDFF 0%, #F6F2FF 100%);
             border: 1px solid rgba(93, 62, 188, 0.15);
             border-radius: 20px;
@@ -394,13 +386,11 @@ if (!function_exists('format_product_title')) {
 
         /* MEDIA QUERIES FOR RESPONSIVE COMPATIBILITY AND FLUID SCALING */
         @media (max-width: 992px) {
-            .detail-header-section {
+            .detail-container {
+                grid-template-columns: 240px 1fr;
+                gap: 1.5rem 2rem;
                 padding: 2rem;
-                gap: 2rem;
                 margin: 2rem auto;
-            }
-            .left-media-column {
-                width: 240px;
             }
             .img-box {
                 width: 240px;
@@ -412,50 +402,39 @@ if (!function_exists('format_product_title')) {
             body { font-size: 14px; }
             .navbar { padding: 1rem 6%; }
             
-            /* Flatten parent containers to allow flexible flexbox order sorting on mobile */
-            .detail-header-section {
+            .detail-container {
                 display: flex;
                 flex-direction: column;
                 align-items: center;
                 margin: 2rem 1rem;
                 padding: 1.5rem;
                 gap: 1.5rem;
-            }
-            .left-media-column {
-                display: contents;
-            }
-            .product-meta-details {
-                display: contents;
+                background: var(--card-bg);
+                border-radius: 24px;
+                border: 1px solid var(--border-color);
+                box-shadow: var(--shadow-md);
             }
             
-            /* Order 1: Product Name */
-            .product-meta-details h2 {
-                order: 1;
+            .detail-title {
                 text-align: center;
                 font-size: 1.6rem;
                 width: 100%;
-                margin-bottom: 0.5rem;
+                margin-bottom: 0.2rem;
             }
             
-            /* Order 2: Product Image Box */
             .img-box {
-                order: 2;
                 width: 100%;
                 height: 280px;
                 max-width: 280px;
             }
             
-            /* Order 3: AI Description Card */
             .ai-breakdown-card {
-                order: 3;
                 width: 100%;
                 padding: 1.5rem;
                 gap: 1.2rem;
             }
             
-            /* Order 4: Action Buttons group */
             .action-button-group {
-                order: 4;
                 width: 100%;
                 max-width: 280px;
                 margin-top: 0.5rem;
@@ -504,56 +483,57 @@ if (!function_exists('format_product_title')) {
         </a>
     </nav>
     
-    <section class="detail-header-section">
-        <div class="left-media-column">
-            <div class="img-box">
-                <img src="<?php echo (!empty($product_info['product_image']) && strpos($product_info['product_image'], 'placeholder') === false) ? htmlspecialchars($product_info['product_image']) : 'no_image.png'; ?>" alt="Product">
+    <div class="detail-container">
+        <!-- 1. Product Name (Top Header) -->
+        <h2 class="detail-title"><?php echo htmlspecialchars(format_product_title($product_info['product_name'])); ?></h2>
+
+        <!-- 2. Product Picture (Centered Box Card) -->
+        <div class="img-box">
+            <img src="<?php echo (!empty($product_info['product_image']) && strpos($product_info['product_image'], 'placeholder') === false) ? htmlspecialchars($product_info['product_image']) : 'no_image.png'; ?>" alt="Product">
+        </div>
+
+        <!-- 3. AI Breakdown Card (Target Skin, When to Apply, Key Benefits, Star Ingredients) -->
+        <div class="ai-breakdown-card">
+            <div class="ai-grid-item">
+                <div class="ai-icon"><i class="fa-solid fa-face-smile"></i></div>
+                <div class="ai-info">
+                    <h4>Target Skin Type</h4>
+                    <div id="aiSkin" class="ai-content-text"><div class="skeleton-text" style="width:120px;"></div></div>
+                </div>
             </div>
-            <div class="action-button-group">
-                <a href="price_history.php?signature=<?php echo urlencode($current_signature); ?>&name=<?php echo urlencode($product_info['product_name']); ?>" class="forecast-btn">
-                    <i class="fa-solid fa-chart-line"></i> View Price History
-                </a>
-                <button class="forecast-btn secondary" id="openMoreInfoBtn">
-                    <i class="fa-solid fa-circle-info"></i> More Info
-                </button>
+            <div class="ai-grid-item">
+                <div class="ai-icon"><i class="fa-solid fa-clock"></i></div>
+                <div class="ai-info">
+                    <h4>When To Apply</h4>
+                    <div id="aiWhen" class="ai-content-text"><div class="skeleton-text" style="width:140px;"></div></div>
+                </div>
+            </div>
+            <div class="ai-grid-item" style="grid-column: span 2;">
+                <div class="ai-icon"><i class="fa-solid fa-sparkles"></i></div>
+                <div class="ai-info">
+                    <h4>Key Benefits</h4>
+                    <div id="aiBenefits" class="ai-content-text"><div class="skeleton-text" style="width:100%;"></div></div>
+                </div>
+            </div>
+            <div class="ai-grid-item" style="grid-column: span 2;">
+                <div class="ai-icon"><i class="fa-solid fa-flask"></i></div>
+                <div class="ai-info">
+                    <h4>Star Ingredients</h4>
+                    <div id="aiIngredients" class="ai-content-text"><div class="skeleton-text" style="width:100%;"></div></div>
+                </div>
             </div>
         </div>
 
-        <div class="product-meta-details">
-            <h2><?php echo htmlspecialchars(format_product_title($product_info['product_name'])); ?></h2>
-            
-            <div class="ai-breakdown-card">
-                <div class="ai-grid-item">
-                    <div class="ai-icon"><i class="fa-solid fa-face-smile"></i></div>
-                    <div class="ai-info">
-                        <h4>Target Skin Type</h4>
-                        <div id="aiSkin" class="ai-content-text"><div class="skeleton-text" style="width:120px;"></div></div>
-                    </div>
-                </div>
-                <div class="ai-grid-item">
-                    <div class="ai-icon"><i class="fa-solid fa-clock"></i></div>
-                    <div class="ai-info">
-                        <h4>When To Apply</h4>
-                        <div id="aiWhen" class="ai-content-text"><div class="skeleton-text" style="width:140px;"></div></div>
-                    </div>
-                </div>
-                <div class="ai-grid-item" style="grid-column: span 2;">
-                    <div class="ai-icon"><i class="fa-solid fa-sparkles"></i></div>
-                    <div class="ai-info">
-                        <h4>Key Benefits</h4>
-                        <div id="aiBenefits" class="ai-content-text"><div class="skeleton-text" style="width:100%;"></div></div>
-                    </div>
-                </div>
-                <div class="ai-grid-item" style="grid-column: span 2;">
-                    <div class="ai-icon"><i class="fa-solid fa-flask"></i></div>
-                    <div class="ai-info">
-                        <h4>Star Ingredients</h4>
-                        <div id="aiIngredients" class="ai-content-text"><div class="skeleton-text" style="width:100%;"></div></div>
-                    </div>
-                </div>
-            </div>
+        <!-- 4. Action Buttons (View Price History & More Info) -->
+        <div class="action-button-group">
+            <a href="price_history.php?signature=<?php echo urlencode($current_signature); ?>&name=<?php echo urlencode($product_info['product_name']); ?>" class="forecast-btn">
+                <i class="fa-solid fa-chart-line"></i> View Price History
+            </a>
+            <button class="forecast-btn secondary" id="openMoreInfoBtn">
+                <i class="fa-solid fa-circle-info"></i> More Info
+            </button>
         </div>
-    </section>
+    </div>
 
     <section class="comparison-wrapper">
         <h3>Price Comparison</h3>
