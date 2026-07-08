@@ -411,7 +411,10 @@ if (!function_exists('format_product_title')) {
         @media (max-width: 768px) {
             body { font-size: 14px; }
             .navbar { padding: 1rem 6%; }
+            
+            /* Flatten parent containers to allow flexible flexbox order sorting on mobile */
             .detail-header-section {
+                display: flex;
                 flex-direction: column;
                 align-items: center;
                 margin: 2rem 1rem;
@@ -419,26 +422,45 @@ if (!function_exists('format_product_title')) {
                 gap: 1.5rem;
             }
             .left-media-column {
-                width: 100%;
-                max-width: 280px;
+                display: contents;
             }
+            .product-meta-details {
+                display: contents;
+            }
+            
+            /* Order 1: Product Name */
+            .product-meta-details h2 {
+                order: 1;
+                text-align: center;
+                font-size: 1.6rem;
+                width: 100%;
+                margin-bottom: 0.5rem;
+            }
+            
+            /* Order 2: Product Image Box */
             .img-box {
+                order: 2;
                 width: 100%;
                 height: 280px;
                 max-width: 280px;
             }
-            .product-meta-details {
-                width: 100%;
-                text-align: center;
-            }
-            .product-meta-details h2 {
-                text-align: center;
-                font-size: 1.6rem;
-            }
+            
+            /* Order 3: AI Description Card */
             .ai-breakdown-card {
+                order: 3;
+                width: 100%;
                 padding: 1.5rem;
                 gap: 1.2rem;
             }
+            
+            /* Order 4: Action Buttons group */
+            .action-button-group {
+                order: 4;
+                width: 100%;
+                max-width: 280px;
+                margin-top: 0.5rem;
+            }
+            
             .comparison-wrapper {
                 margin: 0 1rem 4rem 1rem;
                 padding: 1.5rem;
