@@ -29,6 +29,25 @@
         .btn-login { width: 100%; padding: 0.9rem; background-color: var(--primary-color); color: white; border: none; border-radius: 30px; font-size: 1.1rem; font-weight: 600; cursor: pointer; margin-top: 1.5rem; transition: background 0.2s; box-shadow: 0 4px 12px rgba(93, 62, 188, 0.2); }
         .btn-login:hover { background-color: #4A2E9F; }
         .error-msg { background: #FCE8E6; color: #A8071A; padding: 0.8rem 1.2rem; border-radius: 8px; font-size: 0.95rem; font-weight: 500; border: 1px solid #FFCCC7; text-align: center; width: 100%; max-width: 580px; margin-bottom: 1.5rem; }
+
+        /* RESPONSIVE LAYOUT FOR MOBILE DEVICES */
+        @media (max-width: 768px) {
+            body { padding: 0 1rem; }
+            .navbar { flex-direction: column; gap: 1rem; padding: 1.5rem 0; text-align: center; }
+            .logo-area h1 { font-size: 1.6rem; }
+            .back-btn { width: 100%; text-align: center; padding: 0.6rem 0; }
+            
+            .login-container { padding-bottom: 4rem; justify-content: flex-start; margin-top: 1rem; }
+            .login-container h2 { font-size: 2rem; }
+            .login-container .welcome-text { font-size: 1rem; margin-bottom: 2rem; }
+            
+            .login-form { width: 100%; padding: 0 0.5rem; gap: 1.2rem; }
+            .form-row { display: flex; flex-direction: column; align-items: stretch; gap: 0.4rem; }
+            .form-row label { text-align: left; padding-right: 0; font-size: 0.95rem; }
+            .form-control { padding: 0.75rem 1rem; font-size: 0.95rem; }
+            .btn-login { margin-top: 0.5rem; font-size: 1rem; padding: 0.8rem; }
+            .form-row div { display: none; }
+        }
     </style>
 </head>
 <body>
