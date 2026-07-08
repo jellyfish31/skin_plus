@@ -2,18 +2,32 @@
 // config/Database.php
 
 class Database {
-    private static $host = "localhost";
-    private static $user = "root";
-    private static $pass = "";
-    private static $dbname = "skinplus_db";
+    private static $host = null;
+    private static $user = null;
+    private static $pass = null;
+    private static $dbname = null;
     private static $mysqli = null;
     private static $pdo = null;
+
+    /**
+     * Initializes connection parameters from config/Keys.php or defaults.
+     */
+    private static function init() {
+        if (self::$host === null) {
+            $keys = file_exists(__DIR__ . '/Keys.php') ? include __DIR__ . '/Keys.php' : [];
+            self::$host = $keys['db_host'] ?? 'localhost';
+            self::$user = $keys['db_user'] ?? 'root';
+            self::$pass = $keys['db_pass'] ?? '';
+            self::$dbname = $keys['db_name'] ?? 'skinplus_db';
+        }
+    }
 
     /**
      * Returns a centralized MySQLi connection.
      * @return mysqli
      */
     public static function getMysqli() {
+        self::init();
         if (self::$mysqli === null) {
             self::$mysqli = new mysqli(self::$host, self::$user, self::$pass, self::$dbname);
             if (self::$mysqli->connect_error) {
@@ -29,6 +43,7 @@ class Database {
      * @return PDO
      */
     public static function getPdo() {
+        self::init();
         if (self::$pdo === null) {
             try {
                 self::$pdo = new PDO(
