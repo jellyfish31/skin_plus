@@ -95,6 +95,7 @@ if (!function_exists('format_product_title')) {
         @media (max-width: 768px) {
             body { font-size: 14px; }
             .navbar { padding: 1rem 6%; }
+            .logo-area h1 { font-size: 1.5rem; }
             .main-container { padding: 0 1rem; margin: 2rem auto; }
             .page-title { font-size: 1.6rem; }
             

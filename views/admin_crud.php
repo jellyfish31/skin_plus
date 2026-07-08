@@ -81,6 +81,7 @@
         @media (max-width: 768px) {
             body { padding: 1.5rem 4% 4rem 4%; }
             .navbar { flex-direction: column; gap: 1.2rem; text-align: center; margin-bottom: 2rem; }
+            .logo-area h1 { font-size: 1.5rem; }
             .nav-actions { width: 100%; justify-content: center; flex-wrap: wrap; gap: 0.75rem; }
             .back-btn, .analytics-trigger-btn { flex: 1; min-width: 140px; text-align: center; justify-content: center; padding: 0.65rem 1rem; font-size: 0.85rem; border-radius: 8px; }
             

@@ -293,6 +293,8 @@
 
         /* --- RESPONSIVE CONTROLS --- */
         @media (max-width: 768px) {
+            .navbar { padding: 1rem 4%; }
+            .logo-area h1 { font-size: 1.5rem; }
             .grid-layout { grid-template-columns: repeat(2, 1fr); }
             .hero h2 { font-size: 2rem; }
         }

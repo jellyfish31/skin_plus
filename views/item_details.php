@@ -412,6 +412,7 @@ if (!function_exists('format_product_title')) {
         @media (max-width: 768px) {
             body { font-size: 14px; }
             .navbar { padding: 1rem 6%; }
+            .logo-area h1 { font-size: 1.5rem; }
             
             .detail-container {
                 display: flex;
@@ -485,7 +486,7 @@ if (!function_exists('format_product_title')) {
 
         @media (max-width: 480px) {
             body { font-size: 13px; }
-            .logo-area h1 { font-size: 1.4rem; }
+            .logo-area h1 { font-size: 1.5rem; }
             .product-meta-details h2 { font-size: 1.4rem; }
             .img-box { height: 220px; border-radius: 16px; }
             .ai-breakdown-card { border-radius: 16px; padding: 1.2rem; }

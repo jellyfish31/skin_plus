@@ -31,6 +31,19 @@
         .store-badge { font-size: 0.8rem; color: var(--primary-color); background-color: var(--store-badge-bg); padding: 0.4rem 0.8rem; border-radius: 6px; text-align: left; margin-bottom: 1.5rem; font-weight: 600; display: inline-block; width: 100%; }
         .price-range { font-size: 0.95rem; font-weight: 600; color: var(--text-muted); text-align: left; border-top: 1px solid var(--border-color); padding-top: 1rem; }
         .price-range span { color: var(--text-dark); font-weight: 700; display: block; font-size: 1.1rem; }
+
+        /* RESPONSIVE STYLING FOR MOBILE DEVICES */
+        @media (max-width: 768px) {
+            body { font-size: 14px; }
+            .navbar { padding: 1rem 6%; }
+            .logo-area h1 { font-size: 1.5rem; }
+            
+            .content-header { margin: 2rem auto 1.5rem auto; padding: 0 1rem; }
+            .content-header h2 { font-size: 1.8rem; text-align: center; }
+            #productCount { text-align: center; }
+            
+            .products-grid { gap: 1.5rem; padding: 0 1rem; margin-bottom: 3rem; }
+        }
     </style>
 </head>
 <body>
