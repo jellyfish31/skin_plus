@@ -5,16 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Log In | SKIN+</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root { --primary-color: #5D3EBC; --bg-color: #FAFAFC; --text-dark: #2D2543; --text-muted: #756F86; --border-color: #E6E4ED; }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
         body { background-color: var(--bg-color); color: var(--text-dark); min-height: 100vh; display: flex; flex-direction: column; }
         
-        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 2rem 8%; background: transparent; }
+        .navbar { display: flex; align-items: center; padding: 2rem 8%; background: transparent; }
         .logo-area h1 { font-size: 1.8rem; font-weight: 700; color: var(--primary-color); line-height: 1.1; }
         .logo-area p { font-size: 0.85rem; color: var(--text-muted); font-weight: 500; }
-        .back-btn { background-color: var(--primary-color); color: white; padding: 0.6rem 2.2rem; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: background 0.2s; }
-        .back-btn:hover { background-color: #4A2E9F; }
+        .back-nav { display: flex; align-items: center; gap: 0.8rem; text-decoration: none; color: var(--text-dark); transition: all 0.3s ease; }
+        .back-nav:hover { opacity: 0.8; transform: translateX(-2px); }
 
         .login-container { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding-bottom: 8rem; }
         .login-container h2 { font-size: 2.8rem; font-weight: 700; color: #1A1230; margin-bottom: 0.2rem; }
@@ -33,9 +34,9 @@
         /* RESPONSIVE LAYOUT FOR MOBILE DEVICES */
         @media (max-width: 768px) {
             body { padding: 0 1rem; }
-            .navbar { flex-direction: column; gap: 1rem; padding: 1.5rem 0; text-align: center; }
-            .logo-area h1 { font-size: 1.6rem; }
-            .back-btn { width: 100%; text-align: center; padding: 0.6rem 0; }
+            .navbar { padding: 1.5rem 0; }
+            .logo-area h1 { font-size: 1.5rem; }
+            .logo-area p { font-size: 0.75rem; }
             
             .login-container { padding-bottom: 4rem; justify-content: flex-start; margin-top: 1rem; }
             .login-container h2 { font-size: 2rem; }
@@ -53,8 +54,13 @@
 <body>
 
     <nav class="navbar">
-        <div class="logo-area"><h1>SKIN+</h1><p>Smart Price Comparison</p></div>
-        <a href="javascript:history.back()" class="back-btn">Back</a>
+        <a href="javascript:history.back()" class="back-nav">
+            <i class="fa-solid fa-chevron-left" style="color: var(--text-dark); font-size: 1.2rem;"></i>
+            <div class="logo-area">
+                <h1>SKIN+</h1>
+                <p>Smart Price Comparison</p>
+            </div>
+        </a>
     </nav>
 
     <div class="login-container">
