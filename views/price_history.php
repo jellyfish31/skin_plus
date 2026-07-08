@@ -54,6 +54,7 @@ if (!function_exists('format_product_title')) {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SKIN+ | Historical Price Insights</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -89,6 +90,68 @@ if (!function_exists('format_product_title')) {
 
         .chart-container { background: var(--card-bg); border: 1px solid var(--border-color); padding: 2.5rem; border-radius: 24px; box-shadow: 0 6px 20px rgba(0,0,0,0.01); }
         .chart-header { text-align: left; font-size: 1.1rem; font-weight: 700; margin-bottom: 1.5rem; }
+
+        /* RESPONSIVE STYLING FOR MOBILE DEVICES */
+        @media (max-width: 768px) {
+            body { font-size: 14px; }
+            .navbar { padding: 1rem 6%; }
+            .main-container { padding: 0 1rem; margin: 2rem auto; }
+            .page-title { font-size: 1.6rem; }
+            
+            .flex-row { gap: 1.5rem; margin-bottom: 2rem; }
+            .cards-column { min-width: unset; width: 100%; gap: 0.8rem; }
+            
+            .metric-row-card {
+                flex-direction: column;
+                align-items: stretch;
+                padding: 1.2rem;
+                gap: 0.8rem;
+                border-left-width: 6px !important;
+            }
+            .store-brand-title {
+                width: 100%;
+                text-align: center;
+                font-size: 1.15rem;
+                border-bottom: 1px solid var(--border-color);
+                padding-bottom: 0.5rem;
+            }
+            .price-sub-grid {
+                justify-content: space-around;
+                text-align: center;
+                gap: 1rem;
+            }
+            .price-block-node {
+                flex: 1;
+            }
+            .price-value {
+                font-size: 1.15rem;
+            }
+            
+            .insight-card {
+                padding: 1.2rem;
+                min-width: unset;
+                width: 100%;
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                gap: 0.8rem;
+            }
+            .insight-icon {
+                width: 44px;
+                height: 44px;
+                font-size: 1.2rem;
+                border-radius: 10px;
+            }
+            .chart-container {
+                padding: 1.2rem 1rem;
+                border-radius: 16px;
+            }
+            .chart-header {
+                font-size: 0.95rem;
+                text-align: center;
+                margin-bottom: 1rem;
+            }
+        }
     </style>
 </head>
 <body>
