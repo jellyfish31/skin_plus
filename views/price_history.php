@@ -1,5 +1,27 @@
 <?php
-
+if (!function_exists('format_product_title')) {
+    function format_product_title(string $name) {
+        $name = strtolower($name); $name = ucwords($name);
+        $name = preg_replace('/\b(\d+)\s*Ml\b/i', '$1 ML', $name);
+        $name = preg_replace('/\b(\d+)\s*G\b/i', '$1 G', $name);
+        return $name;
+    }
+}
+if (!function_exists('format_store_name')) {
+    function format_store_name(string $name) {
+        $name_lower = strtolower(trim($name));
+        if ($name_lower === 'caring pharmacy' || $name_lower === 'caring') {
+            return 'CARiNG PHARMACY';
+        }
+        if ($name_lower === 'watsons') {
+            return 'watsons';
+        }
+        if ($name_lower === 'guardian') {
+            return 'guardian';
+        }
+        return $name_lower;
+    }
+}
 
 $color_palette = [
     'watsons' => '#5D3EBC',
@@ -39,30 +61,6 @@ foreach ($stores as $store) {
         'pointRadius' => 3,
         'hoverRadius' => 6
     ];
-}
-
-if (!function_exists('format_product_title')) {
-    function format_product_title(string $name) {
-        $name = strtolower($name); $name = ucwords($name);
-        $name = preg_replace('/\b(\d+)\s*Ml\b/i', '$1 ML', $name);
-        $name = preg_replace('/\b(\d+)\s*G\b/i', '$1 G', $name);
-        return $name;
-    }
-}
-if (!function_exists('format_store_name')) {
-    function format_store_name(string $name) {
-        $name_lower = strtolower(trim($name));
-        if ($name_lower === 'caring pharmacy' || $name_lower === 'caring') {
-            return 'CARiNG PHARMACY';
-        }
-        if ($name_lower === 'watsons') {
-            return 'watsons';
-        }
-        if ($name_lower === 'guardian') {
-            return 'guardian';
-        }
-        return $name_lower;
-    }
 }
 ?>
 <!DOCTYPE html>
