@@ -67,7 +67,7 @@ foreach ($stores as $store) {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="icon" type="image/png" href="/logo.png?v=2">
+    <link rel="icon" type="image/png" href="/favicon.png?v=3">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SKIN+ | Historical Price Insights</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
