@@ -1,0 +1,100 @@
+import mysql.connector
+import csv
+import os
+
+# 🗄️ 1. DATABASE CONNECTION
+try:
+    db = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="",
+        database="skinplus_db"
+    )
+    cursor = db.cursor()
+    print("✅ Connected to skinplus_db")
+except Exception as e:
+    print(f"❌ Database Connection Failed: {e}")
+    exit()
+
+csv_filename = 'cleaned_signatures.csv'
+
+if not os.path.exists(csv_filename):
+    print(f"❌ Error: Cannot find '{csv_filename}' in this directory.")
+    db.close()
+    exit()
+
+# 🚀 CHANGED LOGIC DESCRIPTION
+print("🧼 Starting case-insensitive sync loop for NULL signatures only...")
+
+try:
+    # ❌ REMOVED: The old "Flushing old database signatures..." step has been cut 
+    # to protect your existing database signature rows!
+
+    # 2. PARSE MASTER FILE ENTRIES
+    with open(csv_filename, mode='r', encoding='utf-8') as file:
+        reader = csv.reader(file)
+        headers = next(reader)
+        
+        try:
+            name_idx = headers.index('product_name')
+            sig_idx = headers.index('visual_signature')
+        except ValueError:
+            print("❌ Error: CSV must have headers labeled exactly 'product_name' and 'visual_signature'.")
+            db.close()
+            exit()
+
+        aligned_records = 0
+        skipped_records = 0
+
+        print("📥 Matching clean visual signatures to unassigned items...")
+        for row_data in reader:
+            if len(row_data) <= max(name_idx, sig_idx):
+                continue
+
+            product_name = row_data[name_idx].strip().lower()
+            master_signature = row_data[sig_idx].strip().lower()
+
+            if not product_name or not master_signature or master_signature == 'pending_admin':
+                skipped_records += 1
+                continue
+
+            # 🚀 FIXED SQL: Targets only the 2,000 most recent items based on ID
+            update_sql = """
+                UPDATE products 
+                SET visual_signature = %s 
+                WHERE LOWER(product_name) = %s 
+                  AND visual_signature IS NULL
+                  AND product_id IN (
+                      SELECT product_id FROM (
+                          SELECT product_id FROM products 
+                          ORDER BY product_id DESC 
+                          LIMIT 2000
+                      ) AS recent_items
+                  )
+            """
+            cursor.execute(update_sql, (master_signature, product_name))
+            aligned_records += cursor.rowcount
+
+        # Commit changes safely
+        db.commit()
+
+    print("\n🎉 Processing Complete!")
+    print(f"• {aligned_records} new row profiles successfully assigned their missing signatures.")
+    print(f"• {skipped_records} rows skipped from CSV (blank or pending).")
+
+    # Final check on what's left over
+    cursor.execute("SELECT COUNT(*) FROM products WHERE visual_signature IS NULL")
+    unmapped_count = cursor.fetchone()[0]
+    
+    if unmapped_count > 0:
+        print(f"\n⚠️ Note: There are still {unmapped_count} unassigned items left in the database with no signature.")
+    else:
+        print("\n💎 Excellent! Every item inside your database now has a visual signature mapping.")
+
+except Exception as dbe:
+    print(f"❌ SQL Update Failed: {dbe}")
+    db.rollback()
+
+finally:
+    cursor.close()
+    db.close()

@@ -1,0 +1,14 @@
+# Large Data Files
+historical_price.csv
+watsons_debug.html
+
+# WebDriver Executables
+chromedriver.exe
+
+# Sensitive configurations
+config/Keys.php
+
+# IDE / System files
+.vscode/
+.DS_Store
+Thumbs.db
