@@ -136,7 +136,7 @@ if (!function_exists('format_product_title')) {
                 <div class="insight-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
                 <div class="insight-text">
                     <h3>All-Time Best Pricing Record</h3>
-                    <p>Historically, the absolute lowest recorded price dropped to <span class="insight-highlight">RM <?php echo number_format($absolute_best_price, 2); ?></span> at <span class="insight-highlight" style="text-transform: capitalize;"><?php echo htmlspecialchars($absolute_best_store); ?></span> tracking index logs. This record bottom deal occurred on <span class="insight-highlight"><?php echo $absolute_best_date; ?></span>.</p>
+                    <p>Our records show an all-time low price of <span class="insight-highlight">RM <?php echo number_format($absolute_best_price, 2); ?></span> at <span class="insight-highlight" style="text-transform: capitalize;"><?php echo htmlspecialchars($absolute_best_store); ?></span> on <span class="insight-highlight"><?php echo $absolute_best_date; ?></span>.</p>
                 </div>
             </div>
         </div>
