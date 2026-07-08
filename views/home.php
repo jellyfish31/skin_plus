@@ -90,6 +90,28 @@
             margin-bottom: 2.5rem;
         }
 
+        /* --- PARTNER LOGOS --- */
+        .partner-logos-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 3rem;
+            margin-top: 3rem;
+            flex-wrap: wrap;
+        }
+        .partner-logo {
+            height: 38px;
+            object-fit: contain;
+            filter: grayscale(100%);
+            opacity: 0.65;
+            transition: all 0.3s ease;
+        }
+        .partner-logo:hover {
+            filter: grayscale(0%);
+            opacity: 1;
+            transform: scale(1.05);
+        }
+
         /* --- SEARCH ARCHITECTURE --- */
         .search-container {
             display: flex;
@@ -297,6 +319,13 @@
             .logo-area h1 { font-size: 1.5rem; }
             .grid-layout { grid-template-columns: repeat(2, 1fr); }
             .hero h2 { font-size: 2rem; }
+            .partner-logos-row {
+                gap: 1.5rem;
+                margin-top: 2rem;
+            }
+            .partner-logo {
+                height: 28px;
+            }
         }
         @media (max-width: 480px) {
             .grid-layout { grid-template-columns: 1fr; padding: 0 1rem; }
@@ -338,6 +367,12 @@
         <button class="image-search-btn" onclick="openImageSearchModal()">
             <i class="fa-solid fa-camera"></i> Search By Image
         </button>
+
+        <div class="partner-logos-row">
+            <img src="guard.webp" alt="Guardian" class="partner-logo">
+            <img src="caring.png" alt="Caring Pharmacy" class="partner-logo">
+            <img src="watsons-logo.png" alt="Watsons" class="partner-logo">
+        </div>
     </main>
 
     <div class="img-modal-overlay" id="imageSearchModal">
