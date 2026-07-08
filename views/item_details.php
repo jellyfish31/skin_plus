@@ -670,7 +670,15 @@ if (!function_exists('format_store_name')) {
         openBtn.addEventListener("click", function() {
             modal.style.display = "flex";
             
-            document.getElementById('detailConcerns').innerText = "Consulting Gemini...";
+            document.getElementById('detailConcerns').innerHTML = "Consulting Gemini...";
+            document.getElementById('detailTexture').innerText = "Loading texture details...";
+            document.getElementById('detailRoutine').innerText = "Fetching daily routine steps...";
+            document.getElementById('detailPrecautions').innerText = "Checking precautions...";
+
+            if (detailedDataCached) {
+                renderDetailedModal(detailedDataCached);
+                return;
+            }
 
             fetch('get_ai_detailed_breakdown.php?t=' + Date.now(), {
                 method: 'POST',
@@ -679,16 +687,30 @@ if (!function_exists('format_store_name')) {
             })
             .then(res => res.json())
             .then(data => {
-                detailedDataCached = data;
-                renderDetailedModal(data);
+                if (data && data.success) {
+                    detailedDataCached = data;
+                    renderDetailedModal(data);
+                } else {
+                    renderFallbackDetailedModal();
+                }
+            })
+            .catch(() => {
+                renderFallbackDetailedModal();
             });
         });
 
         function renderDetailedModal(data) {
-            document.getElementById('detailConcerns').innerHTML = data.skin_concerns;
-            document.getElementById('detailTexture').innerText = data.texture_feel;
-            document.getElementById('detailRoutine').innerText = data.routine_layering;
-            document.getElementById('detailPrecautions').innerText = data.precautions;
+            document.getElementById('detailConcerns').innerHTML = data.skin_concerns || "General skin compatibility.";
+            document.getElementById('detailTexture').innerText = data.texture_feel || "Standard smooth skin finish.";
+            document.getElementById('detailRoutine').innerText = data.routine_layering || "Apply onto clean skin morning or night.";
+            document.getElementById('detailPrecautions').innerText = data.precautions || "Patch test before first use.";
+        }
+
+        function renderFallbackDetailedModal() {
+            document.getElementById('detailConcerns').innerHTML = "🤖 SKIN+ AI is currently busy.<br>Recommended for general hydration and barrier support.";
+            document.getElementById('detailTexture').innerText = "🤖 SKIN+ AI is currently busy.\nTypically a gentle, nourishing skin-comforting texture.";
+            document.getElementById('detailRoutine').innerText = "🤖 SKIN+ AI is currently busy.\nApply to clean skin after cleansing, then seal with SPF or moisturizer.";
+            document.getElementById('detailPrecautions').innerText = "🤖 SKIN+ AI is currently busy.\nPerform a patch test first and avoid direct contact with eyes.";
         }
 
         closeBtn.addEventListener("click", function() { modal.style.display = "none"; });
