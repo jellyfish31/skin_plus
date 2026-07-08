@@ -96,7 +96,7 @@
             justify-content: center;
             align-items: center;
             gap: 3rem;
-            margin-top: 3rem;
+            margin-bottom: 1.5rem;
             flex-wrap: wrap;
         }
         .partner-logo {
@@ -321,7 +321,7 @@
             .hero h2 { font-size: 2rem; }
             .partner-logos-row {
                 gap: 1.5rem;
-                margin-top: 2rem;
+                margin-bottom: 1rem;
             }
             .partner-logo {
                 height: 28px;
@@ -367,12 +367,6 @@
         <button class="image-search-btn" onclick="openImageSearchModal()">
             <i class="fa-solid fa-camera"></i> Search By Image
         </button>
-
-        <div class="partner-logos-row">
-            <img src="guard.webp" alt="Guardian" class="partner-logo">
-            <img src="caring.png" alt="Caring Pharmacy" class="partner-logo">
-            <img src="watsons-logo.png" alt="Watsons" class="partner-logo">
-        </div>
     </main>
 
     <div class="img-modal-overlay" id="imageSearchModal">
@@ -431,6 +425,11 @@
     </section>
 
     <footer>
+        <div class="partner-logos-row">
+            <img src="guard.webp" alt="Guardian" class="partner-logo">
+            <img src="caring.png" alt="Caring Pharmacy" class="partner-logo">
+            <img src="watsons-logo.png" alt="Watsons" class="partner-logo">
+        </div>
         <p>Comparing prices from Watsons, Guardian, Caring Pharmacy and so much more</p>
         <p style="margin-top: 0.5rem; font-size: 0.75rem;">Data updated everyday via web scraping</p>
     </footer>
