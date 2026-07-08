@@ -13,7 +13,13 @@ if (!function_exists('format_store_name')) {
         if ($name_lower === 'caring pharmacy' || $name_lower === 'caring') {
             return 'CARiNG PHARMACY';
         }
-        return ucwords($name_lower);
+        if ($name_lower === 'watsons') {
+            return 'watsons';
+        }
+        if ($name_lower === 'guardian') {
+            return 'guardian';
+        }
+        return $name_lower;
     }
 }
 ?>

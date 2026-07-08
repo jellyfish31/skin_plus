@@ -67,7 +67,9 @@
         return storesStr.split(', ').map(s => {
             const sL = s.toLowerCase().trim();
             if (sL === 'caring pharmacy' || sL === 'caring') return 'CARiNG PHARMACY';
-            return sL.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+            if (sL === 'watsons') return 'watsons';
+            if (sL === 'guardian') return 'guardian';
+            return sL;
         }).join(', ');
     }
 

@@ -413,9 +413,9 @@
         function formatStoreNameJS(store) {
             let sL = store.toLowerCase().trim();
             if (sL === 'caring pharmacy' || sL === 'caring') return 'CARiNG PHARMACY';
-            if (sL === 'watsons') return 'Watsons';
-            if (sL === 'guardian') return 'Guardian';
-            return store.toUpperCase();
+            if (sL === 'watsons') return 'watsons';
+            if (sL === 'guardian') return 'guardian';
+            return sL;
         }
 
         function unpackMatrixNodes(storeNodesArray) {
