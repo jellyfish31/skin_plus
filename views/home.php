@@ -443,7 +443,7 @@
                 <img src="caring.png" alt="CARiNG PHARMACY" class="partner-logo">
             </div>
             <div class="partner-logo-wrapper">
-                <img src="watsons-logo.png" alt="watsons" class="partner-logo">
+                <img src="watsons.png" alt="watsons" class="partner-logo">
             </div>
         </div>
         <p>Comparing prices from watsons, guardian, CARiNG PHARMACY and so much more</p>
