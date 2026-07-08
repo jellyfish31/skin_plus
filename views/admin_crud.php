@@ -1,3 +1,16 @@
+<?php
+/** @var int $alert_count */
+/** @var int $total_products_count */
+/** @var int $total_categories */
+/** @var int $total_brands */
+/** @var int $total_visits */
+/** @var string $search_query */
+/** @var array $date_options */
+/** @var string $selected_date */
+/** @var int $total_pages */
+/** @var int $page */
+/** @var array $analytics_result */
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
