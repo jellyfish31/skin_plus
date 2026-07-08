@@ -13,59 +13,416 @@ if (!function_exists('format_product_title')) {
 <head>
     <meta charset="UTF-8">
     <title>SKIN+ | Product Breakdown</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --primary-color: #5D3EBC; --primary-hover: #4A2E9F; --bg-color: #FAFAFC; --card-bg: #FFFFFF; --text-dark: #2D2543; --text-muted: #756F86; --border-color: #E6E4ED; --cheap-color: #27AE60; --normal-color: #F39C12; --expensive-color: #EB5757; }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-dark); line-height: 1.6; }
-        .navbar { display: flex; align-items: center; padding: 1.5rem 8%; background: var(--card-bg); border-bottom: 1px solid var(--border-color); }
-        .back-nav { display: flex; align-items: center; gap: 1rem; text-decoration: none; color: var(--text-dark); }
-        .logo-area h1 { font-size: 1.8rem; font-weight: 700; color: var(--primary-color); }
+        :root {
+            --primary-color: #5D3EBC;
+            --primary-hover: #4A2E9F;
+            --bg-color: #FAFAFC;
+            --card-bg: #FFFFFF;
+            --text-dark: #2D2543;
+            --text-muted: #756F86;
+            --border-color: #EAE8F0;
+            --cheap-color: #27AE60;
+            --normal-color: #F39C12;
+            --expensive-color: #EB5757;
+            --shadow-sm: 0 4px 12px rgba(45, 37, 67, 0.03);
+            --shadow-md: 0 8px 24px rgba(45, 37, 67, 0.05);
+            --shadow-lg: 0 16px 40px rgba(45, 37, 67, 0.08);
+            --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
         
-        /* Master Layout Structure */
-        .detail-header-section { display: flex; max-width: 1000px; margin: 4rem auto 2rem auto; background: var(--card-bg); border-radius: 24px; padding: 2.5rem; border: 1px solid var(--border-color); gap: 3rem; align-items: flex-start; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
         
-        /* Left Column (Image & Under-Buttons) */
-        .left-media-column { display: flex; flex-direction: column; align-items: center; width: 280px; flex-shrink: 0; gap: 1.2rem; }
-        .img-box { width: 280px; height: 280px; background: #FFFFFF; border-radius: 16px; display: flex; align-items: center; justify-content: center; padding: 1rem; border: 1px solid #F0EFF4; overflow: hidden; }
-        .img-box img { max-height: 100%; max-width: 100%; object-fit: contain; }
-        
-        /* Action Buttons Block */
-        .action-button-group { width: 100%; display: flex; flex-direction: column; gap: 0.75rem; }
-        .forecast-btn { width: 100%; background-color: var(--primary-color); color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 25px; font-weight: 600; font-size: 0.95rem; cursor: pointer; display: inline-block; text-decoration: none; text-align: center; transition: all 0.2s ease; }
-        .forecast-btn:hover { background-color: var(--primary-hover); }
-        .forecast-btn.secondary { background-color: #FAFAFC; color: var(--primary-color); border: 2px solid var(--primary-color); }
-        .forecast-btn.secondary:hover { background-color: #F5F2FF; }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            line-height: 1.6;
+            font-size: 16px;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-        /* Right Column (Meta Title & AI Board) */
-        .product-meta-details { flex: 1; }
-        .product-meta-details h2 { font-size: 2.2rem; font-weight: 700; margin-bottom: 1.2rem; line-height: 1.2; text-align: left; }
-        
-        /* AI breakdown items */
-        .ai-breakdown-card { background: linear-gradient(135deg, #F9F8FF 0%, #F5F1FF 100%); border: 1px solid #DFD7FF; border-radius: 16px; padding: 1.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; text-align: left; }
-        .ai-grid-item { display: flex; gap: 0.8rem; align-items: flex-start; }
-        .ai-icon { background: #5D3EBC; color: #FFFFFF; width: 34px; height: 34px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 0.95rem; flex-shrink: 0; }
-        .ai-info h4 { font-size: 0.9rem; font-weight: 700; color: #4A358A; margin-bottom: 0.25rem; text-transform: uppercase; letter-spacing: 0.5px; }
-        .ai-info .ai-content-text { font-size: 0.92rem; color: #443B57; font-weight: 500; line-height: 1.45; }
-        
-        /* Skeleton Pulse Loader */
-        .skeleton-text { height: 14px; background: #E2DBF7; border-radius: 4px; margin-top: 6px; animation: pulseLoading 1.4s infinite ease-in-out; }
-        @keyframes pulseLoading { 0% { opacity: 0.4; } 50% { opacity: 1; } 100% { opacity: 0.4; } }
+        /* Navbar styling */
+        .navbar {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            padding: 1.2rem 8%;
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(8px);
+            background: rgba(255, 255, 255, 0.95);
+        }
+        .back-nav {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            text-decoration: none;
+            color: var(--text-dark);
+            transition: var(--transition-smooth);
+        }
+        .back-nav:hover {
+            opacity: 0.8;
+            transform: translateX(-2px);
+        }
+        .logo-area h1 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            letter-spacing: -0.5px;
+        }
 
-        .comparison-wrapper { max-width: 700px; margin: 0 auto 6rem auto; background: var(--card-bg); border-radius: 24px; padding: 3rem 2.5rem; border: 1px solid var(--border-color); }
-        .comparison-wrapper h3 { text-align: center; font-size: 2.2rem; font-weight: 700; margin-bottom: 2.5rem; }
-        .price-list-stack { display: flex; flex-direction: column; gap: 1.2rem; }
-        .pill-row { display: flex; align-items: center; justify-content: space-between; border: 1.5px solid #9D8FE1; padding: 1rem 2rem; border-radius: 40px; background: #FFFFFF; }
-        .pill-left { display: flex; align-items: center; gap: 1.5rem; }
-        .rank-circle { width: 36px; height: 36px; background: #EAE8F0; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; }
-        .store-title-block { display: flex; flex-direction: column; }
-        .store-display-name { font-size: 1.25rem; font-weight: 600; }
-        .status-tag { font-size: 0.78rem; font-weight: 700; text-transform: capitalize; }
+        /* Central Detail Container */
+        .detail-container {
+            width: 90%;
+            max-width: 720px;
+            margin: 2.5rem auto 5rem auto;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        /* Title Area */
+        .product-name {
+            font-size: 2.2rem;
+            font-weight: 800;
+            text-align: center;
+            line-height: 1.25;
+            color: var(--text-dark);
+            letter-spacing: -0.8px;
+            padding: 0 0.5rem;
+            width: 100%;
+        }
+
+        /* Image Box - beautiful card styling */
+        .img-box {
+            width: 100%;
+            max-width: 320px;
+            height: 320px;
+            background: var(--card-bg);
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-md);
+            transition: var(--transition-smooth);
+            overflow: hidden;
+        }
+        .img-box:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: var(--shadow-lg);
+            border-color: rgba(93, 62, 188, 0.3);
+        }
+        .img-box img {
+            max-height: 100%;
+            max-width: 100%;
+            object-fit: contain;
+            transition: var(--transition-smooth);
+        }
+
+        /* AI Breakdown Card (Description) */
+        .ai-breakdown-card {
+            width: 100%;
+            background: linear-gradient(135deg, #FDFDFF 0%, #F6F2FF 100%);
+            border: 1px solid rgba(93, 62, 188, 0.15);
+            border-radius: 24px;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            box-shadow: var(--shadow-md);
+            position: relative;
+        }
+        .ai-grid-item {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+        .ai-icon {
+            background: var(--primary-color);
+            color: #FFFFFF;
+            width: 36px;
+            height: 36px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+            box-shadow: 0 4px 10px rgba(93, 62, 188, 0.2);
+        }
+        .ai-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+        }
+        .ai-info h4 {
+            font-size: 0.8rem;
+            font-weight: 800;
+            color: #4A358A;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+        .ai-info .ai-content-text {
+            font-size: 0.95rem;
+            color: #443B57;
+            font-weight: 500;
+            line-height: 1.5;
+        }
+
+        /* Action Buttons */
+        .action-button-group {
+            width: 100%;
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+        .forecast-btn {
+            flex: 1;
+            max-width: 280px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.9rem 1.8rem;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            transition: var(--transition-smooth);
+            box-shadow: 0 4px 12px rgba(93, 62, 188, 0.25);
+        }
+        .forecast-btn:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(93, 62, 188, 0.35);
+        }
+        .forecast-btn.secondary {
+            background-color: #FAFAFC;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+            box-shadow: none;
+        }
+        .forecast-btn.secondary:hover {
+            background-color: #F5F2FF;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* Price Comparison Section */
+        .comparison-wrapper {
+            width: 100%;
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-md);
+            margin-top: 1rem;
+        }
+        .comparison-wrapper h3 {
+            text-align: center;
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 2rem;
+            letter-spacing: -0.5px;
+            color: var(--text-dark);
+        }
+        .price-list-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .pill-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid var(--border-color);
+            padding: 1rem 1.5rem;
+            border-radius: 20px;
+            background: #FFFFFF;
+            transition: var(--transition-smooth);
+        }
+        .pill-row:hover {
+            transform: scale(1.01) translateY(-2px);
+            border-color: rgba(93, 62, 188, 0.2);
+            box-shadow: var(--shadow-sm);
+        }
+        .pill-left {
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+        }
+        .rank-circle {
+            width: 32px;
+            height: 32px;
+            background: #F0EEF5;
+            color: var(--text-dark);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+        .store-title-block {
+            display: flex;
+            flex-direction: column;
+            gap: 0.1rem;
+        }
+        .store-display-name {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+        .status-tag {
+            font-size: 0.72rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
         .status-tag.cheap { color: var(--cheap-color); }
         .status-tag.normal { color: var(--normal-color); }
         .status-tag.expensive { color: var(--expensive-color); }
-        .pill-right-price { font-size: 1.4rem; font-weight: 700; }
+        .pill-right-price {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--text-dark);
+        }
+
+        /* Modal styling */
+        #moreInfoModal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(45, 37, 67, 0.55);
+            backdrop-filter: blur(6px);
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition-smooth);
+        }
+        .modal-content {
+            background: #FFFFFF;
+            padding: 2.5rem;
+            border-radius: 28px;
+            max-width: 580px;
+            width: 90%;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            text-align: left;
+            animation: modalSlideUp 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        @keyframes modalSlideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        #closeMoreInfoModal {
+            position: absolute;
+            right: 25px;
+            top: 20px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: var(--transition-smooth);
+        }
+        #closeMoreInfoModal:hover {
+            color: var(--text-dark);
+            transform: scale(1.1);
+        }
+        .modal-content h3 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            letter-spacing: -0.3px;
+        }
+        
+        .modal-body {
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            scrollbar-width: thin;
+        }
+
+        /* Fluid Skeleton Loader */
+        .skeleton-text {
+            height: 14px;
+            background: #EBE8F5;
+            border-radius: 4px;
+            margin-top: 6px;
+            animation: pulseLoading 1.4s infinite ease-in-out;
+        }
+        @keyframes pulseLoading {
+            0% { opacity: 0.4; }
+            50% { opacity: 1; }
+            100% { opacity: 0.4; }
+        }
+
+        /* MEDIA QUERIES FOR FLUID RESPONSIVENESS AND DEVICE COMPATIBILITY */
+        @media (max-width: 768px) {
+            body { font-size: 14px; }
+            .navbar { padding: 1rem 6%; }
+            .detail-container { margin: 1.5rem auto 4rem auto; gap: 1.8rem; }
+            .product-name { font-size: 1.8rem; }
+            .img-box { max-width: 280px; height: 280px; }
+            .ai-breakdown-card { padding: 1.5rem; gap: 1.2rem; }
+            .comparison-wrapper { padding: 1.5rem; }
+            .comparison-wrapper h3 { font-size: 1.5rem; margin-bottom: 1.5rem; }
+        }
+
+        @media (max-width: 580px) {
+            .ai-breakdown-card { grid-template-columns: 1fr; }
+            .ai-grid-item { grid-column: span 1 !important; }
+            .action-button-group { flex-direction: column; align-items: center; gap: 0.8rem; }
+            .forecast-btn { width: 100%; max-width: 100%; }
+        }
+
+        @media (max-width: 480px) {
+            body { font-size: 13px; }
+            .navbar { padding: 0.8rem 4%; }
+            .logo-area h1 { font-size: 1.4rem; }
+            .product-name { font-size: 1.5rem; letter-spacing: -0.5px; }
+            .img-box { max-width: 240px; height: 240px; border-radius: 20px; }
+            .ai-breakdown-card { border-radius: 20px; padding: 1.2rem; }
+            .ai-icon { width: 32px; height: 32px; font-size: 0.9rem; }
+            .pill-row { padding: 0.8rem 1rem; border-radius: 16px; }
+            .pill-left { gap: 0.8rem; }
+            .rank-circle { width: 28px; height: 28px; font-size: 0.8rem; }
+            .store-display-name { font-size: 0.95rem; }
+            .pill-right-price { font-size: 1.1rem; }
+            .comparison-wrapper { border-radius: 20px; }
+            .modal-content { padding: 1.5rem; }
+        }
     </style>
 </head>
 <body>
@@ -76,87 +433,90 @@ if (!function_exists('format_product_title')) {
         </a>
     </nav>
     
-    <section class="detail-header-section">
-        <div class="left-media-column">
-            <div class="img-box">
-                <img src="<?php echo (!empty($product_info['product_image']) && strpos($product_info['product_image'], 'placeholder') === false) ? htmlspecialchars($product_info['product_image']) : 'no_image.png'; ?>" alt="Product">
+    <div class="detail-container">
+        <!-- 1. Product Name -->
+        <h2 class="product-name"><?php echo htmlspecialchars(format_product_title($product_info['product_name'])); ?></h2>
+        
+        <!-- 2. Product Picture -->
+        <div class="img-box">
+            <img src="<?php echo (!empty($product_info['product_image']) && strpos($product_info['product_image'], 'placeholder') === false) ? htmlspecialchars($product_info['product_image']) : 'no_image.png'; ?>" alt="Product">
+        </div>
+        
+        <!-- 3. AI Skincare Description Card -->
+        <div class="ai-breakdown-card">
+            <div class="ai-grid-item">
+                <div class="ai-icon"><i class="fa-solid fa-face-smile"></i></div>
+                <div class="ai-info">
+                    <h4>Target Skin Type</h4>
+                    <div id="aiSkin" class="ai-content-text"><div class="skeleton-text" style="width:120px;"></div></div>
+                </div>
             </div>
-            <div class="action-button-group">
-                <a href="price_history.php?signature=<?php echo urlencode($current_signature); ?>&name=<?php echo urlencode($product_info['product_name']); ?>" class="forecast-btn">
-                    <i class="fa-solid fa-chart-line"></i> View Price History
-                </a>
-                <button class="forecast-btn secondary" id="openMoreInfoBtn">
-                    <i class="fa-solid fa-circle-info"></i> More Info
-                </button>
+            <div class="ai-grid-item">
+                <div class="ai-icon"><i class="fa-solid fa-clock"></i></div>
+                <div class="ai-info">
+                    <h4>When To Apply</h4>
+                    <div id="aiWhen" class="ai-content-text"><div class="skeleton-text" style="width:140px;"></div></div>
+                </div>
+            </div>
+            <div class="ai-grid-item" style="grid-column: span 2;">
+                <div class="ai-icon"><i class="fa-solid fa-sparkles"></i></div>
+                <div class="ai-info">
+                    <h4>Key Benefits</h4>
+                    <div id="aiBenefits" class="ai-content-text"><div class="skeleton-text" style="width:100%;"></div></div>
+                </div>
+            </div>
+            <div class="ai-grid-item" style="grid-column: span 2;">
+                <div class="ai-icon"><i class="fa-solid fa-flask"></i></div>
+                <div class="ai-info">
+                    <h4>Star Ingredients</h4>
+                    <div id="aiIngredients" class="ai-content-text"><div class="skeleton-text" style="width:100%;"></div></div>
+                </div>
             </div>
         </div>
 
-        <div class="product-meta-details">
-            <h2><?php echo htmlspecialchars(format_product_title($product_info['product_name'])); ?></h2>
-            
-            <div class="ai-breakdown-card">
-                <div class="ai-grid-item">
-                    <div class="ai-icon"><i class="fa-solid fa-face-smile"></i></div>
-                    <div class="ai-info">
-                        <h4>Target Skin Type</h4>
-                        <div id="aiSkin" class="ai-content-text"><div class="skeleton-text" style="width:120px;"></div></div>
-                    </div>
-                </div>
-                <div class="ai-grid-item">
-                    <div class="ai-icon"><i class="fa-solid fa-clock"></i></div>
-                    <div class="ai-info">
-                        <h4>When To Apply</h4>
-                        <div id="aiWhen" class="ai-content-text"><div class="skeleton-text" style="width:140px;"></div></div>
-                    </div>
-                </div>
-                <div class="ai-grid-item" style="grid-column: span 2;">
-                    <div class="ai-icon"><i class="fa-solid fa-sparkles"></i></div>
-                    <div class="ai-info">
-                        <h4>Key Benefits</h4>
-                        <div id="aiBenefits" class="ai-content-text"><div class="skeleton-text" style="width:100%;"></div></div>
-                    </div>
-                </div>
-                <div class="ai-grid-item" style="grid-column: span 2;">
-                    <div class="ai-icon"><i class="fa-solid fa-flask"></i></div>
-                    <div class="ai-info">
-                        <h4>Star Ingredients</h4>
-                        <div id="aiIngredients" class="ai-content-text"><div class="skeleton-text" style="width:100%;"></div></div>
-                    </div>
-                </div>
-            </div>
+        <!-- 4. Action Buttons -->
+        <div class="action-button-group">
+            <a href="price_history.php?signature=<?php echo urlencode($current_signature); ?>&name=<?php echo urlencode($product_info['product_name']); ?>" class="forecast-btn">
+                <i class="fa-solid fa-chart-line"></i> View Price History
+            </a>
+            <button class="forecast-btn secondary" id="openMoreInfoBtn">
+                <i class="fa-solid fa-circle-info"></i> More Info
+            </button>
         </div>
-    </section>
 
-    <section class="comparison-wrapper">
-        <h3>Price Comparison</h3>
-        <div class="price-list-stack">
-            <?php if ($total_stores > 0): ?>
-                <?php foreach ($store_prices as $index => $item): 
-                    $current_price = $item['product_price'];
-                    $status = ($current_price < ($average_price * 0.95)) ? "cheap" : (($current_price > ($average_price * 1.05)) ? "expensive" : "normal");
-                ?>
-                    <div class="pill-row">
-                        <div class="pill-left">
-                            <div class="rank-circle">#<?php echo ($index + 1); ?></div>
-                            <div class="store-title-block">
-                                <span class="store-display-name"><?php echo htmlspecialchars($item['product_store']); ?></span>
-                                <span class="status-tag <?php echo $status; ?>"><?php echo $status; ?></span>
+        <!-- 5. Price Comparison Box -->
+        <section class="comparison-wrapper">
+            <h3>Price Comparison</h3>
+            <div class="price-list-stack">
+                <?php if ($total_stores > 0): ?>
+                    <?php foreach ($store_prices as $index => $item): 
+                        $current_price = $item['product_price'];
+                        $status = ($current_price < ($average_price * 0.95)) ? "cheap" : (($current_price > ($average_price * 1.05)) ? "expensive" : "normal");
+                    ?>
+                        <div class="pill-row">
+                            <div class="pill-left">
+                                <div class="rank-circle">#<?php echo ($index + 1); ?></div>
+                                <div class="store-title-block">
+                                    <span class="store-display-name"><?php echo htmlspecialchars($item['product_store']); ?></span>
+                                    <span class="status-tag <?php echo $status; ?>"><?php echo $status; ?></span>
+                                </div>
                             </div>
+                            <div class="pill-right-price">RM <?php echo number_format($current_price, 2); ?></div>
                         </div>
-                        <div class="pill-right-price">RM <?php echo number_format($current_price, 2); ?></div>
-                    </div>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <p style="text-align:center; color:var(--text-muted); padding: 1rem 0;">No matching store details indexed for recent batches.</p>
-            <?php endif; ?>
-        </div>
-    </section>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <p style="text-align:center; color:var(--text-muted); padding: 1rem 0;">No matching store details indexed for recent batches.</p>
+                <?php endif; ?>
+            </div>
+        </section>
+    </div>
 
-    <div id="moreInfoModal" style="display:none; position:fixed; z-index:1000; left:0; top:0; width:100%; height:100%; background:rgba(45,37,67,0.4); backdrop-filter:blur(4px); align-items:center; justify-content:center;">
-        <div style="background:#FFFFFF; padding:2.5rem; border-radius:24px; max-width:600px; width:90%; border:1px solid #E6E4ED; box-shadow:0 10px 30px rgba(0,0,0,0.05); position:relative; text-align:left;">
-            <span id="closeMoreInfoModal" style="position:absolute; right:25px; top:20px; font-size:1.5rem; cursor:pointer; color:var(--text-muted);">&times;</span>
-            <h3 style="font-size:1.6rem; font-weight:700; margin-bottom:1.5rem; color:var(--primary-color);"><i class="fa-solid fa-wand-magic-sparkles"></i> Deep Science Breakdown</h3>
-            <div style="max-height: 400px; overflow-y: auto; padding-right: 10px; display:flex; flex-direction:column; gap:1.2rem; scrollbar-width: thin;">
+    <!-- More Info Modal -->
+    <div id="moreInfoModal">
+        <div class="modal-content">
+            <span id="closeMoreInfoModal">&times;</span>
+            <h3><i class="fa-solid fa-wand-magic-sparkles"></i> Deep Science Breakdown</h3>
+            <div class="modal-body">
                 <div>
                     <h4 style="font-size:0.95rem; color:#4A358A; text-transform:uppercase; font-weight:700;"><i class="fa-solid fa-bullseye"></i> Targeted Concerns</h4>
                     <p id="detailConcerns" style="font-size:0.95rem; margin-top:3px; color:#443B57;"></p>
