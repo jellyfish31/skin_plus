@@ -94,7 +94,7 @@ foreach ($stores as $store) {
         .price-sub-grid { display: flex; gap: 2.5rem; flex: 1; justify-content: flex-end; text-align: right; }
         .price-block-node { display: flex; flex-direction: column; }
         .price-label-text { font-size: 0.78rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
-        .price-value { font-size: 1.25rem; font-weight: 700; margin-top: 2px; }
+        .price-value { font-size: 1.25rem; font-weight: 700; margin-top: 2px; white-space: nowrap; }
         
         .insight-card { flex: 1.1; background: linear-gradient(135deg, #F9F8FF 0%, #F3EFFF 100%); border: 1px solid #DED6FF; padding: 1.8rem; border-radius: 20px; box-shadow: 0 4px 15px rgba(93,62,188,0.03); display: flex; gap: 1.2rem; align-items: center; text-align: left; min-width: 320px; }
         .insight-icon { background: #5D3EBC; color: #FFFFFF; width: 52px; height: 52px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; flex-shrink: 0; }
