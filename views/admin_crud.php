@@ -23,7 +23,32 @@
         .metric-card p { font-size: 2.4rem; font-weight: 700; color: var(--primary-color); }
         
         .controls-wrapper { margin-bottom: 2rem; display: flex; justify-content: flex-end; align-items: center; gap: 1rem; }
-        .dropdown-select { padding: 0.75rem 1.5rem; border: 1px solid var(--border-color); border-radius: 30px; font-size: 0.95rem; outline: none; background: #FFFFFF; color: var(--text-dark); font-weight: 600; cursor: pointer; }
+        .dropdown-select {
+            padding: 0.75rem 2.2rem 0.75rem 1.5rem;
+            border: 2px solid var(--primary-color);
+            border-radius: 30px;
+            font-size: 0.95rem;
+            outline: none;
+            background: #FFFFFF;
+            color: var(--primary-color);
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(93, 62, 188, 0.06);
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%235D3EBC' viewBox='0 0 16 16'><path fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/></svg>");
+            background-repeat: no-repeat;
+            background-position: calc(100% - 1.2rem) center;
+        }
+        .dropdown-select:hover {
+            background-color: #F8F6FF;
+            box-shadow: 0 4px 12px rgba(93, 62, 188, 0.12);
+        }
+        .dropdown-select:focus {
+            background-color: #F1EDFF;
+            border-color: #4A2E9F;
+        }
         .search-form { display: flex; gap: 0.5rem; width: 100%; max-width: 400px; position: relative; }
         .search-input { width: 100%; padding: 0.75rem 3rem 0.75rem 1.2rem; border: 1px solid var(--border-color); border-radius: 30px; font-size: 0.95rem; outline: none; background: #FFFFFF; transition: all 0.2s; color: var(--text-dark); }
         .search-input:focus { border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(93, 62, 188, 0.08); }
@@ -72,10 +97,28 @@
         .modal-summary-lbl { text-align: right; font-weight: 700; font-size: 1.05rem; color: var(--text-dark); margin-top: 1rem; }
         .modal-summary-lbl span { font-weight: 700; color: var(--primary-color); margin-left: 0.5rem; }
         .modal-footer-toolbar { display: flex; justify-content: center; gap: 1rem; margin-top: 2rem; }
-        .btn-modal { padding: 0.65rem 2.5rem; border-radius: 10px; border: none; font-weight: 600; font-size: 0.95rem; cursor: pointer; }
+        .btn-modal { padding: 0.65rem 2.5rem; border-radius: 10px; border: none; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: all 0.15s ease; }
         .btn-modal-cancel { background-color: #A399C9; color: white; }
         .btn-modal-submit { background-color: #231942; color: white; }
         .btn-modal-delete { background-color: #EB5757; color: white; }
+
+        /* Button Press Active Color & Transform States */
+        .back-btn, .analytics-trigger-btn, .btn-modal, .btn-tool, .page-arrow-btn {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .back-btn:hover, .analytics-trigger-btn:hover, .btn-modal:hover {
+            filter: brightness(115%);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.12);
+        }
+        .back-btn:active, .analytics-trigger-btn:active, .btn-modal:active {
+            filter: brightness(80%) !important;
+            transform: scale(0.95) !important;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.06);
+        }
+        .btn-tool:active, .page-arrow-btn:active {
+            transform: scale(0.92) !important;
+            background-color: #E2DFEE !important;
+        }
         .analytics-scroll-box { max-height: 400px; overflow-x: auto; overflow-y: auto; margin-top: 1rem; border: 1px solid var(--border-color); border-radius: 12px; }
 
         
