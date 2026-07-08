@@ -440,8 +440,12 @@ class ApiController {
 
     /**
      * Executes Vision API call.
+     * 
+     * @param string $new_image Path or URL to the new image.
+     * @param array $candidates Array of candidate products for visual matching.
+     * @return string The matching signature or 'NO_MATCH'.
      */
-    private function callVisionAPI($new_image, $candidates) {
+    private function callVisionAPI(string $new_image, array $candidates): string {
         $apiKey = "AIzaSyCYxIUQJuLqBrh8Za1fC_6IBySBCFY14A8"; 
         $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" . $apiKey;
 
@@ -487,12 +491,24 @@ class ApiController {
         return $this->cleanResponseString($result_text);
     }
 
-    private function cleanResponseString($str) {
+    /**
+     * Cleans the response string from the API by removing markdown elements.
+     * 
+     * @param string $str Raw response string.
+     * @return string Cleaned string.
+     */
+    private function cleanResponseString(string $str): string {
         $str = str_replace(['`', 'html', 'json', "\n", "\r", " "], '', $str);
         return trim($str);
     }
 
-    private function cleanProductString($str) {
+    /**
+     * Cleans a product name string by converting to lowercase and stripping common keywords.
+     * 
+     * @param string $str Raw product string.
+     * @return string Cleaned product string.
+     */
+    private function cleanProductString(string $str): string {
         $str = strtolower($str);
         $remove_keywords = [
             'moisturiser', 'moisturizer', 'facial', 'face', 'skin', 'oil', 'tea tree',
