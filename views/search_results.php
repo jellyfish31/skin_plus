@@ -32,7 +32,7 @@
         .price-range { font-size: 0.95rem; font-weight: 600; color: var(--text-muted); text-align: left; border-top: 1px solid var(--border-color); padding-top: 1rem; }
         .price-range span { color: var(--text-dark); font-weight: 700; display: block; font-size: 1.1rem; }
 
-        /* RESPONSIVE STYLING FOR MOBILE DEVICES */
+        
         @media (max-width: 768px) {
             body { font-size: 14px; }
             .navbar { padding: 1rem 6%; }

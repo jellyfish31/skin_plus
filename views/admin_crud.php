@@ -77,7 +77,7 @@
         .btn-modal-delete { background-color: #EB5757; color: white; }
         .analytics-scroll-box { max-height: 400px; overflow-x: auto; overflow-y: auto; margin-top: 1rem; border: 1px solid var(--border-color); border-radius: 12px; }
 
-        /* RESPONSIVE MOBILE OVERRIDES */
+        
         @media (max-width: 768px) {
             body { padding: 1.5rem 4% 4rem 4%; }
             .navbar { flex-direction: column; gap: 1.2rem; text-align: center; margin-bottom: 2rem; }
@@ -97,10 +97,10 @@
             .crud-container { padding: 1.5rem 1rem; border-radius: 18px; }
             .crud-container h2 { font-size: 1.6rem; margin-bottom: 1.5rem; text-align: center; }
             
-            /* Hide columns layout headers */
+            
             .table-header { display: none; }
             
-            /* Restructure table row grid into custom card layout */
+            
             .product-row {
                 display: flex;
                 flex-direction: column;
@@ -127,7 +127,7 @@
                 margin-top: 0.1rem;
             }
             
-            /* Inject semantic helper labels */
+            
             .cell-meta:nth-of-type(1)::before { content: "Category: "; font-weight: 700; color: var(--text-dark); }
             .cell-meta:nth-of-type(2)::before { content: "Brand: "; font-weight: 700; color: var(--text-dark); }
             .cell-min::before { content: "Min Price: "; font-weight: 700; color: var(--text-dark); }
@@ -149,7 +149,7 @@
                 width: 100%;
             }
             
-            /* Modals and overlay layouts */
+            
             .modal-window {
                 width: 95%;
                 padding: 1.8rem 1.2rem;
@@ -441,7 +441,7 @@
             document.getElementById('viewModal').classList.add('active');
         }
 
-        // Trigger edit uses action POST admin_crud.php
+
         function triggerEdit(groupData) {
             document.getElementById('e_id').value = groupData.product_id;
             document.getElementById('e_category').value = groupData.product_category;

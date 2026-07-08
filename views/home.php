@@ -32,7 +32,7 @@
             line-height: 1.6;
         }
 
-        /* --- NAVBAR --- */
+        
         .navbar {
             display: flex;
             justify-content: space-between;
@@ -69,7 +69,7 @@
             background-color: var(--primary-hover);
         }
 
-        /* --- HERO AREA --- */
+        
         .hero {
             text-align: center;
             max-width: 800px;
@@ -90,7 +90,7 @@
             margin-bottom: 2.5rem;
         }
 
-        /* --- PARTNER LOGOS --- */
+        
         .partner-logos-row {
             display: flex;
             justify-content: center;
@@ -120,7 +120,7 @@
             transform: scale(1.05);
         }
 
-        /* --- SEARCH ARCHITECTURE --- */
+        
         .search-container {
             display: flex;
             max-width: 650px;
@@ -174,7 +174,7 @@
             color: white;
         }
 
-        /* --- IMAGE RECOGNITION MODAL COMPONENT --- */
+        
         .img-modal-overlay {
             display: none;
             position: fixed;
@@ -257,7 +257,7 @@
         .btn-modal-primary { background: var(--primary-color); color: white; }
         .btn-modal-primary:hover { background: var(--primary-hover); }
 
-        /* Scanning Screen Loader Overlay */
+        
         .scanner-loader {
             display: none;
             position: absolute;
@@ -282,7 +282,7 @@
         }
         @keyframes spinWheel { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* --- GRID ENGINE DESIGN --- */
+        
         .section-title {
             text-align: center;
             font-size: 1.5rem;
@@ -321,7 +321,7 @@
             background: var(--primary-color);
         }
 
-        /* --- RESPONSIVE CONTROLS --- */
+        
         @media (max-width: 768px) {
             .navbar { padding: 1rem 4%; }
             .logo-area h1 { font-size: 1.5rem; }
@@ -523,7 +523,7 @@
             sendImagePayloadToBackend(compressedBase64);
         }
 
-        // ✨ ASYNCHRONOUS TRANSACTION PIPELINE (SYNCHRONIZED WITH BACKEND MATRIX CHANGES)
+
         function sendImagePayloadToBackend(base64String) {
             modalLoader.classList.add('active');
             
@@ -535,14 +535,14 @@
             .then(res => res.json())
             .then(data => {
                 if(data.success && data.product_keyword) {
-                    // Caches database similarity match listings safely into the user session
+
                     if (data.products && data.products.length > 0) {
                         sessionStorage.setItem('image_search_results', JSON.stringify(data.products));
                     } else {
                         sessionStorage.removeItem('image_search_results');
                     }
 
-                    // Routes user directly to the destination dashboard, flagging an image search operation source
+
                     window.location.href = 'searchByBox_results.php?query=' + encodeURIComponent(data.product_keyword) + '&source=image';
                 } else {
                     alert("Analysis Failed: " + (data.error || "Unable to clearly capture label details. Please try again."));

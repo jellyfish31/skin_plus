@@ -63,7 +63,7 @@ if (!function_exists('format_store_name')) {
             font-size: 16px;
         }
 
-        /* Navbar styling */
+        
         .navbar {
             display: flex;
             align-items: center;
@@ -96,7 +96,7 @@ if (!function_exists('format_store_name')) {
             letter-spacing: -0.5px;
         }
 
-        /* Master Layout Structure (2-Column Desktop layout) */
+        
         .detail-container {
             display: flex;
             max-width: 1000px;
@@ -110,7 +110,7 @@ if (!function_exists('format_store_name')) {
             box-shadow: var(--shadow-md);
         }
         
-        /* Left Column (Image & Under-Buttons) */
+        
         .left-media-column {
             display: flex;
             flex-direction: column;
@@ -143,7 +143,7 @@ if (!function_exists('format_store_name')) {
             object-fit: contain;
         }
         
-        /* Action Buttons Block */
+        
         .action-button-group {
             width: 100%;
             display: flex;
@@ -186,7 +186,7 @@ if (!function_exists('format_store_name')) {
             box-shadow: var(--shadow-sm);
         }
 
-        /* Right Column (Meta Title & AI Board) */
+        
         .product-meta-details {
             flex: 1;
             display: flex;
@@ -202,7 +202,7 @@ if (!function_exists('format_store_name')) {
             text-align: left;
         }
         
-        /* AI breakdown items */
+        
         .ai-breakdown-card {
             background: linear-gradient(135deg, #FDFDFF 0%, #F6F2FF 100%);
             border: 1px solid rgba(93, 62, 188, 0.15);
@@ -250,7 +250,7 @@ if (!function_exists('format_store_name')) {
             line-height: 1.5;
         }
         
-        /* Skeleton Pulse Loader */
+        
         .skeleton-text {
             height: 14px;
             background: #EBE8F5;
@@ -264,7 +264,7 @@ if (!function_exists('format_store_name')) {
             100% { opacity: 0.4; }
         }
 
-        /* Price Comparison Section */
+        
         .comparison-wrapper {
             max-width: 1000px;
             margin: 0 auto 6rem auto;
@@ -344,7 +344,7 @@ if (!function_exists('format_store_name')) {
             color: var(--text-dark);
         }
 
-        /* Modal styling */
+        
         #moreInfoModal {
             display: none;
             position: fixed;
@@ -408,7 +408,7 @@ if (!function_exists('format_store_name')) {
             scrollbar-width: thin;
         }
 
-        /* MEDIA QUERIES FOR RESPONSIVE COMPATIBILITY AND FLUID SCALING */
+        
         @media (max-width: 992px) {
             .detail-container {
                 padding: 2rem;
@@ -448,7 +448,7 @@ if (!function_exists('format_store_name')) {
                 display: contents;
             }
             
-            /* Order 1: Product Name */
+            
             .product-meta-details h2 {
                 order: 1;
                 text-align: center;
@@ -457,7 +457,7 @@ if (!function_exists('format_store_name')) {
                 margin-bottom: 0.5rem;
             }
             
-            /* Order 2: Product Image Box */
+            
             .img-box {
                 order: 2;
                 width: 100%;
@@ -465,7 +465,7 @@ if (!function_exists('format_store_name')) {
                 max-width: 280px;
             }
             
-            /* Order 3: AI Description Card */
+            
             .ai-breakdown-card {
                 order: 3;
                 width: 100%;
@@ -473,7 +473,7 @@ if (!function_exists('format_store_name')) {
                 gap: 1.2rem;
             }
             
-            /* Order 4: Action Buttons group */
+            
             .action-button-group {
                 order: 4;
                 width: 100%;
@@ -526,11 +526,11 @@ if (!function_exists('format_store_name')) {
     
     <div class="detail-container">
         <div class="left-media-column">
-            <!-- Product Picture -->
+            
             <div class="img-box">
                 <img src="<?php echo (!empty($product_info['product_image']) && strpos($product_info['product_image'], 'placeholder') === false) ? htmlspecialchars($product_info['product_image']) : 'no_image.png'; ?>" alt="Product">
             </div>
-            <!-- Action Buttons -->
+            
             <div class="action-button-group">
                 <a href="price_history.php?signature=<?php echo urlencode($current_signature); ?>&name=<?php echo urlencode($product_info['product_name']); ?>" class="forecast-btn">
                     <i class="fa-solid fa-chart-line"></i> View Price History
@@ -542,10 +542,10 @@ if (!function_exists('format_store_name')) {
         </div>
 
         <div class="product-meta-details">
-            <!-- Product Name -->
+            
             <h2><?php echo htmlspecialchars(format_product_title($product_info['product_name'])); ?></h2>
             
-            <!-- AI Breakdown Card (Target Skin, When to Apply, Key Benefits, Star Ingredients) -->
+            
             <div class="ai-breakdown-card">
                 <div class="ai-grid-item">
                     <div class="ai-icon"><i class="fa-solid fa-face-smile"></i></div>
@@ -634,7 +634,7 @@ if (!function_exists('format_store_name')) {
         const productName = <?php echo json_encode($product_info['product_name']); ?>;
         const productSig = <?php echo json_encode($current_signature); ?>;
         
-        // 1. Fetch Primary Summary Breakdown Data Matrix
+
         fetch('get_ai_description.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -660,7 +660,7 @@ if (!function_exists('format_store_name')) {
             document.getElementById('aiIngredients').innerText = "Hyaluronic Acid, Vitamin E";
         }
 
-        // 2. Fetch Deep Science Breakdown Modal Data on Click Activity
+
         const modal = document.getElementById('moreInfoModal');
         const openBtn = document.getElementById('openMoreInfoBtn');
         const closeBtn = document.getElementById('closeMoreInfoModal');

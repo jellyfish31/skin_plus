@@ -1,5 +1,5 @@
 <?php
-// views/price_history.php
+
 
 $color_palette = [
     'watsons' => '#5D3EBC',
@@ -11,9 +11,9 @@ $store_raw_prices = [];
 foreach ($stores as $store) {
     $last_known_price = null;
     foreach ($ordered_labels as $lbl_arr) {
-        // Search matching entry in raw history
+
         $current_date_price = null;
-        // Search by looking at raw date matching day and month
+
         foreach ($raw_history_rows as $row) {
             if ($row['product_store'] === $store && $row['day_label'] === $lbl_arr[0] && $row['month_label'] === $lbl_arr[1]) {
                 $current_date_price = (float)$row['product_price'];
@@ -89,7 +89,7 @@ if (!function_exists('format_store_name')) {
         .flex-row { display: flex; gap: 2rem; margin-bottom: 3rem; flex-wrap: wrap; align-items: stretch; }
         .cards-column { flex: 2; display: flex; flex-direction: column; gap: 1rem; min-width: 500px; }
         
-        /* Redesigned Premium Matrix Row */
+        
         .metric-row-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.25rem 2rem; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 10px rgba(0,0,0,0.01); }
         .store-brand-title { font-size: 1.1rem; font-weight: 700; width: 160px; }
         .price-sub-grid { display: flex; gap: 2.5rem; flex: 1; justify-content: flex-end; text-align: right; }
@@ -106,7 +106,7 @@ if (!function_exists('format_store_name')) {
         .chart-container { background: var(--card-bg); border: 1px solid var(--border-color); padding: 2.5rem; border-radius: 24px; box-shadow: 0 6px 20px rgba(0,0,0,0.01); }
         .chart-header { text-align: left; font-size: 1.1rem; font-weight: 700; margin-bottom: 1.5rem; }
 
-        /* RESPONSIVE STYLING FOR MOBILE DEVICES */
+        
         @media (max-width: 768px) {
             body { font-size: 14px; }
             .navbar { padding: 1rem 6%; }
