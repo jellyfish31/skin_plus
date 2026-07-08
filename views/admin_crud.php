@@ -75,7 +75,117 @@
         .btn-modal-cancel { background-color: #A399C9; color: white; }
         .btn-modal-submit { background-color: #231942; color: white; }
         .btn-modal-delete { background-color: #EB5757; color: white; }
-        .analytics-scroll-box { max-height: 400px; overflow-y: auto; margin-top: 1rem; border: 1px solid var(--border-color); border-radius: 12px; }
+        .analytics-scroll-box { max-height: 400px; overflow-x: auto; overflow-y: auto; margin-top: 1rem; border: 1px solid var(--border-color); border-radius: 12px; }
+
+        /* RESPONSIVE MOBILE OVERRIDES */
+        @media (max-width: 768px) {
+            body { padding: 1.5rem 4% 4rem 4%; }
+            .navbar { flex-direction: column; gap: 1.2rem; text-align: center; margin-bottom: 2rem; }
+            .nav-actions { width: 100%; justify-content: center; flex-wrap: wrap; gap: 0.75rem; }
+            .back-btn, .analytics-trigger-btn { flex: 1; min-width: 140px; text-align: center; justify-content: center; padding: 0.65rem 1rem; font-size: 0.85rem; border-radius: 8px; }
+            
+            .metrics-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 2rem; }
+            .metric-card { padding: 1.2rem 0.8rem; border-radius: 12px; }
+            .metric-card h3 { font-size: 0.9rem; }
+            .metric-card p { font-size: 1.8rem; }
+            
+            .controls-wrapper { flex-direction: column; align-items: stretch; gap: 0.8rem; }
+            .search-form { max-width: 100%; }
+            .dropdown-select { width: 100%; text-align-last: center; }
+            
+            .crud-container { padding: 1.5rem 1rem; border-radius: 18px; }
+            .crud-container h2 { font-size: 1.6rem; margin-bottom: 1.5rem; text-align: center; }
+            
+            /* Hide columns layout headers */
+            .table-header { display: none; }
+            
+            /* Restructure table row grid into custom card layout */
+            .product-row {
+                display: flex;
+                flex-direction: column;
+                align-items: stretch;
+                padding: 1.5rem;
+                background: #FFFFFF;
+                border-radius: 20px;
+                border: 1px solid #EAE8F2;
+                box-shadow: 0 4px 12px rgba(93, 62, 188, 0.02);
+                gap: 0.5rem;
+                position: relative;
+            }
+            .cell-name {
+                font-size: 1.1rem;
+                font-weight: 700;
+                color: var(--text-dark);
+                line-clamp: 2;
+                -webkit-line-clamp: 2;
+                padding-right: 0;
+            }
+            .cell-sig {
+                font-size: 0.78rem;
+                padding: 0.25rem 0.5rem;
+                margin-top: 0.1rem;
+            }
+            
+            /* Inject semantic helper labels */
+            .cell-meta:nth-of-type(1)::before { content: "Category: "; font-weight: 700; color: var(--text-dark); }
+            .cell-meta:nth-of-type(2)::before { content: "Brand: "; font-weight: 700; color: var(--text-dark); }
+            .cell-min::before { content: "Min Price: "; font-weight: 700; color: var(--text-dark); }
+            .cell-max::before { content: "Max Price: "; font-weight: 700; color: var(--text-dark); }
+            
+            .cell-meta, .cell-min, .cell-max {
+                font-size: 0.9rem;
+                text-align: left;
+                width: 100%;
+            }
+            .cell-min { color: var(--cheap-color); }
+            .cell-max { color: var(--expensive-color); }
+            
+            .action-toolbar {
+                margin-top: 0.8rem;
+                padding-top: 0.8rem;
+                border-top: 1px solid var(--border-color);
+                justify-content: flex-end;
+                width: 100%;
+            }
+            
+            /* Modals and overlay layouts */
+            .modal-window {
+                width: 95%;
+                padding: 1.8rem 1.2rem;
+                border-radius: 24px;
+            }
+            .modal-window h3 {
+                font-size: 1.4rem;
+                margin-bottom: 1.5rem;
+            }
+            .modal-form-row {
+                grid-template-columns: 1fr;
+                gap: 0.25rem;
+            }
+            .modal-form-row label {
+                text-align: left;
+                padding-right: 0;
+                font-size: 0.85rem;
+            }
+            .matrix-table {
+                font-size: 0.82rem;
+            }
+            .matrix-table th, .matrix-table td {
+                padding: 0.5rem 0.4rem;
+            }
+            .modal-footer-toolbar {
+                flex-direction: column;
+                gap: 0.8rem;
+            }
+            .btn-modal {
+                width: 100%;
+                padding: 0.75rem 1.5rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .metrics-grid { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
