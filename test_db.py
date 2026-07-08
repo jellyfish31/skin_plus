@@ -8,7 +8,7 @@ try:
         print("Success! Python is connected to MySQL database.")
         
         # Displaying server info
-        db_info = connection.get_server_info()
+        db_info = connection.server_info
         print(f"MySQL Server version: {db_info}")
 
 except Exception as e:
