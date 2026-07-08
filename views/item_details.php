@@ -7,6 +7,15 @@ if (!function_exists('format_product_title')) {
         return $name;
     }
 }
+if (!function_exists('format_store_name')) {
+    function format_store_name(string $name) {
+        $name_lower = strtolower(trim($name));
+        if ($name_lower === 'caring pharmacy' || $name_lower === 'caring') {
+            return 'CARiNG PHARMACY';
+        }
+        return ucwords($name_lower);
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -576,7 +585,7 @@ if (!function_exists('format_product_title')) {
                         <div class="pill-left">
                             <div class="rank-circle">#<?php echo ($index + 1); ?></div>
                             <div class="store-title-block">
-                                <span class="store-display-name"><?php echo htmlspecialchars($item['product_store']); ?></span>
+                                <span class="store-display-name"><?php echo htmlspecialchars(format_store_name($item['product_store'])); ?></span>
                                 <span class="status-tag <?php echo $status; ?>"><?php echo $status; ?></span>
                             </div>
                         </div>

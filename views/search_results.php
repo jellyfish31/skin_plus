@@ -62,6 +62,15 @@
     </main>
 
     <script>
+    function formatStoreNameJS(storesStr) {
+        if (!storesStr) return '';
+        return storesStr.split(', ').map(s => {
+            const sL = s.toLowerCase().trim();
+            if (sL === 'caring pharmacy' || sL === 'caring') return 'CARiNG PHARMACY';
+            return sL.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+        }).join(', ');
+    }
+
     function moveSlider(element, direction, event) {
         event.preventDefault(); event.stopPropagation();
         const viewport = element.parentElement;
@@ -146,7 +155,7 @@
                             </div>
                             <a href="${detailLink}" style="text-decoration: none; color: inherit;">
                                 <h4 class="prod-title">${group.name}</h4>
-                                <div class="store-badge"><i class="fa-solid fa-store"></i> Store: ${group.stores}</div>
+                                <div class="store-badge"><i class="fa-solid fa-store"></i> Store: ${formatStoreNameJS(group.stores)}</div>
                             </a>
                         </div>
                         <div class="price-range">Price: <span>${priceDisplay}</span></div>

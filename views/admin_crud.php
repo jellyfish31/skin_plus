@@ -410,6 +410,14 @@
     </div>
 
     <script>
+        function formatStoreNameJS(store) {
+            let sL = store.toLowerCase().trim();
+            if (sL === 'caring pharmacy' || sL === 'caring') return 'CARiNG PHARMACY';
+            if (sL === 'watsons') return 'Watsons';
+            if (sL === 'guardian') return 'Guardian';
+            return store.toUpperCase();
+        }
+
         function unpackMatrixNodes(storeNodesArray) {
             if (!storeNodesArray || storeNodesArray.length === 0) return [];
             return storeNodesArray.map(node => {
@@ -426,7 +434,7 @@
             let tbContent = ''; let priceSum = 0;
             elements.forEach(item => {
                 priceSum += item.price;
-                tbContent += `<tr><td style="font-weight:700; color:var(--primary-color);">${item.store.toUpperCase()}</td><td>${item.name}</td><td style="font-weight:600; color:var(--cheap-color);">RM ${item.price.toFixed(2)}</td></tr>`;
+                tbContent += `<tr><td style="font-weight:700; color:var(--primary-color);">${formatStoreNameJS(item.store)}</td><td>${item.name}</td><td style="font-weight:600; color:var(--cheap-color);">RM ${item.price.toFixed(2)}</td></tr>`;
             });
             document.getElementById('v_tb').innerHTML = tbContent;
             document.getElementById('v_avg').innerText = elements.length > 0 ? `RM ${(priceSum / elements.length).toFixed(2)}` : 'RM 0.00';
@@ -442,7 +450,7 @@
             let tbContent = ''; let priceSum = 0;
             elements.forEach(item => {
                 priceSum += item.price;
-                tbContent += `<tr><td style="font-weight:700; color:var(--primary-color);">${item.store.toUpperCase()}</td><td><input type="text" name="store_data[${item.id}][name]" value="${item.name.replace(/"/g, '&quot;')}" class="matrix-input" required></td><td>RM <input type="number" step="0.01" name="store_data[${item.id}][price]" value="${item.price.toFixed(2)}" class="matrix-input price-input-box" required></td></tr>`;
+                tbContent += `<tr><td style="font-weight:700; color:var(--primary-color);">${formatStoreNameJS(item.store)}</td><td><input type="text" name="store_data[${item.id}][name]" value="${item.name.replace(/"/g, '&quot;')}" class="matrix-input" required></td><td>RM <input type="number" step="0.01" name="store_data[${item.id}][price]" value="${item.price.toFixed(2)}" class="matrix-input price-input-box" required></td></tr>`;
             });
             document.getElementById('e_tb').innerHTML = tbContent;
             document.getElementById('e_avg').innerText = elements.length > 0 ? `RM ${(priceSum / elements.length).toFixed(2)}` : 'RM 0.00';
@@ -453,7 +461,7 @@
             let elements = unpackMatrixNodes(groupData.store_nodes);
             let tbContent = '';
             elements.forEach(item => {
-                tbContent += `<tr><td style="font-weight:700; color:var(--primary-color);">${item.store.toUpperCase()}</td><td style="font-size:0.85rem;">${item.name}</td><td><form method="POST" action="admin_crud.php" style="margin:0;" onsubmit="window.isNavigatingInside = true; return confirm('Erase this exact record line from DB?');"><input type="hidden" name="action" value="delete"><input type="hidden" name="product_id" value="${item.id}"><button type="submit" class="btn-modal btn-modal-delete" style="padding:4px 12px; font-size:0.8rem; border-radius:4px;"><i class="fa-regular fa-trash-can"></i> Delete</button></form></td></tr>`;
+                tbContent += `<tr><td style="font-weight:700; color:var(--primary-color);">${formatStoreNameJS(item.store)}</td><td style="font-size:0.85rem;">${item.name}</td><td><form method="POST" action="admin_crud.php" style="margin:0;" onsubmit="window.isNavigatingInside = true; return confirm('Erase this exact record line from DB?');"><input type="hidden" name="action" value="delete"><input type="hidden" name="product_id" value="${item.id}"><button type="submit" class="btn-modal btn-modal-delete" style="padding:4px 12px; font-size:0.8rem; border-radius:4px;"><i class="fa-regular fa-trash-can"></i> Delete</button></form></td></tr>`;
             });
             document.getElementById('d_tb').innerHTML = tbContent;
             document.getElementById('deleteModal').classList.add('active');

@@ -30,7 +30,7 @@ $final_json_datasets = [];
 foreach ($stores as $store) {
     $color = isset($color_palette[$store]) ? $color_palette[$store] : '#9D8FE1';
     $final_json_datasets[] = [
-        'label' => ucwords($store),
+        'label' => format_store_name($store),
         'data' => $store_raw_prices[$store],
         'borderColor' => $color,
         'backgroundColor' => $color . '10',
@@ -47,6 +47,15 @@ if (!function_exists('format_product_title')) {
         $name = preg_replace('/\b(\d+)\s*Ml\b/i', '$1 ML', $name);
         $name = preg_replace('/\b(\d+)\s*G\b/i', '$1 G', $name);
         return $name;
+    }
+}
+if (!function_exists('format_store_name')) {
+    function format_store_name(string $name) {
+        $name_lower = strtolower(trim($name));
+        if ($name_lower === 'caring pharmacy' || $name_lower === 'caring') {
+            return 'CARiNG PHARMACY';
+        }
+        return ucwords($name_lower);
     }
 }
 ?>
@@ -76,7 +85,7 @@ if (!function_exists('format_product_title')) {
         
         /* Redesigned Premium Matrix Row */
         .metric-row-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.25rem 2rem; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 10px rgba(0,0,0,0.01); }
-        .store-brand-title { font-size: 1.1rem; font-weight: 700; text-transform: capitalize; width: 160px; }
+        .store-brand-title { font-size: 1.1rem; font-weight: 700; width: 160px; }
         .price-sub-grid { display: flex; gap: 2.5rem; flex: 1; justify-content: flex-end; text-align: right; }
         .price-block-node { display: flex; flex-direction: column; }
         .price-label-text { font-size: 0.78rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
@@ -176,7 +185,7 @@ if (!function_exists('format_product_title')) {
                 ?>
                     <div class="metric-row-card" style="border-left: 5px solid <?php echo $brand_color; ?>;">
                         <div class="store-brand-title" style="color: <?php echo $brand_color; ?>;">
-                            <?php echo htmlspecialchars($s_name); ?>
+                            <?php echo htmlspecialchars(format_store_name($s_name)); ?>
                         </div>
                         <div class="price-sub-grid">
                             <div class="price-block-node">
@@ -200,7 +209,7 @@ if (!function_exists('format_product_title')) {
                 <div class="insight-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
                 <div class="insight-text">
                     <h3>All-Time Best Pricing Record</h3>
-                    <p>Our records show an all-time low price of <span class="insight-highlight">RM <?php echo number_format($absolute_best_price, 2); ?></span> at <span class="insight-highlight" style="text-transform: capitalize;"><?php echo htmlspecialchars($absolute_best_store); ?></span> on <span class="insight-highlight"><?php echo $absolute_best_date; ?></span>.</p>
+                    <p>Our records show an all-time low price of <span class="insight-highlight">RM <?php echo number_format($absolute_best_price, 2); ?></span> at <span class="insight-highlight"><?php echo htmlspecialchars(format_store_name($absolute_best_store)); ?></span> on <span class="insight-highlight"><?php echo $absolute_best_date; ?></span>.</p>
                 </div>
             </div>
         </div>
