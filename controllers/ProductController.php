@@ -4,6 +4,35 @@
 require_once __DIR__ . '/../model/Product.php';
 
 class ProductController {
+    public function __construct() {
+        $this->trackVisitor();
+    }
+
+    /**
+     * Tracks unique visitor sessions anonymously.
+     */
+    private function trackVisitor() {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        if (!isset($_SESSION['tracked_visit'])) {
+            $ip = $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
+            $ua = $_SERVER['HTTP_USER_AGENT'] ?? '';
+            $visitor_id = 'visitor_' . substr(md5($ip . $ua . time() . uniqid()), 0, 16);
+
+            $db = Database::getMysqli();
+            $stmt = $db->prepare("INSERT INTO visitors (visitor_id) VALUES (?)");
+            if ($stmt) {
+                $stmt->bind_param("s", $visitor_id);
+                $stmt->execute();
+                $stmt->close();
+            }
+
+            $_SESSION['tracked_visit'] = $visitor_id;
+        }
+    }
+
     /**
      * Renders the home page.
      */
