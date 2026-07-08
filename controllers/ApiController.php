@@ -17,9 +17,9 @@ class ApiController {
             exit();
         }
 
-        // Gemini API Key credentials
+        // Gemini API Key credentials - use gemini_key_2 as primary since key_1 is currently rate-limited
         $keys = file_exists(__DIR__ . '/../config/Keys.php') ? include __DIR__ . '/../config/Keys.php' : [];
-        $api_key = $keys['gemini_key_1'] ?? ''; 
+        $api_key = $keys['gemini_key_2'] ?? $keys['gemini_key_1'] ?? ''; 
         $endpointUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" . $api_key;
 
         $prompt = "You are an expert, fun, and highly engaging skincare guru chatbot for the SKIN+ platform.\n"
@@ -82,9 +82,9 @@ class ApiController {
             exit();
         }
 
-        // Call Gemini API in real-time
+        // Call Gemini API in real-time - fallback to key_1 if needed
         $keys = file_exists(__DIR__ . '/../config/Keys.php') ? include __DIR__ . '/../config/Keys.php' : [];
-        $apiKey = $keys['gemini_key_2'] ?? '';
+        $apiKey = $keys['gemini_key_2'] ?? $keys['gemini_key_1'] ?? '';
         $endpointUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" . $apiKey;
 
         $prompt = "You are an elite cosmetic chemist, skincare educator, and luxury beauty advisor for the SKIN+ platform.\n"
