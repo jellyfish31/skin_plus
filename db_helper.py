@@ -17,7 +17,7 @@ def get_db_connection():
                 database=config.get('database', 'skinplus_db')
             )
         except Exception as e:
-            print(f"⚠️ Error reading db_config.json: {e}. Falling back to local database.")
+            print(f"Error reading db_config.json: {e}. Falling back to local database.")
             
     # Fallback to local development DB
     return mysql.connector.connect(
