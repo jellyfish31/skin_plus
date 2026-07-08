@@ -13,7 +13,7 @@ if (!function_exists('format_product_title')) {
 <head>
     <meta charset="UTF-8">
     <title>SKIN+ | Product Breakdown</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -45,15 +45,10 @@ if (!function_exists('format_product_title')) {
             color: var(--text-dark);
             line-height: 1.6;
             font-size: 16px;
-            overflow-x: hidden;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
         }
 
         /* Navbar styling */
         .navbar {
-            width: 100%;
             display: flex;
             align-items: center;
             padding: 1.2rem 8%;
@@ -85,73 +80,126 @@ if (!function_exists('format_product_title')) {
             letter-spacing: -0.5px;
         }
 
-        /* Central Detail Container */
-        .detail-container {
-            width: 90%;
-            max-width: 720px;
-            margin: 2.5rem auto 5rem auto;
+        /* Master Layout Structure (2-Column Desktop layout) */
+        .detail-header-section {
             display: flex;
-            flex-direction: column;
-            gap: 2rem;
-            align-items: center;
-        }
-
-        /* Title Area */
-        .product-name {
-            font-size: 2.2rem;
-            font-weight: 800;
-            text-align: center;
-            line-height: 1.25;
-            color: var(--text-dark);
-            letter-spacing: -0.8px;
-            padding: 0 0.5rem;
-            width: 100%;
-        }
-
-        /* Image Box - beautiful card styling */
-        .img-box {
-            width: 100%;
-            max-width: 320px;
-            height: 320px;
+            max-width: 1000px;
+            margin: 3rem auto 2rem auto;
             background: var(--card-bg);
             border-radius: 24px;
+            padding: 2.5rem;
+            border: 1px solid var(--border-color);
+            gap: 3rem;
+            align-items: flex-start;
+            box-shadow: var(--shadow-md);
+        }
+        
+        /* Left Column (Image & Under-Buttons) */
+        .left-media-column {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 280px;
+            flex-shrink: 0;
+            gap: 1.2rem;
+        }
+        .img-box {
+            width: 280px;
+            height: 280px;
+            background: #FFFFFF;
+            border-radius: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 1.5rem;
             border: 1px solid var(--border-color);
-            box-shadow: var(--shadow-md);
+            box-shadow: var(--shadow-sm);
             transition: var(--transition-smooth);
             overflow: hidden;
         }
         .img-box:hover {
             transform: translateY(-4px) scale(1.02);
-            box-shadow: var(--shadow-lg);
-            border-color: rgba(93, 62, 188, 0.3);
+            box-shadow: var(--shadow-md);
         }
         .img-box img {
             max-height: 100%;
             max-width: 100%;
             object-fit: contain;
+        }
+        
+        /* Action Buttons Block */
+        .action-button-group {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        .forecast-btn {
+            width: 100%;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.85rem 1.5rem;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            text-align: center;
             transition: var(--transition-smooth);
+            box-shadow: 0 4px 10px rgba(93, 62, 188, 0.2);
+        }
+        .forecast-btn:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(93, 62, 188, 0.3);
+        }
+        .forecast-btn.secondary {
+            background-color: #FAFAFC;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+            box-shadow: none;
+        }
+        .forecast-btn.secondary:hover {
+            background-color: #F5F2FF;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
         }
 
-        /* AI Breakdown Card (Description) */
+        /* Right Column (Meta Title & AI Board) */
+        .product-meta-details {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+        .product-meta-details h2 {
+            font-size: 2rem;
+            font-weight: 800;
+            line-height: 1.3;
+            color: var(--text-dark);
+            letter-spacing: -0.5px;
+            text-align: left;
+        }
+        
+        /* AI breakdown items */
         .ai-breakdown-card {
-            width: 100%;
             background: linear-gradient(135deg, #FDFDFF 0%, #F6F2FF 100%);
             border: 1px solid rgba(93, 62, 188, 0.15);
-            border-radius: 24px;
-            padding: 2rem;
+            border-radius: 20px;
+            padding: 1.8rem;
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 1.5rem;
-            box-shadow: var(--shadow-md);
-            position: relative;
+            box-shadow: var(--shadow-sm);
         }
         .ai-grid-item {
             display: flex;
-            gap: 1rem;
+            gap: 0.8rem;
             align-items: flex-start;
         }
         .ai-icon {
@@ -185,59 +233,30 @@ if (!function_exists('format_product_title')) {
             font-weight: 500;
             line-height: 1.5;
         }
-
-        /* Action Buttons */
-        .action-button-group {
-            width: 100%;
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
+        
+        /* Skeleton Pulse Loader */
+        .skeleton-text {
+            height: 14px;
+            background: #EBE8F5;
+            border-radius: 4px;
+            margin-top: 6px;
+            animation: pulseLoading 1.4s infinite ease-in-out;
         }
-        .forecast-btn {
-            flex: 1;
-            max-width: 280px;
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 0.9rem 1.8rem;
-            border-radius: 30px;
-            font-weight: 700;
-            font-size: 0.95rem;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            text-decoration: none;
-            transition: var(--transition-smooth);
-            box-shadow: 0 4px 12px rgba(93, 62, 188, 0.25);
-        }
-        .forecast-btn:hover {
-            background-color: var(--primary-hover);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 18px rgba(93, 62, 188, 0.35);
-        }
-        .forecast-btn.secondary {
-            background-color: #FAFAFC;
-            color: var(--primary-color);
-            border: 2px solid var(--primary-color);
-            box-shadow: none;
-        }
-        .forecast-btn.secondary:hover {
-            background-color: #F5F2FF;
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-sm);
+        @keyframes pulseLoading {
+            0% { opacity: 0.4; }
+            50% { opacity: 1; }
+            100% { opacity: 0.4; }
         }
 
         /* Price Comparison Section */
         .comparison-wrapper {
-            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto 6rem auto;
             background: var(--card-bg);
             border-radius: 24px;
-            padding: 2rem;
+            padding: 2.5rem;
             border: 1px solid var(--border-color);
             box-shadow: var(--shadow-md);
-            margin-top: 1rem;
         }
         .comparison-wrapper h3 {
             text-align: center;
@@ -363,7 +382,6 @@ if (!function_exists('format_product_title')) {
             gap: 0.6rem;
             letter-spacing: -0.3px;
         }
-        
         .modal-body {
             max-height: 400px;
             overflow-y: auto;
@@ -374,53 +392,84 @@ if (!function_exists('format_product_title')) {
             scrollbar-width: thin;
         }
 
-        /* Fluid Skeleton Loader */
-        .skeleton-text {
-            height: 14px;
-            background: #EBE8F5;
-            border-radius: 4px;
-            margin-top: 6px;
-            animation: pulseLoading 1.4s infinite ease-in-out;
-        }
-        @keyframes pulseLoading {
-            0% { opacity: 0.4; }
-            50% { opacity: 1; }
-            100% { opacity: 0.4; }
+        /* MEDIA QUERIES FOR RESPONSIVE COMPATIBILITY AND FLUID SCALING */
+        @media (max-width: 992px) {
+            .detail-header-section {
+                padding: 2rem;
+                gap: 2rem;
+                margin: 2rem auto;
+            }
+            .left-media-column {
+                width: 240px;
+            }
+            .img-box {
+                width: 240px;
+                height: 240px;
+            }
         }
 
-        /* MEDIA QUERIES FOR FLUID RESPONSIVENESS AND DEVICE COMPATIBILITY */
         @media (max-width: 768px) {
             body { font-size: 14px; }
             .navbar { padding: 1rem 6%; }
-            .detail-container { margin: 1.5rem auto 4rem auto; gap: 1.8rem; }
-            .product-name { font-size: 1.8rem; }
-            .img-box { max-width: 280px; height: 280px; }
-            .ai-breakdown-card { padding: 1.5rem; gap: 1.2rem; }
-            .comparison-wrapper { padding: 1.5rem; }
-            .comparison-wrapper h3 { font-size: 1.5rem; margin-bottom: 1.5rem; }
+            .detail-header-section {
+                flex-direction: column;
+                align-items: center;
+                margin: 2rem 1rem;
+                padding: 1.5rem;
+                gap: 1.5rem;
+            }
+            .left-media-column {
+                width: 100%;
+                max-width: 280px;
+            }
+            .img-box {
+                width: 100%;
+                height: 280px;
+                max-width: 280px;
+            }
+            .product-meta-details {
+                width: 100%;
+                text-align: center;
+            }
+            .product-meta-details h2 {
+                text-align: center;
+                font-size: 1.6rem;
+            }
+            .ai-breakdown-card {
+                padding: 1.5rem;
+                gap: 1.2rem;
+            }
+            .comparison-wrapper {
+                margin: 0 1rem 4rem 1rem;
+                padding: 1.5rem;
+            }
+            .comparison-wrapper h3 {
+                font-size: 1.5rem;
+            }
         }
 
         @media (max-width: 580px) {
-            .ai-breakdown-card { grid-template-columns: 1fr; }
-            .ai-grid-item { grid-column: span 1 !important; }
-            .action-button-group { flex-direction: column; align-items: center; gap: 0.8rem; }
-            .forecast-btn { width: 100%; max-width: 100%; }
+            .ai-breakdown-card {
+                grid-template-columns: 1fr;
+            }
+            .ai-grid-item {
+                grid-column: span 1 !important;
+            }
         }
 
         @media (max-width: 480px) {
             body { font-size: 13px; }
-            .navbar { padding: 0.8rem 4%; }
             .logo-area h1 { font-size: 1.4rem; }
-            .product-name { font-size: 1.5rem; letter-spacing: -0.5px; }
-            .img-box { max-width: 240px; height: 240px; border-radius: 20px; }
-            .ai-breakdown-card { border-radius: 20px; padding: 1.2rem; }
+            .product-meta-details h2 { font-size: 1.4rem; }
+            .img-box { height: 220px; border-radius: 16px; }
+            .ai-breakdown-card { border-radius: 16px; padding: 1.2rem; }
             .ai-icon { width: 32px; height: 32px; font-size: 0.9rem; }
             .pill-row { padding: 0.8rem 1rem; border-radius: 16px; }
             .pill-left { gap: 0.8rem; }
             .rank-circle { width: 28px; height: 28px; font-size: 0.8rem; }
             .store-display-name { font-size: 0.95rem; }
             .pill-right-price { font-size: 1.1rem; }
-            .comparison-wrapper { border-radius: 20px; }
+            .comparison-wrapper { border-radius: 16px; }
             .modal-content { padding: 1.5rem; }
         }
     </style>
@@ -433,90 +482,87 @@ if (!function_exists('format_product_title')) {
         </a>
     </nav>
     
-    <div class="detail-container">
-        <!-- 1. Product Name -->
-        <h2 class="product-name"><?php echo htmlspecialchars(format_product_title($product_info['product_name'])); ?></h2>
-        
-        <!-- 2. Product Picture -->
-        <div class="img-box">
-            <img src="<?php echo (!empty($product_info['product_image']) && strpos($product_info['product_image'], 'placeholder') === false) ? htmlspecialchars($product_info['product_image']) : 'no_image.png'; ?>" alt="Product">
-        </div>
-        
-        <!-- 3. AI Skincare Description Card -->
-        <div class="ai-breakdown-card">
-            <div class="ai-grid-item">
-                <div class="ai-icon"><i class="fa-solid fa-face-smile"></i></div>
-                <div class="ai-info">
-                    <h4>Target Skin Type</h4>
-                    <div id="aiSkin" class="ai-content-text"><div class="skeleton-text" style="width:120px;"></div></div>
-                </div>
+    <section class="detail-header-section">
+        <div class="left-media-column">
+            <div class="img-box">
+                <img src="<?php echo (!empty($product_info['product_image']) && strpos($product_info['product_image'], 'placeholder') === false) ? htmlspecialchars($product_info['product_image']) : 'no_image.png'; ?>" alt="Product">
             </div>
-            <div class="ai-grid-item">
-                <div class="ai-icon"><i class="fa-solid fa-clock"></i></div>
-                <div class="ai-info">
-                    <h4>When To Apply</h4>
-                    <div id="aiWhen" class="ai-content-text"><div class="skeleton-text" style="width:140px;"></div></div>
-                </div>
-            </div>
-            <div class="ai-grid-item" style="grid-column: span 2;">
-                <div class="ai-icon"><i class="fa-solid fa-sparkles"></i></div>
-                <div class="ai-info">
-                    <h4>Key Benefits</h4>
-                    <div id="aiBenefits" class="ai-content-text"><div class="skeleton-text" style="width:100%;"></div></div>
-                </div>
-            </div>
-            <div class="ai-grid-item" style="grid-column: span 2;">
-                <div class="ai-icon"><i class="fa-solid fa-flask"></i></div>
-                <div class="ai-info">
-                    <h4>Star Ingredients</h4>
-                    <div id="aiIngredients" class="ai-content-text"><div class="skeleton-text" style="width:100%;"></div></div>
-                </div>
+            <div class="action-button-group">
+                <a href="price_history.php?signature=<?php echo urlencode($current_signature); ?>&name=<?php echo urlencode($product_info['product_name']); ?>" class="forecast-btn">
+                    <i class="fa-solid fa-chart-line"></i> View Price History
+                </a>
+                <button class="forecast-btn secondary" id="openMoreInfoBtn">
+                    <i class="fa-solid fa-circle-info"></i> More Info
+                </button>
             </div>
         </div>
 
-        <!-- 4. Action Buttons -->
-        <div class="action-button-group">
-            <a href="price_history.php?signature=<?php echo urlencode($current_signature); ?>&name=<?php echo urlencode($product_info['product_name']); ?>" class="forecast-btn">
-                <i class="fa-solid fa-chart-line"></i> View Price History
-            </a>
-            <button class="forecast-btn secondary" id="openMoreInfoBtn">
-                <i class="fa-solid fa-circle-info"></i> More Info
-            </button>
+        <div class="product-meta-details">
+            <h2><?php echo htmlspecialchars(format_product_title($product_info['product_name'])); ?></h2>
+            
+            <div class="ai-breakdown-card">
+                <div class="ai-grid-item">
+                    <div class="ai-icon"><i class="fa-solid fa-face-smile"></i></div>
+                    <div class="ai-info">
+                        <h4>Target Skin Type</h4>
+                        <div id="aiSkin" class="ai-content-text"><div class="skeleton-text" style="width:120px;"></div></div>
+                    </div>
+                </div>
+                <div class="ai-grid-item">
+                    <div class="ai-icon"><i class="fa-solid fa-clock"></i></div>
+                    <div class="ai-info">
+                        <h4>When To Apply</h4>
+                        <div id="aiWhen" class="ai-content-text"><div class="skeleton-text" style="width:140px;"></div></div>
+                    </div>
+                </div>
+                <div class="ai-grid-item" style="grid-column: span 2;">
+                    <div class="ai-icon"><i class="fa-solid fa-sparkles"></i></div>
+                    <div class="ai-info">
+                        <h4>Key Benefits</h4>
+                        <div id="aiBenefits" class="ai-content-text"><div class="skeleton-text" style="width:100%;"></div></div>
+                    </div>
+                </div>
+                <div class="ai-grid-item" style="grid-column: span 2;">
+                    <div class="ai-icon"><i class="fa-solid fa-flask"></i></div>
+                    <div class="ai-info">
+                        <h4>Star Ingredients</h4>
+                        <div id="aiIngredients" class="ai-content-text"><div class="skeleton-text" style="width:100%;"></div></div>
+                    </div>
+                </div>
+            </div>
         </div>
+    </section>
 
-        <!-- 5. Price Comparison Box -->
-        <section class="comparison-wrapper">
-            <h3>Price Comparison</h3>
-            <div class="price-list-stack">
-                <?php if ($total_stores > 0): ?>
-                    <?php foreach ($store_prices as $index => $item): 
-                        $current_price = $item['product_price'];
-                        $status = ($current_price < ($average_price * 0.95)) ? "cheap" : (($current_price > ($average_price * 1.05)) ? "expensive" : "normal");
-                    ?>
-                        <div class="pill-row">
-                            <div class="pill-left">
-                                <div class="rank-circle">#<?php echo ($index + 1); ?></div>
-                                <div class="store-title-block">
-                                    <span class="store-display-name"><?php echo htmlspecialchars($item['product_store']); ?></span>
-                                    <span class="status-tag <?php echo $status; ?>"><?php echo $status; ?></span>
-                                </div>
+    <section class="comparison-wrapper">
+        <h3>Price Comparison</h3>
+        <div class="price-list-stack">
+            <?php if ($total_stores > 0): ?>
+                <?php foreach ($store_prices as $index => $item): 
+                    $current_price = $item['product_price'];
+                    $status = ($current_price < ($average_price * 0.95)) ? "cheap" : (($current_price > ($average_price * 1.05)) ? "expensive" : "normal");
+                ?>
+                    <div class="pill-row">
+                        <div class="pill-left">
+                            <div class="rank-circle">#<?php echo ($index + 1); ?></div>
+                            <div class="store-title-block">
+                                <span class="store-display-name"><?php echo htmlspecialchars($item['product_store']); ?></span>
+                                <span class="status-tag <?php echo $status; ?>"><?php echo $status; ?></span>
                             </div>
-                            <div class="pill-right-price">RM <?php echo number_format($current_price, 2); ?></div>
                         </div>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <p style="text-align:center; color:var(--text-muted); padding: 1rem 0;">No matching store details indexed for recent batches.</p>
-                <?php endif; ?>
-            </div>
-        </section>
-    </div>
+                        <div class="pill-right-price">RM <?php echo number_format($current_price, 2); ?></div>
+                    </div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <p style="text-align:center; color:var(--text-muted); padding: 1rem 0;">No matching store details indexed for recent batches.</p>
+            <?php endif; ?>
+        </div>
+    </section>
 
-    <!-- More Info Modal -->
-    <div id="moreInfoModal">
-        <div class="modal-content">
-            <span id="closeMoreInfoModal">&times;</span>
-            <h3><i class="fa-solid fa-wand-magic-sparkles"></i> Deep Science Breakdown</h3>
-            <div class="modal-body">
+    <div id="moreInfoModal" style="display:none; position:fixed; z-index:1000; left:0; top:0; width:100%; height:100%; background:rgba(45,37,67,0.4); backdrop-filter:blur(4px); align-items:center; justify-content:center;">
+        <div style="background:#FFFFFF; padding:2.5rem; border-radius:24px; max-width:600px; width:90%; border:1px solid #E6E4ED; box-shadow:0 10px 30px rgba(0,0,0,0.05); position:relative; text-align:left;">
+            <span id="closeMoreInfoModal" style="position:absolute; right:25px; top:20px; font-size:1.5rem; cursor:pointer; color:var(--text-muted);">&times;</span>
+            <h3 style="font-size:1.6rem; font-weight:700; margin-bottom:1.5rem; color:var(--primary-color);"><i class="fa-solid fa-wand-magic-sparkles"></i> Deep Science Breakdown</h3>
+            <div style="max-height: 400px; overflow-y: auto; padding-right: 10px; display:flex; flex-direction:column; gap:1.2rem; scrollbar-width: thin;">
                 <div>
                     <h4 style="font-size:0.95rem; color:#4A358A; text-transform:uppercase; font-weight:700;"><i class="fa-solid fa-bullseye"></i> Targeted Concerns</h4>
                     <p id="detailConcerns" style="font-size:0.95rem; margin-top:3px; color:#443B57;"></p>
