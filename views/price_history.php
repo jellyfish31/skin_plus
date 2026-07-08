@@ -91,7 +91,7 @@ foreach ($stores as $store) {
         
         .metric-row-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.25rem 2rem; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 10px rgba(0,0,0,0.01); }
         .store-brand-title { font-size: 1.1rem; font-weight: 700; width: 160px; }
-        .price-sub-grid { display: flex; gap: 2.5rem; flex: 1; justify-content: flex-end; text-align: right; }
+        .price-sub-grid { display: grid; grid-template-columns: repeat(3, 1fr); flex: 1; text-align: right; }
         .price-block-node { display: flex; flex-direction: column; }
         .price-label-text { font-size: 0.78rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
         .price-value { font-size: 1.25rem; font-weight: 700; margin-top: 2px; white-space: nowrap; }
@@ -131,6 +131,7 @@ foreach ($stores as $store) {
                 padding-bottom: 0.5rem;
             }
             .price-sub-grid {
+                display: flex;
                 justify-content: space-around;
                 text-align: center;
                 gap: 1rem;
