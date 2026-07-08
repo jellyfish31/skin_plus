@@ -101,17 +101,18 @@ if ($action === 'sync') {
 
         // Sync history_logs batch
         if (isset($data['history_logs']) && is_array($data['history_logs'])) {
-            $stmt = $db->prepare("INSERT INTO history_logs (log_id, action_type, target_identifier, old_value, new_value, log_timestamp) VALUES (?, ?, ?, ?, ?, ?)");
+            $stmt = $db->prepare("INSERT INTO history_logs (log_id, admin_user, action_type, target_identifier, old_value, new_value, changed_at) VALUES (?, ?, ?, ?, ?, ?, ?)");
             $count = 0;
             foreach ($data['history_logs'] as $row) {
                 $stmt->bind_param(
-                    "isssss",
+                    "issssss",
                     $row['log_id'],
+                    $row['admin_user'],
                     $row['action_type'],
                     $row['target_identifier'],
                     $row['old_value'],
                     $row['new_value'],
-                    $row['log_timestamp']
+                    $row['changed_at']
                 );
                 $stmt->execute();
                 $count++;
