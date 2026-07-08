@@ -3,15 +3,11 @@ import csv
 import os
 
 # 🗄️ 1. DATABASE CONNECTION
+from db_helper import get_db_connection
 try:
-    db = mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="",
-        database="skinplus_db"
-    )
+    db = get_db_connection()
     cursor = db.cursor()
-    print("✅ Connected to skinplus_db")
+    print("✅ Connected to database")
 except Exception as e:
     print(f"❌ Database Connection Failed: {e}")
     exit()

@@ -1,16 +1,11 @@
 import mysql.connector
 
+from db_helper import get_db_connection
 try:
-    # Connecting to XAMPP MySQL
-    connection = mysql.connector.connect(
-        host="localhost",
-        user="root",        # XAMPP default
-        password="",        # XAMPP default is empty
-        database="skinplus_db"
-    )
+    connection = get_db_connection()
 
     if connection.is_connected():
-        print("✅ Success! Python is connected to XAMPP MySQL.")
+        print("✅ Success! Python is connected to MySQL database.")
         
         # Displaying server info
         db_info = connection.get_server_info()

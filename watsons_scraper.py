@@ -53,10 +53,11 @@ driver.execute_cdp_cmd('Page.addScriptToEvaluateOnNewDocument', {
 })
 
 # --- 3. DATABASE SETUP CONNECTION ---
+from db_helper import get_db_connection
 try:
-    db = mysql.connector.connect(host="localhost", user="root", password="", database="skinplus_db")
+    db = get_db_connection()
     cursor = db.cursor()
-    print("✅ Connected to skinplus_db")
+    print("✅ Connected to database")
 except Exception as e:
     print(f"❌ DB Fail: {e}")
     driver.quit()

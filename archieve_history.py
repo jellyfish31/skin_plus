@@ -1,16 +1,11 @@
 # archive_history.py
 import mysql.connector
 
-db_config = {
-    "host": "localhost",
-    "user": "root",
-    "password": "",
-    "database": "skinplus_db"
-}
+from db_helper import get_db_connection
 
 def archive_old_prices():
     try:
-        db = mysql.connector.connect(**db_config)
+        db = get_db_connection()
         cursor = db.cursor()
         print("📦 Connected to database. Running History Migration (Keeping Top 2 Per Item)...")
 
