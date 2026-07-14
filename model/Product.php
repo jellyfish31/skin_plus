@@ -143,7 +143,7 @@ class Product {
     /**
      * Gets base profile info of a product by signature or name.
      */
-    public static function getProductProfile($name, $signature) {
+    public static function getProductProfile(string $name, string $signature) {
         $db = Database::getMysqli();
         $escaped_name = $db->real_escape_string($name);
         $escaped_sig = $db->real_escape_string($signature);
@@ -167,7 +167,7 @@ class Product {
     /**
      * Gets store prices for a normalized signature.
      */
-    public static function getStorePrices($signature) {
+    public static function getStorePrices(string $signature) {
         $db = Database::getMysqli();
         $escaped_sig = $db->real_escape_string($signature);
         $store_prices = [];
@@ -208,7 +208,7 @@ class Product {
     /**
      * Fetch historical timelines for line charts.
      */
-    public static function getPriceHistory($signature) {
+    public static function getPriceHistory(string $signature) {
         $db = Database::getMysqli();
         $escaped_sig = $db->real_escape_string($signature);
         $timeline_js_labels = [];
@@ -251,7 +251,7 @@ class Product {
     /**
      * Delete product by ID.
      */
-    public static function deleteProduct($id) {
+    public static function deleteProduct(int $id) {
         $db = Database::getMysqli();
         $id = intval($id);
 
@@ -267,7 +267,7 @@ class Product {
     /**
      * Updates properties for an entire visual signature group and individual store prices.
      */
-    public static function updateProductGroup($id, $category, $brand, $storeData) {
+    public static function updateProductGroup(int $id, string $category, string $brand, array $storeData) {
         $db = Database::getMysqli();
         $id = intval($id);
         $escaped_category = $db->real_escape_string($category);
@@ -458,7 +458,7 @@ class Product {
     /**
      * Assigns a signature to a specific product name.
      */
-    public static function assignSignature($product_name, $signature) {
+    public static function assignSignature(string $product_name, string $signature) {
         $db = Database::getMysqli();
         $escaped_name = $db->real_escape_string($product_name);
         $escaped_sig = $db->real_escape_string($signature);
@@ -471,7 +471,7 @@ class Product {
     /**
      * Fetches candidates for Vision API matching.
      */
-    public static function fetchVisionCandidates($brand, $category, $size_query) {
+    public static function fetchVisionCandidates(string $brand, string $category, string $size_query) {
         $db = Database::getMysqli();
         $escaped_brand = $db->real_escape_string($brand);
         $escaped_category = $db->real_escape_string($category);
@@ -499,7 +499,7 @@ class Product {
     /**
      * Updates signature and logs AI auto match.
      */
-    public static function updateAiMatchedSignature($product_name, $signature) {
+    public static function updateAiMatchedSignature(string $product_name, string $signature) {
         $db = Database::getMysqli();
         $escaped_sig = $db->real_escape_string($signature);
         $escaped_name = $db->real_escape_string($product_name);
@@ -533,7 +533,7 @@ class Product {
     /**
      * Gets the latest products for a brand, filtering out Shopee/Lazada and ignoring old history.
      */
-    public static function getLatestProductsByBrand($brand) {
+    public static function getLatestProductsByBrand(string $brand) {
         $db = Database::getMysqli();
         $escaped_brand = $db->real_escape_string(strtolower($brand));
         
@@ -568,7 +568,7 @@ class Product {
     /**
      * Retrieves existing signature suggestions for a brand/category combination.
      */
-    public static function getSuggestionsForProduct($brand, $category) {
+    public static function getSuggestionsForProduct(string $brand, string $category) {
         $db = Database::getMysqli();
         $escaped_brand = $db->real_escape_string($brand);
         $escaped_category = $db->real_escape_string($category);

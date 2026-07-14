@@ -33,6 +33,16 @@ def main():
 
     # 2️⃣ STEP 2: Execute your product web scrapers
     # Change "scraper.py" to match your actual scraping file name!
+    if not execute_worker_script("caring_scraper.py"):
+        sys.exit(1)
+
+    time.sleep(120)
+
+    if not execute_worker_script("caring_scraper2.py"):
+        sys.exit(1)
+
+    time.sleep(60)
+
     if not execute_worker_script("watsons_scraper.py"):
         sys.exit(1)
 
@@ -41,23 +51,13 @@ def main():
     if not execute_worker_script("guardian_scraper.py"):
         sys.exit(1)
 
-    time.sleep(60)
-
-    if not execute_worker_script("caring_scraper.py"):
-        sys.exit(1)
-
-    time.sleep(60)
-
-    if not execute_worker_script("caring_scraper2.py"):
-        sys.exit(1)
-
     # 3️⃣ STEP 3: Map fresh NULL products to their visual signatures
     # Change "offline_matching.py" to match your actual matching file name!
     if not execute_worker_script("offline_matching.py"):
         sys.exit(1)
 
     # 4️⃣ STEP 4: Compute updated 30-day linear regression price forecasts
-    if not execute_worker_script("price_prediction.py"):
+    if not execute_worker_script("sync_to_live.py"):
         sys.exit(1)
 
     total_pipeline_time = time.time() - pipeline_start

@@ -26,7 +26,7 @@ def send_request(url, payload_dict, token):
         method='POST'
     )
     try:
-        with urllib.request.urlopen(req) as response:
+        with urllib.request.urlopen(req, timeout=15) as response:
             res_body = response.read().decode('utf-8')
             return json.loads(res_body)
     except Exception as e:

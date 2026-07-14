@@ -9,6 +9,14 @@ from selenium.common.exceptions import TimeoutException
 import time
 import datetime
 import traceback
+import sys
+
+# Ensure UTF-8 output encoding to avoid console print crashes on emojis in Windows
+if hasattr(sys.stdout, 'reconfigure'):
+    sys.stdout.reconfigure(encoding='utf-8')
+if hasattr(sys.stderr, 'reconfigure'):
+    sys.stderr.reconfigure(encoding='utf-8')
+
 
 # --- 1. CONFIG ---
 brands = ["Skintific", "Cetaphil", "Garnier", "Cosrx", "Medicube", "Glad2Glow", "Eucerin", "Aiken"]
