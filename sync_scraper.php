@@ -52,6 +52,8 @@ if ($action === 'sync') {
     $results = [];
 
     try {
+        $db->begin_transaction();
+        
         // Sync products batch
         if (isset($data['products']) && is_array($data['products'])) {
             $stmt = $db->prepare("INSERT INTO products (product_id, product_name, product_brand, product_price, product_store, product_category, product_image, visual_signature, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
@@ -120,10 +122,12 @@ if ($action === 'sync') {
             $results['history_logs'] = $count;
         }
 
+        $db->commit();
         $db->query("SET FOREIGN_KEY_CHECKS = 1;");
         echo json_encode(['success' => true, 'synced' => $results]);
 
     } catch (Exception $e) {
+        $db->rollback();
         $db->query("SET FOREIGN_KEY_CHECKS = 1;");
         http_response_code(500);
         echo json_encode(['success' => false, 'error' => 'Sync batch failed: ' . $e->getMessage()]);
