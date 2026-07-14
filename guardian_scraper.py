@@ -43,7 +43,7 @@ options.add_experimental_option("excludeSwitches", ["enable-automation"])
 options.add_experimental_option('useAutomationExtension', False)
 options.add_argument("--disable-blink-features=AutomationControlled")
 
-driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+driver = webdriver.Chrome(options=options)
 
 driver.execute_cdp_cmd('Page.addScriptToEvaluateOnNewDocument', {
     'source': 'Object.defineProperty(navigator, "webdriver", {get: () => undefined})'
