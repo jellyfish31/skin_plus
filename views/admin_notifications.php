@@ -84,7 +84,7 @@
                                 </div>
                                 <div class="product-details-area">
                                     <h4 style="font-size:1.1rem; font-weight:700; margin:0; color:#2D2543; line-height:1.3;"><?php echo htmlspecialchars($row['product_name']); ?></h4>
-                                    <div class="meta">Brand: <span><?php echo htmlspecialchars($row['product_brand']); ?></span> | Category: <span><?php echo htmlspecialchars($row['product_category']); ?></span></div>
+                                    <div class="meta">Brand: <span><?php echo htmlspecialchars($row['product_brand']); ?></span> | Category: <span><?php echo htmlspecialchars($row['product_category']); ?></span> | Store: <span><?php echo htmlspecialchars($row['product_store']); ?></span></div>
                                 </div>
                             </div>
                             
