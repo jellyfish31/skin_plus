@@ -12,7 +12,7 @@ class Notification {
         $db = Database::getMysqli();
         $sql = "SELECT product_name, product_brand, product_category, product_store, product_image 
                 FROM products 
-                WHERE visual_signature = 'PENDING_ADMIN' 
+                WHERE visual_signature = 'PENDING_ADMIN' OR visual_signature IS NULL
                 GROUP BY product_name";
                 
         $result = $db->query($sql);
@@ -33,7 +33,7 @@ class Notification {
         $db = Database::getMysqli();
         $sql = "SELECT COUNT(DISTINCT product_name) as cnt 
                 FROM products 
-                WHERE visual_signature = 'PENDING_ADMIN'";
+                WHERE visual_signature = 'PENDING_ADMIN' OR visual_signature IS NULL";
         $result = $db->query($sql);
         if ($result) {
             $row = $result->fetch_assoc();

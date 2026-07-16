@@ -109,14 +109,36 @@ class AdminController {
                 // Sync and append updates to local spreadsheet records
                 if (file_exists($csv_filename)) {
                     $rows = [];
+                    $found = false;
                     if (($handle = fopen($csv_filename, "r")) !== FALSE) {
                         while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
-                            if (isset($data[1]) && trim($data[1]) === $target_name) {
+                            if (isset($data[1]) && strcasecmp(trim($data[1]), $target_name) === 0) {
                                 $data[8] = $custom_signature; 
+                                $found = true;
                             }
                             $rows[] = $data;
                         }
                         fclose($handle);
+                    }
+
+                    if (!$found) {
+                        $db = Database::getMysqli();
+                        $escaped_name = $db->real_escape_string($target_name);
+                        $prod_info = $db->query("SELECT * FROM products WHERE product_name = '$escaped_name' LIMIT 1")->fetch_assoc();
+                        if ($prod_info) {
+                            $new_row = [
+                                'NEW_SCRAPE',
+                                $prod_info['product_name'],
+                                $prod_info['product_brand'],
+                                $prod_info['product_category'],
+                                $prod_info['product_image'],
+                                $prod_info['product_price'],
+                                $prod_info['product_store'],
+                                date('Y-m-d H:i:s'),
+                                $custom_signature
+                            ];
+                            $rows[] = $new_row;
+                        }
                     }
 
                     $write_handle = fopen($csv_filename, "w");

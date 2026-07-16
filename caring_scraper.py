@@ -13,7 +13,7 @@ brands = ["Skintific", "Cetaphil", "Garnier", "Cosrx"]
 category_map = {
     "cleanser": "Cleanser", "wash": "Cleanser", "toner": "Toner", "serum": "Serum", "sunscreen": "Sunscreen",
     "sunblock": "Sunscreen", "mask": "Mask", "micellar": "Micellar Water", "eye": "Eye Care",
-    "moisturizer": "Moisturizer", "moisturiser": "Moisturizer", "mosituriser": "Moisturizer", 
+    "moisturizer": "Moisturizer", "moisturiser": "Moisturizer", "mosituriser": "Moisturizer", "moisture": "Moisturizer",
     "gel cream": "Moisturizer", "jelly cream": "Moisturizer", "cream": "Moisturizer", "lotion": "Moisturizer", "spf": "Sunscreen",        
 }
 
@@ -50,7 +50,7 @@ except Exception as e:
 
 # --- 4. THE ENGINE ---
 for brand in brands:
-    for cat_search in ["Face Wash", "Toner", "Serum", "Moisturizer", "Sunscreen", "Mask", "Micellar Water"]:
+    for cat_search in ["Face Wash", "Toner", "Serum", "Gel", "Sunscreen", "Mask", "Micellar Water"]:
         search_query = f"{brand} {cat_search}"
         print(f"\n🔎 Searching CARiNG Pharmacy: {search_query}...")
         

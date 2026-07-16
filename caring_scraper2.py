@@ -13,7 +13,7 @@ brands = ["Eucerin", "Aiken"]
 category_map = {
     "cleanser": "Cleanser", "wash": "Cleanser", "toner": "Toner", "serum": "Serum", "sunscreen": "Sunscreen",
     "sunblock": "Sunscreen", "mask": "Mask", "micellar": "Micellar Water", "eye": "Eye Care",
-    "moisturizer": "Moisturizer", "moisturiser": "Moisturizer", "mosituriser": "Moisturizer", 
+    "moisturizer": "Moisturizer", "moisturiser": "Moisturizer", "mosituriser": "Moisturizer","moisture": "Moisturizer", 
     "gel cream": "Moisturizer", "jelly cream": "Moisturizer", "cream": "Moisturizer", "lotion": "Moisturizer", "spf": "Sunscreen",        
 }
 
