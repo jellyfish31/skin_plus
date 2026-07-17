@@ -1,4 +1,10 @@
 <?php
+$product_info = $product_info ?? [];
+$current_signature = $current_signature ?? '';
+$store_prices = $store_prices ?? [];
+$total_stores = $total_stores ?? 0;
+$average_price = $average_price ?? 0.0;
+
 if (!function_exists('format_product_title')) {
     function format_product_title(string $name) {
         $name = strtolower($name); $name = ucwords($name);

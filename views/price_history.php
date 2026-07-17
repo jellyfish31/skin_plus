@@ -1,4 +1,14 @@
 <?php
+$product_info = $product_info ?? [];
+$stores = $stores ?? [];
+$ordered_labels = $ordered_labels ?? [];
+$raw_history_rows = $raw_history_rows ?? [];
+$final_json_datasets = $final_json_datasets ?? [];
+$store_analysis_metrics = $store_analysis_metrics ?? [];
+$absolute_best_store = $absolute_best_store ?? '';
+$absolute_best_price = $absolute_best_price ?? 0.0;
+$absolute_best_date = $absolute_best_date ?? '';
+
 if (!function_exists('format_product_title')) {
     function format_product_title(string $name) {
         $name = strtolower($name); $name = ucwords($name);
