@@ -1,3 +1,7 @@
+<?php
+$view_title = $view_title ?? '';
+$grouped_display_rows = $grouped_display_rows ?? [];
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -56,7 +60,7 @@
     </nav>
     <header class="content-header">
         <h2 id="pageViewTitle"><?php echo $view_title; ?></h2>
-        <p id="productCount">0 unique items isolated</p>
+        <p id="productCount">0 items found</p>
     </header>
     
     <main class="products-grid" id="mainProductsGrid">
@@ -132,7 +136,7 @@
             }));
         }
 
-        if (countBadge) countBadge.innerText = `${displayGroup.length} unique items isolated`;
+        if (countBadge) countBadge.innerText = `${displayGroup.length} items found`;
 
         if (gridContainer && displayGroup.length > 0) {
             gridContainer.innerHTML = '';

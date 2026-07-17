@@ -109,7 +109,7 @@ class Product {
                 $final_sql = $base_sql . $sql_fallback_clauses . " GROUP BY normalized_signature ORDER BY display_name ASC";
                 $result = $db->query($final_sql);
                 $display_correction = trim(($corrected_brand ? ucfirst($corrected_brand) : '') . ' ' . ($corrected_category ? ucfirst($corrected_category) : ''));
-                $view_title = "Showing results for fuzzy match: '<strong>" . htmlspecialchars($display_correction) . "</strong>'";
+                $view_title = "Showing results for \"<strong>" . htmlspecialchars($display_correction) . "</strong>\"";
             }
         }
 
