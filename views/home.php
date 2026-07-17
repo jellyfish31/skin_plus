@@ -365,7 +365,7 @@
 
     <main class="hero">
         <h2>Find the Best Skincare Prices</h2>
-        <p>Compare prices across watsons, guardian, CARiNG PHARMACY and so much more</p>
+        <p>Compare prices across watsons, guardian and CARiNG PHARMACY</p>
         
         <form action="searchByBox_results.php" method="GET">
             <div class="search-container">
@@ -446,7 +446,7 @@
                 <img src="watsons.png" alt="watsons" class="partner-logo">
             </div>
         </div>
-        <p>Comparing prices from watsons, guardian, CARiNG PHARMACY and so much more</p>
+        <p>Comparing prices from watsons, guardian and CARiNG PHARMACY</p>
         <p style="margin-top: 0.5rem; font-size: 0.75rem;">Data updated everyday via web scraping</p>
     </footer>
 

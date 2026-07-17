@@ -17,7 +17,8 @@ $grouped_display_rows = $grouped_display_rows ?? [];
         body { background-color: var(--bg-color); color: var(--text-dark); }
         .navbar { display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 8%; background: var(--card-bg); border-bottom: 1px solid var(--border-color); }
         .back-nav { display: flex; align-items: center; gap: 1rem; text-decoration: none; color: var(--text-dark); }
-        .logo-area h1 { font-size: 1.8rem; font-weight: 700; color: var(--primary-color); }
+        .logo-area h1 { font-size: 1.8rem; font-weight: 700; color: var(--primary-color); line-height: 1.1; }
+        .logo-area p { font-size: 0.85rem; color: var(--text-muted); font-weight: 500; }
         .content-header { max-width: 1100px; margin: 4rem auto 2rem auto; padding: 0 2rem; }
         .content-header h2 { font-size: 2.5rem; font-weight: 700; }
         .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 2.5rem; max-width: 1100px; margin: 0 auto 5rem auto; padding: 0 2rem; }
@@ -42,6 +43,7 @@ $grouped_display_rows = $grouped_display_rows ?? [];
             body { font-size: 14px; }
             .navbar { padding: 1rem 6%; }
             .logo-area h1 { font-size: 1.5rem; }
+            .logo-area p { font-size: 0.75rem; }
             
             .content-header { margin: 2rem auto 1.5rem auto; padding: 0 1rem; }
             .content-header h2 { font-size: 1.8rem; text-align: center; }
@@ -55,7 +57,7 @@ $grouped_display_rows = $grouped_display_rows ?? [];
     <nav class="navbar">
         <a href="index.php" class="back-nav">
             <i class="fa-solid fa-chevron-left"></i>
-            <div class="logo-area"><h1>SKIN+</h1></div>
+            <div class="logo-area"><h1>SKIN+</h1><p>Smart Price Comparison</p></div>
         </a>
     </nav>
     <header class="content-header">

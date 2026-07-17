@@ -89,7 +89,8 @@ foreach ($stores as $store) {
         body { background-color: var(--bg-color); color: var(--text-dark); }
         .navbar { display: flex; align-items: center; padding: 1.5rem 8%; background: var(--card-bg); border-bottom: 1px solid var(--border-color); }
         .back-nav { display: flex; align-items: center; gap: 1rem; text-decoration: none; color: var(--text-dark); }
-        .logo-area h1 { font-size: 1.8rem; font-weight: 700; color: var(--primary-color); }
+        .logo-area h1 { font-size: 1.8rem; font-weight: 700; color: var(--primary-color); line-height: 1.1; }
+        .logo-area p { font-size: 0.85rem; color: var(--text-muted); font-weight: 500; }
         .main-container { max-width: 1100px; margin: 3rem auto; padding: 0 2rem; }
         .page-header { text-align: center; margin-bottom: 2.5rem; }
         .page-title { font-size: 2.2rem; font-weight: 700; margin-bottom: 0.2rem; }
@@ -120,6 +121,7 @@ foreach ($stores as $store) {
             body { font-size: 14px; }
             .navbar { padding: 1rem 6%; }
             .logo-area h1 { font-size: 1.5rem; }
+            .logo-area p { font-size: 0.75rem; }
             .main-container { padding: 0 1rem; margin: 2rem auto; }
             .page-title { font-size: 1.6rem; }
             
@@ -184,7 +186,7 @@ foreach ($stores as $store) {
     <nav class="navbar">
         <a href="javascript:history.back()" class="back-nav">
             <i class="fa-solid fa-chevron-left" style="font-size: 1.2rem;"></i>
-            <div class="logo-area"><h1>SKIN+</h1></div>
+            <div class="logo-area"><h1>SKIN+</h1><p>Smart Price Comparison</p></div>
         </a>
     </nav>
 
