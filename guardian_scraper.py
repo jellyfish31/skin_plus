@@ -50,19 +50,21 @@ driver.execute_cdp_cmd('Page.addScriptToEvaluateOnNewDocument', {
 })
 
 # --- 2. DATABASE CONNECTION ---
-from db_helper import get_db_connection
+from db_helper import get_db_connection, add_history_log
+import sys
 try:
     db = get_db_connection()
     cursor = db.cursor()
     print("✅ Connected to database")
-    
+    add_history_log(db, 'SCRAPE_START', 'Guardian Scraper', 'Idle', 'Scraping started')
 except Exception as e:
     print(f"❌ Database connection failed: {e}")
     driver.quit()
     exit()
 
 # --- 3. THE BRAND SEARCH ENGINE ---
-for brand in brands:
+try:
+    for brand in brands:
     print(f"\n🚀 [GUARDIAN] Searching Brand: {brand}")
     last_page_items = [] 
     
@@ -250,11 +252,29 @@ for brand in brands:
             except Exception as item_error:
                 continue 
 
-# --- 4. FINAL SUMMARY DASHBOARD ---
-print("\n" + "="*50)
-print(f"🏁 GUARDIAN SCRAPE COMPLETE!")
-print(f"📦 Total Products Cleaned & Processed: {total_added}")
-print("="*50)
+except Exception as e:
+    print(f"❌ Error during execution: {e}")
+finally:
+    # --- 4. FINAL SUMMARY DASHBOARD ---
+    print("\n" + "="*50)
+    print(f"🏁 GUARDIAN SCRAPE COMPLETE!")
+    print(f"📦 Total Products Cleaned & Processed: {total_added}")
+    print("="*50)
 
-db.close()
-driver.quit()
+    if 'db' in locals():
+        try:
+            exc_type, exc_value, tb = sys.exc_info()
+            if exc_type is not None and exc_type is not SystemExit:
+                error_msg = f"Failed: {str(exc_value)[:200]}"
+                add_history_log(db, 'SCRAPE_FAILED', 'Guardian Scraper', 'Scraping', error_msg)
+            else:
+                add_history_log(db, 'SCRAPE_COMPLETE', 'Guardian Scraper', 'Scraping', f'Successfully added {total_added} products')
+        except Exception as log_err:
+            print(f"Error logging exit: {log_err}")
+            
+        cursor.close()
+        db.close()
+        print("🔌 Database connection closed cleanly.")
+        
+    if 'driver' in locals():
+        driver.quit()

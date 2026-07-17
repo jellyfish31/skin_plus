@@ -37,19 +37,21 @@ driver.execute_cdp_cmd('Page.addScriptToEvaluateOnNewDocument', {
 })
 
 # --- 3. DB CONNECT ---
-from db_helper import get_db_connection
+from db_helper import get_db_connection, add_history_log
+import sys
 try:
     db = get_db_connection()
     cursor = db.cursor()
     print("✅ Connected to database")
-    
+    add_history_log(db, 'SCRAPE_START', 'CARiNG Pharmacy Scraper', 'Idle', 'Scraping started')
 except Exception as e:
     print(f"❌ DB Fail: {e}")
     driver.quit()
     exit()
 
 # --- 4. THE ENGINE ---
-for brand in brands:
+try:
+    for brand in brands:
     for cat_search in ["Face Wash", "Toner", "Serum", "Gel", "Sunscreen", "Mask", "Micellar Water"]:
         search_query = f"{brand} {cat_search}"
         print(f"\n🔎 Searching CARiNG Pharmacy: {search_query}...")
@@ -210,10 +212,28 @@ for brand in brands:
             
         time.sleep(1.5)
 
-print("\n" + "="*40)
-print(f" 📦 Total Unique CARiNG Pharmacy Products Added: {total_added}")
-print(f" ✨ Status: ENGINE SYNCHRONIZATION RUN COMPLETE")
-print("="*40)
+except Exception as e:
+    print(f"❌ Error during execution: {e}")
+finally:
+    print("\n" + "="*40)
+    print(f" 📦 Total Unique CARiNG Pharmacy Products Added: {total_added}")
+    print(f" ✨ Status: ENGINE SYNCHRONIZATION RUN COMPLETE")
+    print("="*40)
 
-db.close()
-driver.quit()
+    if 'db' in locals():
+        try:
+            exc_type, exc_value, tb = sys.exc_info()
+            if exc_type is not None and exc_type is not SystemExit:
+                error_msg = f"Failed: {str(exc_value)[:200]}"
+                add_history_log(db, 'SCRAPE_FAILED', 'CARiNG Pharmacy Scraper', 'Scraping', error_msg)
+            else:
+                add_history_log(db, 'SCRAPE_COMPLETE', 'CARiNG Pharmacy Scraper', 'Scraping', f'Successfully added {total_added} products')
+        except Exception as log_err:
+            print(f"Error logging exit: {log_err}")
+            
+        cursor.close()
+        db.close()
+        print("🔌 Database connection closed cleanly.")
+        
+    if 'driver' in locals():
+        driver.quit()

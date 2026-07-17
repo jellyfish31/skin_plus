@@ -3,11 +3,12 @@ import csv
 import os
 
 # 🗄️ 1. DATABASE CONNECTION
-from db_helper import get_db_connection
+from db_helper import get_db_connection, add_history_log
 try:
     db = get_db_connection()
     cursor = db.cursor()
     print("✅ Connected to database")
+    add_history_log(db, 'MATCHING_START', 'Offline Signature Matching', 'Unassigned Signatures', 'Matching started')
 except Exception as e:
     print(f"❌ Database Connection Failed: {e}")
     exit()
@@ -87,10 +88,15 @@ try:
     else:
         print("\n💎 Excellent! Every item inside your database now has a visual signature mapping.")
 
+    add_history_log(db, 'MATCHING_COMPLETE', 'Offline Signature Matching', 'Matching', f'Successfully assigned {aligned_records} signatures')
+
 except Exception as dbe:
     print(f"❌ SQL Update Failed: {dbe}")
-    db.rollback()
+    if db is not None:
+        add_history_log(db, 'MATCHING_FAILED', 'Offline Signature Matching', 'Matching', f'Failed: {str(dbe)[:200]}')
+        db.rollback()
 
 finally:
-    cursor.close()
-    db.close()
+    if db is not None:
+        cursor.close()
+        db.close()

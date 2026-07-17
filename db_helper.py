@@ -26,3 +26,18 @@ def get_db_connection():
         password='',
         database='skinplus_db'
     )
+
+def add_history_log(db, action_type, target_identifier, old_value, new_value, admin_user='system'):
+    """Inserts a record into the history_logs table."""
+    try:
+        cursor = db.cursor()
+        sql = """INSERT INTO history_logs (action_type, target_identifier, old_value, new_value, admin_user) 
+                 VALUES (%s, %s, %s, %s, %s)"""
+        cursor.execute(sql, (action_type, target_identifier, old_value, new_value, admin_user))
+        db.commit()
+        cursor.close()
+        return True
+    except Exception as e:
+        print(f"⚠️ Failed to write to history_logs: {e}")
+        return False
+

@@ -448,12 +448,31 @@
                         $history_res = Database::getMysqli()->query("SELECT action_type, target_identifier, old_value, new_value, changed_at FROM history_logs ORDER BY changed_at DESC LIMIT 150");
                         if ($history_res && $history_res->num_rows > 0):
                             while ($h_log = $history_res->fetch_assoc()):
+                                $action = $h_log['action_type'];
+                                $bg = '#D4EFDF';
+                                $fg = '#2E7D32';
+                                if ($action === 'DELETE_ROW') {
+                                    $bg = '#FADBD8';
+                                    $fg = '#E53935';
+                                } elseif ($action === 'ASSIGN_SIGNATURE' || $action === 'AI_AUTO_MATCH') {
+                                    $bg = '#E8F8F5';
+                                    $fg = '#117A65';
+                                } elseif (strpos($action, 'SCRAPE') !== false) {
+                                    $bg = '#FDEBD0';
+                                    $fg = '#B9770E';
+                                } elseif (strpos($action, 'SYNC') !== false) {
+                                    $bg = '#E8DAEF';
+                                    $fg = '#7D3C98';
+                                } elseif (strpos($action, 'MATCH') !== false || strpos($action, 'ARCHIVE') !== false) {
+                                    $bg = '#E5F1FD';
+                                    $fg = '#1A73E8';
+                                }
                         ?>
                             <tr>
                                 <td style="font-size:0.8rem; white-space:nowrap;"><?php echo $h_log['changed_at']; ?></td>
                                 <td>
-                                    <span style="font-weight:700; font-size:0.78rem; padding:2px 6px; border-radius:4px; background:<?php echo $h_log['action_type'] === 'DELETE_ROW' ? '#FADBD8; color:#E53935;' : ($h_log['action_type'] === 'ASSIGN_SIGNATURE' ? '#E8F8F5; color:#117A65;' : '#D4EFDF; color:#2E7D32;'); ?>">
-                                        <?php echo $h_log['action_type']; ?>
+                                    <span style="font-weight:700; font-size:0.78rem; padding:2px 6px; border-radius:4px; background:<?php echo $bg; ?>; color:<?php echo $fg; ?>;">
+                                        <?php echo $action; ?>
                                     </span>
                                 </td>
                                 <td style="font-size:0.85rem; font-weight:600;"><?php echo htmlspecialchars($h_log['target_identifier']); ?></td>

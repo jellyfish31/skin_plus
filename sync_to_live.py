@@ -5,6 +5,7 @@ import json
 import decimal
 import datetime
 import mysql.connector
+from db_helper import get_db_connection, add_history_log
 
 class CustomEncoder(json.JSONEncoder):
     def default(self, obj):
@@ -35,16 +36,14 @@ def send_request(url, payload_dict, token):
 def sync():
     print("Reading local database...")
     try:
-        local_db = mysql.connector.connect(
-            host='localhost',
-            user='root',
-            password='',
-            database='skinplus_db'
-        )
+        local_db = get_db_connection()
         cursor = local_db.cursor(dictionary=True)
     except Exception as e:
         print(f"Error connecting to local database: {e}")
         return
+
+    # 1. Log sync start locally
+    add_history_log(local_db, 'SYNC_START', 'Live Database Sync', 'Local DB', 'Syncing started')
 
     # Fetch rows
     cursor.execute("SELECT * FROM products")
@@ -53,15 +52,9 @@ def sync():
     cursor.execute("SELECT * FROM data_history")
     data_history = cursor.fetchall()
 
-    cursor.execute("SELECT * FROM history_logs")
-    history_logs = cursor.fetchall()
-
-    local_db.close()
-
     total_products = len(products)
     total_history = len(data_history)
-    total_logs = len(history_logs)
-    print(f"Loaded local data: {total_products} products, {total_history} history rows, {total_logs} log entries.")
+    print(f"Loaded local data: {total_products} products, {total_history} history rows.")
 
     url = "https://skinplus.space/sync_scraper.php"
     token = "plusMin1SecretToken"
@@ -75,15 +68,21 @@ def sync():
         except Exception:
             pass
 
-    # 1. Clear database on live server
+    # 2. Clear database on live server
     print("Clearing active tables on live database...")
     clear_res = send_request(url, {"action": "clear"}, token)
     if not clear_res.get('success'):
         print(f"Failed to clear database: {clear_res.get('error')}")
+        # Log failure locally
+        add_history_log(local_db, 'SYNC_FAILED', 'Live Database Sync', 'Syncing', f"Clear failed: {clear_res.get('error')}")
+        local_db.close()
         return
     print("Live database cleared.")
 
-    # 2. Upload products in batches of 500
+    sync_success = True
+    error_msg = ""
+
+    # 3. Upload products in batches of 500
     batch_size = 500
     print(f"Uploading {total_products} products in batches of {batch_size}...")
     for i in range(0, total_products, batch_size):
@@ -91,29 +90,52 @@ def sync():
         res = send_request(url, {"action": "sync", "products": batch}, token)
         if not res.get('success'):
             print(f"Failed uploading product batch {i//batch_size + 1}: {res.get('error')}")
-            return
+            sync_success = False
+            error_msg = f"Product upload failed: {res.get('error')}"
+            break
         print(f"  Uploaded products {i+1} to {min(i+batch_size, total_products)}")
 
-    # 3. Upload data_history in batches of 500
-    print(f"Uploading {total_history} history rows in batches of {batch_size}...")
-    for i in range(0, total_history, batch_size):
-        batch = data_history[i : i + batch_size]
-        res = send_request(url, {"action": "sync", "data_history": batch}, token)
-        if not res.get('success'):
-            print(f"Failed uploading history batch {i//batch_size + 1}: {res.get('error')}")
-            return
-        print(f"  Uploaded history {i+1} to {min(i+batch_size, total_history)}")
+    # 4. Upload data_history in batches of 500
+    if sync_success:
+        print(f"Uploading {total_history} history rows in batches of {batch_size}...")
+        for i in range(0, total_history, batch_size):
+            batch = data_history[i : i + batch_size]
+            res = send_request(url, {"action": "sync", "data_history": batch}, token)
+            if not res.get('success'):
+                print(f"Failed uploading history batch {i//batch_size + 1}: {res.get('error')}")
+                sync_success = False
+                error_msg = f"History upload failed: {res.get('error')}"
+                break
+            print(f"  Uploaded history {i+1} to {min(i+batch_size, total_history)}")
 
-    # 4. Upload logs in one batch
+    # 5. Insert completion/failure status into local DB before fetching logs
+    if sync_success:
+        add_history_log(local_db, 'SYNC_COMPLETE', 'Live Database Sync', 'Syncing', 'Completed successfully')
+    else:
+        add_history_log(local_db, 'SYNC_FAILED', 'Live Database Sync', 'Syncing', error_msg)
+
+    # 6. Fetch logs (which now includes the SYNC_START and SYNC_COMPLETE/SYNC_FAILED records!)
+    cursor.execute("SELECT * FROM history_logs")
+    history_logs = cursor.fetchall()
+    total_logs = len(history_logs)
+
+    # 7. Upload logs in one batch to live server
     if total_logs > 0:
         print(f"Uploading {total_logs} log entries...")
         res = send_request(url, {"action": "sync", "history_logs": history_logs}, token)
         if not res.get('success'):
             print(f"Failed uploading logs: {res.get('error')}")
+            add_history_log(local_db, 'SYNC_FAILED', 'Live Database Sync', 'Syncing Logs', f"Log upload failed: {res.get('error')}")
+            local_db.close()
             return
         print("  Uploaded logs.")
 
-    print("\nSync Successful! Your live website is updated.")
+    local_db.close()
+
+    if sync_success:
+        print("\nSync Successful! Your live website is updated.")
+    else:
+        print("\nSync Failed! Check local logs for details.")
 
 if __name__ == '__main__':
     sync()

@@ -1,13 +1,15 @@
 # archive_history.py
 import mysql.connector
 
-from db_helper import get_db_connection
+from db_helper import get_db_connection, add_history_log
 
 def archive_old_prices():
+    db = None
     try:
         db = get_db_connection()
         cursor = db.cursor()
         print("📦 Connected to database. Running History Migration (Keeping Top 2 Per Item)...")
+        add_history_log(db, 'ARCHIVE_START', 'History Archive', 'Active Table', 'Archiving Old Entries')
 
         # Create tracking table
         cursor.execute("""
@@ -49,15 +51,20 @@ def archive_old_prices():
         # Drop temporary checklist tracking structure
         cursor.execute("DROP TABLE IF EXISTS temp_latest_ids")
         
+        # Log success and commit
+        add_history_log(db, 'ARCHIVE_COMPLETE', 'History Archive', 'Archiving', 'Completed successfully')
         db.commit()
         print("✅ History migration completed successfully! Active table is fully streamlined.")
 
     except Exception as e:
         print(f"❌ Migration Error Encountered: {e}")
-        db.rollback()
+        if db is not None:
+            add_history_log(db, 'ARCHIVE_FAILED', 'History Archive', 'Archiving', f'Failed: {str(e)[:200]}')
+            db.rollback()
     finally:
-        cursor.close()
-        db.close()
+        if db is not None:
+            cursor.close()
+            db.close()
 
 if __name__ == "__main__":
     archive_old_prices()
