@@ -101,12 +101,6 @@ if (!function_exists('format_store_name')) {
             font-weight: 800;
             color: var(--primary-color);
             letter-spacing: -0.5px;
-            line-height: 1.1;
-        }
-        .logo-area p {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            font-weight: 500;
         }
 
         
@@ -160,7 +154,7 @@ if (!function_exists('format_store_name')) {
         .action-button-group {
             width: 100%;
             display: flex;
-            flex-direction: column;
+            flex-direction: column; 
             gap: 0.75rem;
         }
         .forecast-btn {
@@ -441,7 +435,6 @@ if (!function_exists('format_store_name')) {
             body { font-size: 14px; }
             .navbar { padding: 1rem 6%; }
             .logo-area h1 { font-size: 1.5rem; }
-            .logo-area p { font-size: 0.75rem; }
             
             .detail-container {
                 display: flex;
@@ -516,7 +509,6 @@ if (!function_exists('format_store_name')) {
         @media (max-width: 480px) {
             body { font-size: 13px; }
             .logo-area h1 { font-size: 1.5rem; }
-            .logo-area p { font-size: 0.75rem; }
             .product-meta-details h2 { font-size: 1.4rem; }
             .img-box { height: 220px; border-radius: 16px; }
             .ai-breakdown-card { border-radius: 16px; padding: 1.2rem; }
@@ -535,7 +527,7 @@ if (!function_exists('format_store_name')) {
     <nav class="navbar">
         <a href="javascript:history.back()" class="back-nav">
             <i class="fa-solid fa-chevron-left" style="color: var(--text-dark);"></i>
-            <div class="logo-area"><h1>SKIN+</h1><p>Smart Price Comparison</p></div>
+            <div class="logo-area"><h1>SKIN+</h1></div>
         </a>
     </nav>
     
