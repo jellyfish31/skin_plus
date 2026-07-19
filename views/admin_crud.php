@@ -439,16 +439,81 @@
                             <th>Timestamp</th>
                             <th>Action</th>
                             <th>Target Item</th>
-                            <th>Previous Value State</th>
-                            <th>Updated Value State</th>
+                            <th>Changes / Description</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php 
+                        if (!function_exists('getFriendlyActionLabel')) {
+                            function getFriendlyActionLabel($action) {
+                                if ($action === 'ASSIGN_SIGNATURE') return 'Assign';
+                                if ($action === 'AI_AUTO_MATCH' || strpos($action, 'MATCH') !== false) return 'Match';
+                                if ($action === 'UPDATE_GROUP') return 'Update';
+                                if ($action === 'DELETE_ROW') return 'Delete';
+                                if (strpos($action, 'SCRAPE') !== false) return 'Scrape';
+                                if (strpos($action, 'SYNC') !== false) return 'Sync';
+                                if (strpos($action, 'ARCHIVE') !== false) return 'Archive';
+                                return $action;
+                            }
+                        }
+
+                        if (!function_exists('getFriendlyChangesDescription')) {
+                            function getFriendlyChangesDescription($action, $target, $old, $new) {
+                                if ($action === 'UPDATE_GROUP') {
+                                    $old_data = json_decode($old, true);
+                                    $new_data = json_decode($new, true);
+                                    if ($old_data && $new_data) {
+                                        $changes = [];
+                                        if ($old_data['product_name'] !== $new_data['product_name']) {
+                                            $changes[] = 'Name to "' . $new_data['product_name'] . '"';
+                                        }
+                                        if ($old_data['product_category'] !== $new_data['product_category']) {
+                                            $changes[] = 'Category to "' . $new_data['product_category'] . '"';
+                                        }
+                                        if ($old_data['product_brand'] !== $new_data['product_brand']) {
+                                            $changes[] = 'Brand to "' . $new_data['product_brand'] . '"';
+                                        }
+                                        if (!empty($changes)) {
+                                            return 'Updated ' . implode(', ', $changes);
+                                        }
+                                    }
+                                    return 'Updated product details';
+                                }
+                                
+                                if ($action === 'DELETE_ROW') {
+                                    $old_data = json_decode($old, true);
+                                    if ($old_data) {
+                                        $store = $old_data['product_store'] ?? 'unknown store';
+                                        $price = isset($old_data['product_price']) ? ' (RM ' . $old_data['product_price'] . ')' : '';
+                                        return 'Deleted item from ' . $store . $price;
+                                    }
+                                    return 'Deleted product row';
+                                }
+                                
+                                if ($action === 'ASSIGN_SIGNATURE') {
+                                    return 'Linked signature "' . $new . '" to item';
+                                }
+                                
+                                if ($action === 'AI_AUTO_MATCH') {
+                                    return 'AI auto-linked signature "' . $new . '" to item';
+                                }
+                                
+                                if (strpos($action, 'SCRAPE') !== false || strpos($action, 'SYNC') !== false || strpos($action, 'MATCHING') !== false || strpos($action, 'ARCHIVE') !== false) {
+                                    return $new;
+                                }
+                                
+                                if (!empty($old) && !empty($new)) {
+                                    return 'Changed from "' . $old . '" to "' . $new . '"';
+                                }
+                                return $new ?: $old ?: 'Action performed';
+                            }
+                        }
+
                         $history_res = Database::getMysqli()->query("SELECT action_type, target_identifier, old_value, new_value, changed_at FROM history_logs ORDER BY changed_at DESC LIMIT 150");
                         if ($history_res && $history_res->num_rows > 0):
                             while ($h_log = $history_res->fetch_assoc()):
                                 $action = $h_log['action_type'];
+                                $friendly_label = getFriendlyActionLabel($action);
                                 $bg = '#D4EFDF';
                                 $fg = '#2E7D32';
                                 if ($action === 'DELETE_ROW') {
@@ -472,18 +537,17 @@
                                 <td style="font-size:0.8rem; white-space:nowrap;"><?php echo $h_log['changed_at']; ?></td>
                                 <td>
                                     <span style="font-weight:700; font-size:0.78rem; padding:2px 6px; border-radius:4px; background:<?php echo $bg; ?>; color:<?php echo $fg; ?>;">
-                                        <?php echo $action; ?>
+                                        <?php echo $friendly_label; ?>
                                     </span>
                                 </td>
                                 <td style="font-size:0.85rem; font-weight:600;"><?php echo htmlspecialchars($h_log['target_identifier']); ?></td>
-                                <td style="font-family:monospace; font-size:0.75rem; color:#756F86; max-width:220px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="<?php echo htmlspecialchars($h_log['old_value']); ?>"><?php echo htmlspecialchars($h_log['old_value']); ?></td>
-                                <td style="font-family:monospace; font-size:0.75rem; color:var(--primary-color); max-width:220px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="<?php echo htmlspecialchars($h_log['new_value']); ?>"><?php echo htmlspecialchars($h_log['new_value']); ?></td>
+                                <td style="font-size:0.85rem; color:#4F4F4F;"><?php echo htmlspecialchars(getFriendlyChangesDescription($action, $h_log['target_identifier'], $h_log['old_value'], $h_log['new_value'])); ?></td>
                             </tr>
                         <?php 
                             endwhile;
                         else:
                         ?>
-                            <tr><td colspan="5" style="text-align:center; padding:2rem; color:var(--text-muted);">No administrative modification entries captured yet.</td></tr>
+                            <tr><td colspan="4" style="text-align:center; padding:2rem; color:var(--text-muted);">No administrative modification entries captured yet.</td></tr>
                         <?php endif; ?>
                     </tbody>
                 </table>

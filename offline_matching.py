@@ -13,7 +13,7 @@ except Exception as e:
     print(f"❌ Database Connection Failed: {e}")
     exit()
 
-csv_filename = 'cleaned_signatures.csv'
+csv_filename = 'visual_signature_list.csv'
 
 if not os.path.exists(csv_filename):
     print(f"❌ Error: Cannot find '{csv_filename}' in this directory.")
