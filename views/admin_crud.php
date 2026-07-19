@@ -264,6 +264,7 @@
                 <?php endif; ?>
             </a>
             <button class="analytics-trigger-btn" style="background:#D35400;" onclick="document.getElementById('historyModal').classList.add('active')"><i class="fa-solid fa-clock-rotate-left"></i> History Logs</button>
+            <button class="analytics-trigger-btn" style="background:#2D9CDB;" onclick="window.location.reload()"><i class="fa-solid fa-rotate"></i> Refresh</button>
             <a href="logout.php" class="back-btn">Log Out</a>
         </div>
     </nav>
