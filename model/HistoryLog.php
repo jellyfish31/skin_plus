@@ -20,8 +20,8 @@ class HistoryLog {
         $escapedOld = $db->real_escape_string($oldValue);
         $escapedNew = $db->real_escape_string($newValue);
 
-        $sql = "INSERT INTO history_logs (action_type, target_identifier, old_value, new_value) 
-                VALUES ('$escapedAction', '$escapedTarget', '$escapedOld', '$escapedNew')";
+        $sql = "INSERT INTO history_logs (action_type, target_identifier, old_value, new_value, admin_user) 
+                VALUES ('$escapedAction', '$escapedTarget', '$escapedOld', '$escapedNew', 'admin')";
                 
         return $db->query($sql);
     }
