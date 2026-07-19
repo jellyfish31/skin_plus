@@ -58,12 +58,12 @@ class AdminController {
                 $id = intval($_POST['product_id']);
                 Product::deleteProduct($id);
             } elseif ($_POST['action'] === 'update') {
-                $id = intval(key($_POST['store_data'])); // target id representing the group
-                $category = $_POST['product_category'];
-                $brand = $_POST['product_brand'];
-                $storeData = $_POST['store_data'];
+                $id = intval($_POST['product_id']);
+                $category = trim($_POST['product_category']);
+                $brand = trim($_POST['product_brand']);
+                $new_sig = trim($_POST['visual_signature']);
 
-                Product::updateProductGroup($id, $category, $brand, $storeData);
+                Product::updateProductGroup($id, $category, $brand, $new_sig);
             }
         }
 

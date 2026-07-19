@@ -24,9 +24,8 @@ class HistoryLog {
                 VALUES ('$escapedAction', '$escapedTarget', '$escapedOld', '$escapedNew', 'admin')";
                 
         $result = $db->query($sql);
-        if (!$result) {
-            file_put_contents(__DIR__ . '/../debug_log.txt', "SQL: " . $sql . "\nError: " . $db->error . "\n\n", FILE_APPEND);
-        }
+        $status = $result ? "SUCCESS" : "FAILED (Error: " . $db->error . ")";
+        file_put_contents(__DIR__ . '/../debug_log.txt', "[" . date('Y-m-d H:i:s') . "] Action: $escapedAction | Target: $escapedTarget | Status: $status\n", FILE_APPEND);
         return $result;
     }
 }

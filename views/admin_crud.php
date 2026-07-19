@@ -370,9 +370,10 @@
                 <input type="hidden" name="product_id" id="e_id">
                 <div class="modal-form-grid">
                     <div class="modal-form-row align-center"><label>Category:</label><input type="text" name="product_category" id="e_category" class="modal-input-field" required></div>
-                    <div class="modal-form-row align-center"><label>Brand:</label><input type="text" name="product_brand" id="e_brand" class="modal-input-field" required></div>
+                    <div class="modal-form-row align-center"><label>Brand (Read-Only):</label><span id="e_brand_label" style="font-weight:700; color:var(--text-muted); background:#f4f4f6; padding:6px 12px; border-radius:6px; display:inline-block; border:1px solid #ddd; min-width: 150px;"></span><input type="hidden" name="product_brand" id="e_brand"></div>
+                    <div class="modal-form-row align-center"><label>Visual Signature:</label><input type="text" name="visual_signature" id="e_signature" class="modal-input-field" required style="font-family:monospace; font-weight:700; color:#d35400;"></div>
                 </div>
-                <div class="prices-label-header">Individual Store Rows Customization Mappings</div>
+                <div class="prices-label-header">Individual Store Mappings (Read-Only)</div>
                 <table class="matrix-table">
                     <thead><tr><th>Store Channel</th><th>Real Scraped Store Item Title</th><th>Store Price (RM)</th></tr></thead>
                     <tbody id="e_tb"></tbody>
@@ -380,7 +381,7 @@
                 <div class="modal-summary-lbl">Calculated Average: <span id="e_avg"></span></div>
                 <div class="modal-footer-toolbar">
                     <button type="button" class="btn-modal btn-modal-cancel" onclick="dismissModal('editModal')">Cancel</button>
-                    <button type="submit" class="btn-modal btn-modal-submit">Save Multi-Store Changes</button>
+                    <button type="submit" class="btn-modal btn-modal-submit">Save Changes</button>
                 </div>
             </form>
         </div>
@@ -424,7 +425,7 @@
                             function getFriendlyActionLabel($action) {
                                 if ($action === 'ASSIGN_SIGNATURE') return 'Assign';
                                 if ($action === 'AI_AUTO_MATCH' || strpos($action, 'MATCH') !== false) return 'Match';
-                                if ($action === 'UPDATE_GROUP') return 'Update';
+                                if ($action === 'UPDATE_GROUP' || $action === 'UPDATE_PRICE') return 'Update';
                                 if ($action === 'DELETE_ROW') return 'Delete';
                                 if (strpos($action, 'SCRAPE') !== false) return 'Scrape';
                                 if (strpos($action, 'SYNC') !== false) return 'Sync';
@@ -440,20 +441,27 @@
                                     $new_data = json_decode($new, true);
                                     if ($old_data && $new_data) {
                                         $changes = [];
-                                        if ($old_data['product_name'] !== $new_data['product_name']) {
+                                        if (isset($old_data['product_name']) && isset($new_data['product_name']) && $old_data['product_name'] !== $new_data['product_name']) {
                                             $changes[] = 'Name to "' . $new_data['product_name'] . '"';
                                         }
-                                        if ($old_data['product_category'] !== $new_data['product_category']) {
+                                        if (isset($old_data['product_category']) && isset($new_data['product_category']) && $old_data['product_category'] !== $new_data['product_category']) {
                                             $changes[] = 'Category to "' . $new_data['product_category'] . '"';
                                         }
-                                        if ($old_data['product_brand'] !== $new_data['product_brand']) {
+                                        if (isset($old_data['product_brand']) && isset($new_data['product_brand']) && $old_data['product_brand'] !== $new_data['product_brand']) {
                                             $changes[] = 'Brand to "' . $new_data['product_brand'] . '"';
+                                        }
+                                        if (isset($old_data['visual_signature']) && isset($new_data['visual_signature']) && $old_data['visual_signature'] !== $new_data['visual_signature']) {
+                                            $changes[] = 'Signature to "' . $new_data['visual_signature'] . '"';
                                         }
                                         if (!empty($changes)) {
                                             return 'Updated ' . implode(', ', $changes);
                                         }
                                     }
                                     return 'Updated product details';
+                                }
+                                
+                                if ($action === 'UPDATE_PRICE') {
+                                    return 'Changed price from ' . $old . ' to ' . $new;
                                 }
                                 
                                 if ($action === 'DELETE_ROW') {
@@ -567,12 +575,14 @@
         function triggerEdit(groupData) {
             document.getElementById('e_id').value = groupData.product_id;
             document.getElementById('e_category').value = groupData.product_category;
+            document.getElementById('e_brand_label').innerText = groupData.product_brand;
             document.getElementById('e_brand').value = groupData.product_brand;
+            document.getElementById('e_signature').value = groupData.signature;
             let elements = unpackMatrixNodes(groupData.store_nodes);
             let tbContent = ''; let priceSum = 0;
             elements.forEach(item => {
                 priceSum += item.price;
-                tbContent += `<tr><td style="font-weight:700; color:var(--primary-color);">${formatStoreNameJS(item.store)}</td><td><input type="text" name="store_data[${item.id}][name]" value="${item.name.replace(/"/g, '&quot;')}" class="matrix-input" required></td><td>RM <input type="number" step="0.01" name="store_data[${item.id}][price]" value="${item.price.toFixed(2)}" class="matrix-input price-input-box" required></td></tr>`;
+                tbContent += `<tr><td style="font-weight:700; color:var(--primary-color);">${formatStoreNameJS(item.store)}</td><td>${item.name}</td><td style="font-weight:600; color:var(--cheap-color);">RM ${item.price.toFixed(2)}</td></tr>`;
             });
             document.getElementById('e_tb').innerHTML = tbContent;
             document.getElementById('e_avg').innerText = elements.length > 0 ? `RM ${(priceSum / elements.length).toFixed(2)}` : 'RM 0.00';

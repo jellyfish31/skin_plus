@@ -267,57 +267,55 @@ class Product {
     /**
      * Updates properties for an entire visual signature group and individual store prices.
      */
-    public static function updateProductGroup(int $id, string $category, string $brand, array $storeData) {
+    public static function updateProductGroup(int $id, string $category, string $brand, string $new_sig) {
         $db = Database::getMysqli();
         $id = intval($id);
         $escaped_category = $db->real_escape_string($category);
         $escaped_brand = $db->real_escape_string($brand);
+        $escaped_new_sig = strtolower(trim($db->real_escape_string($new_sig)));
 
-        if (is_array($storeData) && !empty($storeData)) {
-            $first_item = reset($storeData);
-            $master_name = $db->real_escape_string($first_item['name']);
+        // Isolate visual_signature map pointer for mass update execution
+        $sig_res = $db->query("SELECT visual_signature, product_name FROM products WHERE product_id = $id");
+        $sig_row = $sig_res ? $sig_res->fetch_assoc() : null;
 
-            // Isolate visual_signature map pointer for mass update execution
-            $sig_res = $db->query("SELECT visual_signature FROM products WHERE product_id = $id");
-            $sig_row = $sig_res->fetch_assoc();
+        if (!$sig_row) {
+            file_put_contents(__DIR__ . '/../debug_log.txt', "updateProductGroup Debug: No signature row found for product_id = $id\n", FILE_APPEND);
+        } elseif (empty($sig_row['visual_signature'])) {
+            file_put_contents(__DIR__ . '/../debug_log.txt', "updateProductGroup Debug: visual_signature is empty for product_id = $id\n", FILE_APPEND);
+        }
 
-            if (!$sig_row) {
-                file_put_contents(__DIR__ . '/../debug_log.txt', "updateProductGroup Debug: No signature row found for product_id = $id\n", FILE_APPEND);
-            } elseif (empty($sig_row['visual_signature'])) {
-                file_put_contents(__DIR__ . '/../debug_log.txt', "updateProductGroup Debug: visual_signature is empty for product_id = $id\n", FILE_APPEND);
-            }
+        if ($sig_row && !empty($sig_row['visual_signature'])) {
+            $target_sig = $db->real_escape_string($sig_row['visual_signature']);
+            $master_name = $sig_row['product_name'];
 
-            if ($sig_row && !empty($sig_row['visual_signature'])) {
-                $target_sig = $db->real_escape_string($sig_row['visual_signature']);
-
-                // Fetch previous data snapshot for logging
-                $prev = $db->query("SELECT product_name, product_category, product_brand FROM products WHERE product_id = $id")->fetch_assoc();
-                if (!$prev) {
-                    file_put_contents(__DIR__ . '/../debug_log.txt', "updateProductGroup Debug: No previous details found for product_id = $id\n", FILE_APPEND);
-                } else {
+            // Fetch previous data snapshot for logging
+            $prev = $db->query("SELECT product_category, visual_signature FROM products WHERE product_id = $id")->fetch_assoc();
+            if (!$prev) {
+                file_put_contents(__DIR__ . '/../debug_log.txt', "updateProductGroup Debug: No previous details found for product_id = $id\n", FILE_APPEND);
+            } else {
+                $changes = [];
+                if ($prev['product_category'] !== $category) {
+                    $changes[] = 'Category to "' . $category . '"';
+                }
+                if ($prev['visual_signature'] !== $new_sig) {
+                    $changes[] = 'Signature to "' . $new_sig . '"';
+                }
+                
+                if (!empty($changes)) {
                     $old_json = json_encode($prev);
                     $new_json = json_encode([
-                        'product_name' => $master_name,
                         'product_category' => $category,
-                        'product_brand' => $brand
+                        'visual_signature' => $new_sig
                     ]);
                     HistoryLog::addLog('UPDATE_GROUP', $master_name, $old_json, $new_json);
                 }
-
-                // Global group update
-                $db->query("UPDATE products SET 
-                                product_name = '$master_name',
-                                product_category = '$escaped_category',
-                                product_brand = '$escaped_brand'
-                              WHERE visual_signature = '$target_sig'");
             }
 
-            // Update individual prices
-            foreach ($storeData as $sub_id => $data) {
-                $individual_id = intval($sub_id);
-                $individual_price = floatval($data['price']);
-                $db->query("UPDATE products SET product_price = $individual_price WHERE product_id = $individual_id");
-            }
+            // Global group update (only updates category and signature)
+            $db->query("UPDATE products SET 
+                            product_category = '$escaped_category',
+                            visual_signature = '$escaped_new_sig'
+                          WHERE visual_signature = '$target_sig'");
             return true;
         }
         return false;
