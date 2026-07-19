@@ -264,7 +264,6 @@
                 <?php endif; ?>
             </a>
             <button class="analytics-trigger-btn" style="background:#D35400;" onclick="document.getElementById('historyModal').classList.add('active')"><i class="fa-solid fa-clock-rotate-left"></i> History Logs</button>
-            <button class="analytics-trigger-btn" onclick="triggerAnalytics()"><i class="fa-solid fa-chart-line"></i> View Logs</button>
             <a href="logout.php" class="back-btn">Log Out</a>
         </div>
     </nav>
@@ -401,31 +400,7 @@
         </div>
     </div>
 
-    <div class="modal-overlay" id="analyticsModal">
-        <div class="modal-window">
-            <button class="btn-close-modal" onclick="dismissModal('analyticsModal')">×</button>
-            <h3><i class="fa-solid fa-users-line"></i> Visitor Traffic Monitor Panel</h3>
-            <div class="prices-label-header">Recent Access Activity Footprints Log (Total Hits Tracking: <?php echo $total_visits; ?>)</div>
-            <div class="analytics-scroll-box">
-                <table class="matrix-table" style="margin-bottom:0;">
-                    <thead><tr><th>Sequence ID</th><th>User Visitor Hash Tracking Token</th><th>Access Session Timestamps</th></tr></thead>
-                    <tbody>
-                        <?php if ($analytics_result && $analytics_result->num_rows > 0): $seq = 1; ?>
-                            <?php while ($log = $analytics_result->fetch_assoc()): ?>
-                                <tr>
-                                    <td>#<?php echo $seq++; ?></td>
-                                    <td style="font-family:monospace; font-weight:600; color:var(--primary-color);"><?php echo htmlspecialchars($log['visitor_id']); ?></td>
-                                    <td><?php echo htmlspecialchars($log['time_session']); ?></td>
-                                </tr>
-                            <?php endwhile; ?>
-                        <?php else: ?>
-                            <tr><td colspan="3">No viewer traffic footprints recorded in connection log blocks.</td></tr>
-                        <?php endif; ?>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
+
 
     <div class="modal-overlay" id="historyModal">
         <div class="modal-window" style="max-width: 920px;">
@@ -613,7 +588,6 @@
             document.getElementById('deleteModal').classList.add('active');
         }
 
-        function triggerAnalytics() { document.getElementById('analyticsModal').classList.add('active'); }
         function dismissModal(id) { document.getElementById(id).classList.remove('active'); }
 
         window.isNavigatingInside = false;

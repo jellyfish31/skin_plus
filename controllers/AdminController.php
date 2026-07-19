@@ -89,7 +89,6 @@ class AdminController {
         $total_categories = $db->query("SELECT COUNT(DISTINCT product_category) as total FROM products")->fetch_assoc()['total'];
         $total_brands = $db->query("SELECT COUNT(DISTINCT product_brand) as total FROM products")->fetch_assoc()['total'];
         $total_visits = $db->query("SELECT COUNT(*) as total FROM visitors")->fetch_assoc()['total'];
-        $analytics_result = $db->query("SELECT visitor_id, time_session FROM visitors ORDER BY time_session DESC LIMIT 250");
         $alert_count = Notification::getPendingDiscoveriesCount();
 
         include __DIR__ . '/../views/admin_crud.php';
