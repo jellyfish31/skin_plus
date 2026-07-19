@@ -61,7 +61,7 @@ class AdminController {
                 $id = intval($_POST['product_id']);
                 $category = trim($_POST['product_category']);
                 $brand = trim($_POST['product_brand']);
-                $new_sig = trim($_POST['visual_signature']);
+                $new_sig = isset($_POST['visual_signature']) ? trim($_POST['visual_signature']) : '';
 
                 Product::updateProductGroup($id, $category, $brand, $new_sig);
             }
