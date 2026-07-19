@@ -603,7 +603,19 @@
         });
 
         window.addEventListener('beforeunload', function (event) {
-            if (window.isNavigatingInside || performance.navigation.type === 1) {
+            let isReload = false;
+            if (window.performance) {
+                if (performance.navigation && performance.navigation.type === 1) {
+                    isReload = true;
+                } else {
+                    const navEntries = performance.getEntriesByType('navigation');
+                    if (navEntries.length > 0 && navEntries[0].type === 'reload') {
+                        isReload = true;
+                    }
+                }
+            }
+
+            if (window.isNavigatingInside || isReload) {
                 return;
             }
             navigator.sendBeacon('logout.php');

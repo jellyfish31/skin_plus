@@ -85,9 +85,9 @@ class AdminController {
 
         // Fetch portal statistics and visitor analytics
         $db = Database::getMysqli();
-        $total_products_count = $db->query("SELECT COUNT(DISTINCT visual_signature) as total FROM products WHERE visual_signature IS NOT NULL AND visual_signature != 'PENDING_ADMIN' AND visual_signature != ''")->fetch_assoc()['total'];
-        $total_categories = $db->query("SELECT COUNT(DISTINCT product_category) as total FROM products WHERE visual_signature IS NOT NULL AND visual_signature != 'PENDING_ADMIN' AND visual_signature != ''")->fetch_assoc()['total'];
-        $total_brands = $db->query("SELECT COUNT(DISTINCT product_brand) as total FROM products WHERE visual_signature IS NOT NULL AND visual_signature != 'PENDING_ADMIN' AND visual_signature != ''")->fetch_assoc()['total'];
+        $total_products_count = $db->query("SELECT COUNT(DISTINCT visual_signature) as total FROM products WHERE visual_signature IS NOT NULL AND visual_signature != 'PENDING_ADMIN' AND visual_signature != '' AND product_brand != 'Historical Brand'")->fetch_assoc()['total'];
+        $total_categories = $db->query("SELECT COUNT(DISTINCT product_category) as total FROM products WHERE visual_signature IS NOT NULL AND visual_signature != 'PENDING_ADMIN' AND visual_signature != '' AND product_brand != 'Historical Brand'")->fetch_assoc()['total'];
+        $total_brands = $db->query("SELECT COUNT(DISTINCT product_brand) as total FROM products WHERE visual_signature IS NOT NULL AND visual_signature != 'PENDING_ADMIN' AND visual_signature != '' AND product_brand != 'Historical Brand'")->fetch_assoc()['total'];
         $total_visits = $db->query("SELECT COUNT(*) as total FROM visitors")->fetch_assoc()['total'];
         $alert_count = Notification::getPendingDiscoveriesCount();
 
