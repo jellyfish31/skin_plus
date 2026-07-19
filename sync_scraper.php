@@ -32,18 +32,8 @@ $action = $data['action'] ?? '';
 $db = Database::getMysqli();
 
 if ($action === 'clear') {
-    try {
-        $db->query("SET FOREIGN_KEY_CHECKS = 0;");
-        $db->query("TRUNCATE TABLE products");
-        $db->query("TRUNCATE TABLE data_history");
-        $db->query("TRUNCATE TABLE history_logs");
-        $db->query("SET FOREIGN_KEY_CHECKS = 1;");
-        echo json_encode(['success' => true, 'message' => 'Tables cleared successfully']);
-    } catch (Exception $e) {
-        $db->query("SET FOREIGN_KEY_CHECKS = 1;");
-        http_response_code(500);
-        echo json_encode(['success' => false, 'error' => 'Clear failed: ' . $e->getMessage()]);
-    }
+    // We no longer clear/truncate products to protect live database changes and admin edits!
+    echo json_encode(['success' => true, 'message' => 'Tables cleared successfully (skipped to protect live database)']);
     exit();
 }
 
@@ -56,7 +46,7 @@ if ($action === 'sync') {
         
         // Sync products batch
         if (isset($data['products']) && is_array($data['products'])) {
-            $stmt = $db->prepare("INSERT INTO products (product_id, product_name, product_brand, product_price, product_store, product_category, product_image, visual_signature, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            $stmt = $db->prepare("INSERT IGNORE INTO products (product_id, product_name, product_brand, product_price, product_store, product_category, product_image, visual_signature, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
             $count = 0;
             foreach ($data['products'] as $row) {
                 $stmt->bind_param(
@@ -77,33 +67,9 @@ if ($action === 'sync') {
             $results['products'] = $count;
         }
 
-        // Sync data_history batch
-        if (isset($data['data_history']) && is_array($data['data_history'])) {
-            $stmt = $db->prepare("INSERT INTO data_history (history_id, product_id, product_name, product_brand, product_category, product_price, product_store, product_image, visual_signature, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-            $count = 0;
-            foreach ($data['data_history'] as $row) {
-                $stmt->bind_param(
-                    "iissssssss",
-                    $row['history_id'],
-                    $row['product_id'],
-                    $row['product_name'],
-                    $row['product_brand'],
-                    $row['product_category'],
-                    $row['product_price'],
-                    $row['product_store'],
-                    $row['product_image'],
-                    $row['visual_signature'],
-                    $row['created_at']
-                );
-                $stmt->execute();
-                $count++;
-            }
-            $results['data_history'] = $count;
-        }
-
         // Sync history_logs batch
         if (isset($data['history_logs']) && is_array($data['history_logs'])) {
-            $stmt = $db->prepare("INSERT INTO history_logs (log_id, admin_user, action_type, target_identifier, old_value, new_value, changed_at) VALUES (?, ?, ?, ?, ?, ?, ?)");
+            $stmt = $db->prepare("INSERT IGNORE INTO history_logs (log_id, admin_user, action_type, target_identifier, old_value, new_value, changed_at) VALUES (?, ?, ?, ?, ?, ?, ?)");
             $count = 0;
             foreach ($data['history_logs'] as $row) {
                 $stmt->bind_param(
@@ -121,6 +87,22 @@ if ($action === 'sync') {
             }
             $results['history_logs'] = $count;
         }
+
+        // Auto-assign known signatures on the live database
+        $db->query("UPDATE products p
+                    INNER JOIN (
+                        SELECT product_name, visual_signature 
+                        FROM products 
+                        WHERE visual_signature IS NOT NULL 
+                          AND visual_signature != '' 
+                          AND visual_signature != 'PENDING_ADMIN'
+                        GROUP BY product_name
+                    ) historical ON p.product_name = historical.product_name
+                    SET p.visual_signature = historical.visual_signature
+                    WHERE p.visual_signature IS NULL");
+
+        // Mark remaining unassigned signatures as PENDING_ADMIN
+        $db->query("UPDATE products SET visual_signature = 'PENDING_ADMIN' WHERE visual_signature IS NULL");
 
         $db->commit();
         $db->query("SET FOREIGN_KEY_CHECKS = 1;");

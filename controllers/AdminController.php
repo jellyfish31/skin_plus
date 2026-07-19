@@ -7,6 +7,10 @@ require_once __DIR__ . '/../model/Notification.php';
 require_once __DIR__ . '/../model/HistoryLog.php';
 
 class AdminController {
+    public function __construct() {
+        Database::useLiveDatabase(true);
+    }
+
     /**
      * Handles admin login page and processing credentials.
      */

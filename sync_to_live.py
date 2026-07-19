@@ -45,16 +45,12 @@ def sync():
     # 1. Log sync start locally
     add_history_log(local_db, 'SYNC_START', 'Live Database Sync', 'Local DB', 'Syncing started')
 
-    # Fetch rows
+    # Fetch rows from products locally
     cursor.execute("SELECT * FROM products")
     products = cursor.fetchall()
-    
-    cursor.execute("SELECT * FROM data_history")
-    data_history = cursor.fetchall()
 
     total_products = len(products)
-    total_history = len(data_history)
-    print(f"Loaded local data: {total_products} products, {total_history} history rows.")
+    print(f"Loaded local data: {total_products} products.")
 
     url = "https://skinplus.space/sync_scraper.php"
     token = "plusMin1SecretToken"
@@ -68,58 +64,37 @@ def sync():
         except Exception:
             pass
 
-    # 2. Clear database on live server
-    print("Clearing active tables on live database...")
-    clear_res = send_request(url, {"action": "clear"}, token)
-    if not clear_res.get('success'):
-        print(f"Failed to clear database: {clear_res.get('error')}")
-        # Log failure locally
-        add_history_log(local_db, 'SYNC_FAILED', 'Live Database Sync', 'Syncing', f"Clear failed: {clear_res.get('error')}")
-        local_db.close()
-        return
-    print("Live database cleared.")
-
     sync_success = True
     error_msg = ""
 
-    # 3. Upload products in batches of 500
+    # 2. Upload products in batches of 500
     batch_size = 500
-    print(f"Uploading {total_products} products in batches of {batch_size}...")
-    for i in range(0, total_products, batch_size):
-        batch = products[i : i + batch_size]
-        res = send_request(url, {"action": "sync", "products": batch}, token)
-        if not res.get('success'):
-            print(f"Failed uploading product batch {i//batch_size + 1}: {res.get('error')}")
-            sync_success = False
-            error_msg = f"Product upload failed: {res.get('error')}"
-            break
-        print(f"  Uploaded products {i+1} to {min(i+batch_size, total_products)}")
-
-    # 4. Upload data_history in batches of 500
-    if sync_success:
-        print(f"Uploading {total_history} history rows in batches of {batch_size}...")
-        for i in range(0, total_history, batch_size):
-            batch = data_history[i : i + batch_size]
-            res = send_request(url, {"action": "sync", "data_history": batch}, token)
+    if total_products > 0:
+        print(f"Uploading {total_products} products in batches of {batch_size}...")
+        for i in range(0, total_products, batch_size):
+            batch = products[i : i + batch_size]
+            res = send_request(url, {"action": "sync", "products": batch}, token)
             if not res.get('success'):
-                print(f"Failed uploading history batch {i//batch_size + 1}: {res.get('error')}")
+                print(f"Failed uploading product batch {i//batch_size + 1}: {res.get('error')}")
                 sync_success = False
-                error_msg = f"History upload failed: {res.get('error')}"
+                error_msg = f"Product upload failed: {res.get('error')}"
                 break
-            print(f"  Uploaded history {i+1} to {min(i+batch_size, total_history)}")
+            print(f"  Uploaded products {i+1} to {min(i+batch_size, total_products)}")
+    else:
+        print("No new products to upload.")
 
-    # 5. Insert completion/failure status into local DB before fetching logs
+    # 3. Insert completion/failure status into local DB before fetching logs
     if sync_success:
         add_history_log(local_db, 'SYNC_COMPLETE', 'Live Database Sync', 'Syncing', 'Completed successfully')
     else:
         add_history_log(local_db, 'SYNC_FAILED', 'Live Database Sync', 'Syncing', error_msg)
 
-    # 6. Fetch logs (which now includes the SYNC_START and SYNC_COMPLETE/SYNC_FAILED records!)
+    # 4. Fetch logs (which now includes the SYNC_START and SYNC_COMPLETE/SYNC_FAILED records!)
     cursor.execute("SELECT * FROM history_logs")
     history_logs = cursor.fetchall()
     total_logs = len(history_logs)
 
-    # 7. Upload logs in one batch to live server
+    # 5. Upload logs in one batch to live server
     if total_logs > 0:
         print(f"Uploading {total_logs} log entries...")
         res = send_request(url, {"action": "sync", "history_logs": history_logs}, token)
@@ -129,6 +104,17 @@ def sync():
             local_db.close()
             return
         print("  Uploaded logs.")
+
+    # 6. Clear local staging tables on successful sync (DELETE preserves auto-increment counters)
+    if sync_success:
+        print("Sync successful. Clearing local staging tables...")
+        try:
+            cursor.execute("DELETE FROM products")
+            cursor.execute("DELETE FROM history_logs")
+            local_db.commit()
+            print("  Local staging tables cleared.")
+        except Exception as e:
+            print(f"⚠️ Warning: Failed to clear local staging tables: {e}")
 
     local_db.close()
 

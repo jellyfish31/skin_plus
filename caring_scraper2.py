@@ -8,7 +8,7 @@ import urllib.parse
 import traceback
 
 # --- 1. CONFIG ---
-brands = ["Eucerin", "Aiken"]
+brands = ["Medicube", "Glad2Glow", "Eucerin", "Aiken"]
 
 category_map = {
     "cleanser": "Cleanser", "wash": "Cleanser", "toner": "Toner", "serum": "Serum", "sunscreen": "Sunscreen",

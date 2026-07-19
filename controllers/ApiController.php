@@ -189,6 +189,7 @@ class ApiController {
             exit();
         }
 
+        Database::useLiveDatabase(true);
         $db = Database::getMysqli();
 
         // Fetch up to 10 pending items

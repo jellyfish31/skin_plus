@@ -8,6 +8,23 @@ class Database {
     private static ?string $dbname = null;
     private static ?mysqli $mysqli = null;
     private static ?PDO $pdo = null;
+    private static bool $use_live = false;
+
+    /**
+     * Dynamically enables or disables connection to Hostinger live DB.
+     */
+    public static function useLiveDatabase(bool $enable = true) {
+        if (self::$use_live !== $enable) {
+            self::$use_live = $enable;
+            // Clear existing connection variables to force reconnection
+            self::$host = null;
+            self::$user = null;
+            self::$pass = null;
+            self::$dbname = null;
+            self::$mysqli = null;
+            self::$pdo = null;
+        }
+    }
 
     /**
      * Initializes connection parameters from config/Keys.php or defaults.
@@ -15,10 +32,30 @@ class Database {
     private static function init() {
         if (self::$host === null) {
             $keys = file_exists(__DIR__ . '/Keys.php') ? include __DIR__ . '/Keys.php' : [];
-            self::$host = $keys['db_host'] ?? 'localhost';
-            self::$user = $keys['db_user'] ?? 'root';
-            self::$pass = $keys['db_pass'] ?? '';
-            self::$dbname = $keys['db_name'] ?? 'skinplus_db';
+            
+            // Detect if running on localhost / development environment
+            $is_local = false;
+            if (isset($_SERVER['HTTP_HOST'])) {
+                $host_lower = strtolower($_SERVER['HTTP_HOST']);
+                if ($host_lower === 'localhost' || str_starts_with($host_lower, '127.0.0.1') || str_starts_with($host_lower, '192.168.')) {
+                    $is_local = true;
+                }
+            } else {
+                $is_local = true; // Fallback for PHP CLI / other scripts running locally
+            }
+
+            // If locally requested admin tasks, use the remote live database credentials
+            if ($is_local && self::$use_live && isset($keys['live_db_host']) && !empty($keys['live_db_host'])) {
+                self::$host = $keys['live_db_host'];
+                self::$user = $keys['live_db_user'] ?? '';
+                self::$pass = $keys['live_db_pass'] ?? '';
+                self::$dbname = $keys['live_db_name'] ?? '';
+            } else {
+                self::$host = $keys['db_host'] ?? 'localhost';
+                self::$user = $keys['db_user'] ?? 'root';
+                self::$pass = $keys['db_pass'] ?? '';
+                self::$dbname = $keys['db_name'] ?? 'skinplus_db';
+            }
         }
     }
 

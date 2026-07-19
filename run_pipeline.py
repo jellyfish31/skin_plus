@@ -27,11 +27,7 @@ def main():
     print("🌟 SKIN+ Automated Processing Pipeline Framework Initialized 🌟")
     pipeline_start = time.time()
 
-    # 1️⃣ STEP 1: Archive old duplicate prices out to data_history
-    if not execute_worker_script("archieve_history.py"):
-        sys.exit(1)
-
-    # 2️⃣ STEP 2: Execute your product web scrapers
+    # 1️⃣ STEP 1: Execute your product web scrapers
     # Change "scraper.py" to match your actual scraping file name!
     if not execute_worker_script("caring_scraper.py"):
         sys.exit(1)

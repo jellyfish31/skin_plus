@@ -221,13 +221,7 @@ class Product {
                            DATE_FORMAT(created_at, '%d') as day_label,
                            DATE_FORMAT(created_at, '%M %Y') as month_label,
                            DATE(created_at) as raw_date
-                    FROM (
-                        SELECT product_name, product_store, product_price, created_at, visual_signature, product_brand
-                        FROM products
-                        UNION ALL
-                        SELECT product_name, product_store, product_price, created_at, visual_signature, product_brand
-                        FROM data_history
-                    ) combined
+                    FROM products
                     WHERE LOWER(REPLACE(visual_signature, 'ml', 'g')) = '$escaped_sig'
                       AND LOWER(product_store) NOT LIKE '%shopee%'
                       AND LOWER(product_store) NOT LIKE '%lazada%'
