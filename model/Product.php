@@ -281,12 +281,20 @@ class Product {
             $sig_res = $db->query("SELECT visual_signature FROM products WHERE product_id = $id");
             $sig_row = $sig_res->fetch_assoc();
 
+            if (!$sig_row) {
+                file_put_contents(__DIR__ . '/../debug_log.txt', "updateProductGroup Debug: No signature row found for product_id = $id\n", FILE_APPEND);
+            } elseif (empty($sig_row['visual_signature'])) {
+                file_put_contents(__DIR__ . '/../debug_log.txt', "updateProductGroup Debug: visual_signature is empty for product_id = $id\n", FILE_APPEND);
+            }
+
             if ($sig_row && !empty($sig_row['visual_signature'])) {
                 $target_sig = $db->real_escape_string($sig_row['visual_signature']);
 
                 // Fetch previous data snapshot for logging
                 $prev = $db->query("SELECT product_name, product_category, product_brand FROM products WHERE product_id = $id")->fetch_assoc();
-                if ($prev) {
+                if (!$prev) {
+                    file_put_contents(__DIR__ . '/../debug_log.txt', "updateProductGroup Debug: No previous details found for product_id = $id\n", FILE_APPEND);
+                } else {
                     $old_json = json_encode($prev);
                     $new_json = json_encode([
                         'product_name' => $master_name,

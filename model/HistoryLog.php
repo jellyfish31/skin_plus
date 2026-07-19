@@ -23,6 +23,10 @@ class HistoryLog {
         $sql = "INSERT INTO history_logs (action_type, target_identifier, old_value, new_value, admin_user) 
                 VALUES ('$escapedAction', '$escapedTarget', '$escapedOld', '$escapedNew', 'admin')";
                 
-        return $db->query($sql);
+        $result = $db->query($sql);
+        if (!$result) {
+            file_put_contents(__DIR__ . '/../debug_log.txt', "SQL: " . $sql . "\nError: " . $db->error . "\n\n", FILE_APPEND);
+        }
+        return $result;
     }
 }
