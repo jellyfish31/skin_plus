@@ -65,6 +65,11 @@ class AdminController {
 
                 Product::updateProductGroup($id, $category, $brand, $new_sig);
             }
+            
+            // Post-Redirect-Get to force clean browser reload and preserve page filters
+            $referer = $_SERVER['HTTP_REFERER'] ?? 'admin_crud.php';
+            header("Location: " . $referer);
+            exit();
         }
 
         // Fetch filter params
