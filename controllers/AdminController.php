@@ -57,6 +57,7 @@ class AdminController {
             if ($_POST['action'] === 'delete') {
                 $id = intval($_POST['product_id']);
                 Product::deleteProduct($id);
+                $_SESSION['success_msg'] = "Product successfully deleted!";
             } elseif ($_POST['action'] === 'update') {
                 $id = intval($_POST['product_id']);
                 $category = trim($_POST['product_category']);
@@ -64,12 +65,20 @@ class AdminController {
                 $new_sig = isset($_POST['visual_signature']) ? trim($_POST['visual_signature']) : '';
 
                 Product::updateProductGroup($id, $category, $brand, $new_sig);
+                $_SESSION['success_msg'] = "Product successfully updated!";
             }
             
             // Post-Redirect-Get to force clean browser reload and preserve page filters
             $referer = $_SERVER['HTTP_REFERER'] ?? 'admin_crud.php';
             header("Location: " . $referer);
             exit();
+        }
+
+        // Retrieve and clear success message from session
+        $success_msg = "";
+        if (isset($_SESSION['success_msg'])) {
+            $success_msg = $_SESSION['success_msg'];
+            unset($_SESSION['success_msg']);
         }
 
         // Fetch filter params

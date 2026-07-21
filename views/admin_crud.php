@@ -10,6 +10,7 @@
 /** @var int $total_pages */
 /** @var int $page */
 /** @var array $analytics_result */
+/** @var string $success_msg */
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -250,9 +251,41 @@
         @media (max-width: 480px) {
             .metrics-grid { grid-template-columns: 1fr; }
         }
+
+        /* 🔔 FLOATING TOAST NOTIFICATION */
+        .toast-message {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #E8F8F5;
+            color: #27AE60;
+            border: 1px solid #D1F2EB;
+            padding: 0.75rem 1.5rem;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            box-shadow: 0 10px 25px rgba(39, 174, 96, 0.15);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        .toast-message.fade-out {
+            opacity: 0;
+            transform: translate(-50%, 10px);
+            pointer-events: none;
+        }
     </style>
 </head>
 <body>
+
+    <?php if (!empty($success_msg)): ?>
+        <div id="successToast" class="toast-message">
+            <?php echo $success_msg; ?>
+        </div>
+    <?php endif; ?>
 
     <nav class="navbar">
         <div class="logo-area"><h1>SKIN+</h1><p>Smart Price Comparison</p></div>
@@ -422,7 +455,8 @@
                     <tbody>
                         <?php 
                         if (!function_exists('getFriendlyActionLabel')) {
-                            function getFriendlyActionLabel($action) {
+                            function getFriendlyActionLabel(?string $action): string {
+                                $action = $action ?? '';
                                 if ($action === 'ASSIGN_SIGNATURE') return 'Assign';
                                 if ($action === 'AI_AUTO_MATCH' || strpos($action, 'MATCH') !== false) return 'Match';
                                 if ($action === 'UPDATE_GROUP' || $action === 'UPDATE_PRICE') return 'Update';
@@ -435,7 +469,11 @@
                         }
 
                         if (!function_exists('getFriendlyChangesDescription')) {
-                            function getFriendlyChangesDescription($action, $target, $old, $new) {
+                            function getFriendlyChangesDescription(?string $action, ?string $target, ?string $old, ?string $new): string {
+                                $action = $action ?? '';
+                                $target = $target ?? '';
+                                $old = $old ?? '';
+                                $new = $new ?? '';
                                 if ($action === 'UPDATE_GROUP') {
                                     $old_data = json_decode($old, true);
                                     $new_data = json_decode($new, true);
@@ -600,6 +638,17 @@
         }
 
         function dismissModal(id) { document.getElementById(id).classList.remove('active'); }
+
+        // Auto-dismiss success toast after 5 seconds
+        const toast = document.getElementById('successToast');
+        if (toast) {
+            setTimeout(() => {
+                toast.classList.add('fade-out');
+                setTimeout(() => {
+                    toast.remove();
+                }, 500); // Wait for transition to finish
+            }, 5000);
+        }
 
         window.isNavigatingInside = false;
 
