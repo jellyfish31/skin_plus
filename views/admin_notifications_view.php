@@ -1,3 +1,14 @@
+<?php
+/** @var int $pending_count */
+/** @var array $pending_discoveries */
+/** @var string $success_msg */
+
+// Safeguard: Redirect to the controller in the root directory if accessed directly
+if (!isset($pending_count) || !isset($pending_discoveries)) {
+    header("Location: ../admin_notifications.php");
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -28,7 +39,7 @@
         .input-box:focus { border-color: #5D3EBC; box-shadow: 0 0 0 3px rgba(93, 62, 188, 0.1); }
         .btn { background: #5D3EBC; color: white; border: none; padding: 0.75rem 1.8rem; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background 0.2s; font-size: 0.95rem; }
         .btn:hover { background: #472BA3; }
-
+ 
         /* 💡 LAYOUT DESIGN MATRICES FOR DROPDOWN ACCORDION CHIPS */
         .suggestions-panel-tray { display: flex; flex-direction: column; gap: 4px; width: calc(100% - 2rem); margin-left: auto; margin-right: auto; margin-top: -6px; }
         
@@ -51,7 +62,7 @@
         <?php if (!empty($success_msg)): ?>
             <div style="padding:1rem; background:#E8F8F5; color:#27AE60; border-radius:8px; margin:1.5rem 0; font-weight:600;"><?php echo $success_msg; ?></div>
         <?php endif; ?>
-
+ 
         <div class="header-row">
             <a href="admin_crud.php" class="back-btn" style="background-color: #5D3EBC; color: white; padding: 0.6rem 2.2rem; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.9rem; box-shadow: 0 4px 12px rgba(93, 62, 188, 0.15); display: inline-flex; align-items: center; justify-content: center; transition: background-color 0.2s;" onmouseover="this.style.backgroundColor='#472BA3'" onmouseout="this.style.backgroundColor='#5D3EBC'">
                 Back
@@ -71,7 +82,7 @@
         </div>
         
         <p style="color:#756F86; margin-bottom:2rem; padding-left: 0.2rem;">
-            🚨 System has captured <strong><?php echo $pending_count; ?></strong> new products requiring visual signature tags:
+            🚨 There are <strong><?php echo $pending_count; ?></strong> new products requiring visual signature tags!
         </p>
         
         <div class="discoveries-stack">
@@ -119,7 +130,7 @@
                                 <div class="suggestion-row-item" style="background:#FAFAFC; border-color:#E6E4ED; color:#756F86; cursor:default;">
                                     <div class="suggestion-content-left">
                                         <i class="fa-solid fa-triangle-exclamation" style="color:#756F86;"></i> 
-                                        No historical cluster matches found for this specific combination yet.
+                                        No products matches found for this specific combination yet.
                                     </div>
                                 </div>
                             <?php endif; ?>
@@ -127,11 +138,11 @@
                     </div>
                 <?php endforeach; ?>
             <?php else: ?>
-                <div style="text-align:center; padding:4rem; background:white; border-radius:16px; border:1px solid #E6E4ED; color:#756F86; font-weight:500;">🎉 Clean sheet! All active records are matched perfectly.</div>
+                <div style="text-align:center; padding:4rem; background:white; border-radius:16px; border:1px solid #E6E4ED; color:#756F86; font-weight:500;">No unassigned discoveries at this time.</div>
             <?php endif; ?>
         </div>
     </div>
-
+ 
     <script>
         function applySuggestion(suggestionItemElement, tagValue) {
             const parentGroup = suggestionItemElement.closest('.discovery-group');
@@ -141,7 +152,7 @@
                 targetInput.focus();
             }
         }
-
+ 
         function runAIAutoMatch() {
             window.isNavigatingInside = true; // Lock lifecycle unload handler
             const btn = document.getElementById('aiScanBtn');
@@ -151,7 +162,7 @@
             btn.style.pointerEvents = 'none';
             icon.className = 'fa-solid fa-spinner fa-spin';
             text.innerText = 'Scanning & Matching Items...';
-
+ 
             fetch('ai_image_matcher.php')
                 .then(response => response.text())
                 .then(data => {
@@ -163,19 +174,19 @@
                     window.location.reload();
                 });
         }
-
+ 
         window.isNavigatingInside = false;
-
+ 
         document.addEventListener('click', function(e) {
             if (e.target.closest('a') || e.target.closest('button') || e.target.closest('form')) {
                 window.isNavigatingInside = true;
             }
         });
-
+ 
         document.querySelectorAll('form').forEach(form => {
             form.addEventListener('submit', () => { window.isNavigatingInside = true; });
         });
-
+ 
         window.addEventListener('beforeunload', function (event) {
             let isReload = false;
             if (window.performance) {
@@ -188,7 +199,7 @@
                     }
                 }
             }
-
+ 
             if (window.isNavigatingInside || isReload) {
                 return;
             }

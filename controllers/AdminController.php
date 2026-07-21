@@ -153,7 +153,7 @@ class AdminController {
                     foreach ($rows as $row) { fputcsv($write_handle, $row); }
                     fclose($write_handle);
                 }
-                $success_msg = "✅ Successfully linked <strong>" . htmlspecialchars($custom_signature) . "</strong> across DB & CSV!";
+                $success_msg = "Successfully linked <strong>" . htmlspecialchars($custom_signature) . "</strong>!";
             }
         }
 
@@ -161,7 +161,7 @@ class AdminController {
         $pending_discoveries = Notification::getPendingDiscoveries();
         $pending_count = count($pending_discoveries);
 
-        include __DIR__ . '/../views/admin_notifications.php';
+        include __DIR__ . '/../views/admin_notifications_view.php';
     }
 
     /**
