@@ -54,13 +54,41 @@ if (!isset($pending_count) || !isset($pending_discoveries)) {
         .suggestion-content-left code { font-family: monospace; font-weight: 700; color: #5D3EBC; font-size: 0.95rem; background: #FFFFFF; padding: 2px 6px; border-radius: 4px; border: 1px solid #DDD6F3; }
         .use-sig-btn { background: #5D3EBC; color: white; font-weight: 700; font-size: 0.72rem; padding: 5px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.5px; border: none; cursor: pointer; transition: background 0.15s; }
         .use-sig-btn:hover { background: #472BA3; }
+
+        /* 🔔 FLOATING TOAST NOTIFICATION */
+        .toast-message {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #E8F8F5;
+            color: #27AE60;
+            border: 1px solid #D1F2EB;
+            padding: 0.75rem 1.5rem;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            box-shadow: 0 10px 25px rgba(39, 174, 96, 0.15);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        .toast-message.fade-out {
+            opacity: 0;
+            transform: translate(-50%, 10px);
+            pointer-events: none;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         
         <?php if (!empty($success_msg)): ?>
-            <div style="padding:1rem; background:#E8F8F5; color:#27AE60; border-radius:8px; margin:1.5rem 0; font-weight:600;"><?php echo $success_msg; ?></div>
+            <div id="successToast" class="toast-message">
+                <?php echo $success_msg; ?>
+            </div>
         <?php endif; ?>
  
         <div class="header-row">
@@ -144,6 +172,17 @@ if (!isset($pending_count) || !isset($pending_discoveries)) {
     </div>
  
     <script>
+        // Auto-dismiss success toast after 5 seconds
+        const toast = document.getElementById('successToast');
+        if (toast) {
+            setTimeout(() => {
+                toast.classList.add('fade-out');
+                setTimeout(() => {
+                    toast.remove();
+                }, 500); // Wait for transition to finish
+            }, 5000);
+        }
+
         function applySuggestion(suggestionItemElement, tagValue) {
             const parentGroup = suggestionItemElement.closest('.discovery-group');
             const targetInput = parentGroup.querySelector('.input-box');
