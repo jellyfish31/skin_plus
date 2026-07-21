@@ -71,6 +71,7 @@ class Database {
                 die("❌ Database connection failed (mysqli): " . self::$mysqli->connect_error);
             }
             self::$mysqli->set_charset("utf8mb4");
+            self::$mysqli->query("SET time_zone = '+08:00'");
         }
         return self::$mysqli;
     }
@@ -93,6 +94,7 @@ class Database {
                         PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8mb4"
                     ]
                 );
+                self::$pdo->exec("SET time_zone = '+08:00'");
             } catch (PDOException $e) {
                 die(json_encode(['success' => false, 'error' => 'Database connection failed (PDO): ' . $e->getMessage()]));
             }

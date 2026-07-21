@@ -632,6 +632,10 @@ if (!function_exists('format_store_name')) {
                     <h4 style="font-size:0.95rem; color:#4A358A; text-transform:uppercase; font-weight:700;"><i class="fa-solid fa-triangle-exclamation"></i> Safety Precautions</h4>
                     <p id="detailPrecautions" style="font-size:0.95rem; margin-top:3px; color:#443B57;"></p>
                 </div>
+                <div>
+                    <h4 style="font-size:0.95rem; color:#C0392B; text-transform:uppercase; font-weight:700;"><i class="fa-solid fa-ban"></i> Conflict Warnings (Do Not Mix)</h4>
+                    <p id="detailConflicts" style="font-size:0.95rem; margin-top:3px; color:#443B57;"></p>
+                </div>
             </div>
         </div>
     </div>
@@ -680,6 +684,7 @@ if (!function_exists('format_store_name')) {
             document.getElementById('detailTexture').innerText = "Loading texture details...";
             document.getElementById('detailRoutine').innerText = "Fetching daily routine steps...";
             document.getElementById('detailPrecautions').innerText = "Checking precautions...";
+            document.getElementById('detailConflicts').innerText = "Analyzing active ingredient conflicts...";
 
             if (detailedDataCached) {
                 renderDetailedModal(detailedDataCached);
@@ -710,6 +715,7 @@ if (!function_exists('format_store_name')) {
             document.getElementById('detailTexture').innerText = data.texture_feel || "Standard smooth skin finish.";
             document.getElementById('detailRoutine').innerText = data.routine_layering || "Apply onto clean skin morning or night.";
             document.getElementById('detailPrecautions').innerText = data.precautions || "Patch test before first use.";
+            document.getElementById('detailConflicts').innerText = data.ingredients_conflicts || "No common active conflicts.";
         }
 
         function renderFallbackDetailedModal() {
@@ -717,6 +723,7 @@ if (!function_exists('format_store_name')) {
             document.getElementById('detailTexture').innerText = "🤖 SKIN+ AI is currently busy. Please try again later.";
             document.getElementById('detailRoutine').innerText = "🤖 SKIN+ AI is currently busy. Please try again later.";
             document.getElementById('detailPrecautions').innerText = "🤖 SKIN+ AI is currently busy. Please try again later.";
+            document.getElementById('detailConflicts').innerText = "🤖 SKIN+ AI is currently busy. Please try again later.";
         }
 
         closeBtn.addEventListener("click", function() { modal.style.display = "none"; });

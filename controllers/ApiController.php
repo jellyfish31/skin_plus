@@ -105,7 +105,8 @@ class ApiController {
                 . "\"skin_concerns\": \"...\",\n"
                 . "\"texture_feel\": \"...\",\n"
                 . "\"routine_layering\": \"...\",\n"
-                . "\"precautions\": \"...\"\n"
+                . "\"precautions\": \"...\",\n"
+                . "\"ingredients_conflicts\": \"...\"\n"
                 . "}\n"
                 . "━━━━━━━━━━━━━━━━━━\n\n"
                 . "Formatting Requirements:\n\n"
@@ -130,6 +131,11 @@ class ApiController {
                 . "🧪 Always patch test behind the ear before first use\n"
                 . "👁️ Keep clear of the delicate eye contour region\n"
                 . "☀️ Ensure daily broad-spectrum sun defense during use\n\n"
+                . "\"ingredients_conflicts\"\n"
+                . "Strictly highlight what active ingredients this product should NOT be mixed or layered with in the same routine, separated strictly by line breaks (use 🚫 emoji).\n"
+                . "Example style:\n"
+                . "🚫 Do not layer with products containing high-strength Retinol in the same routine\n"
+                . "🚫 Avoid combining with strong AHA/BHA exfoliants to prevent skin irritation\n\n"
                 . "Do not wrap your output in markdown formatting tags like ```json. Return ONLY a valid JSON string.";
 
         $payload = [
@@ -165,12 +171,13 @@ class ApiController {
 
         if (json_last_error() === JSON_ERROR_NONE && !empty($parsed)) {
             echo json_encode([
-                'success'          => true,
-                'cached'           => false,
-                'skin_concerns'    => $parsed['skin_concerns'],
-                'texture_feel'     => $parsed['texture_feel'],
-                'routine_layering' => $parsed['routine_layering'],
-                'precautions'      => $parsed['precautions']
+                'success'               => true,
+                'cached'                => false,
+                'skin_concerns'         => $parsed['skin_concerns'] ?? 'General skin compatibility.',
+                'texture_feel'          => $parsed['texture_feel'] ?? 'Standard smooth finish.',
+                'routine_layering'      => $parsed['routine_layering'] ?? 'Apply as directed.',
+                'precautions'           => $parsed['precautions'] ?? 'Patch test before use.',
+                'ingredients_conflicts' => $parsed['ingredients_conflicts'] ?? 'No common active conflicts.'
             ]);
         } else {
             echo json_encode(['success' => false, 'error' => 'Unable to parse AI response. Raw output: ' . $ai_raw_text]);
