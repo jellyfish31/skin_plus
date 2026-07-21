@@ -311,11 +311,26 @@ class Product {
                 }
             }
 
-            // Global group update (only updates category and signature)
-            $db->query("UPDATE products SET 
-                            product_category = '$escaped_category',
-                            visual_signature = '$escaped_new_sig'
-                          WHERE visual_signature = '$target_sig'");
+            // Find all signatures in this normalized group to update them all together (handles 'ml' vs 'g' differences in the group)
+            $target_normalized_sig = strtolower(str_replace('ml', 'g', $target_sig));
+            $sig_list_res = $db->query("SELECT DISTINCT visual_signature FROM products WHERE visual_signature IS NOT NULL AND visual_signature != ''");
+            $matching_sigs = [];
+            if ($sig_list_res) {
+                while ($row = $sig_list_res->fetch_assoc()) {
+                    $raw_sig = $row['visual_signature'];
+                    if (strtolower(str_replace('ml', 'g', $raw_sig)) === $target_normalized_sig) {
+                        $matching_sigs[] = "'" . $db->real_escape_string($raw_sig) . "'";
+                    }
+                }
+            }
+
+            if (!empty($matching_sigs)) {
+                $sigs_in_clause = implode(',', $matching_sigs);
+                $db->query("UPDATE products SET 
+                                product_category = '$escaped_category',
+                                visual_signature = '$escaped_new_sig'
+                              WHERE visual_signature IN ($sigs_in_clause)");
+            }
             return true;
         }
         return false;
