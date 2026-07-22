@@ -32,7 +32,7 @@
         .btn-login:hover { background-color: #4A2E9F; }
         .error-msg { background: #FCE8E6; color: #A8071A; padding: 0.8rem 1.2rem; border-radius: 8px; font-size: 0.95rem; font-weight: 500; border: 1px solid #FFCCC7; text-align: center; width: 100%; max-width: 580px; margin-bottom: 1.5rem; }
 
-        /* RESPONSIVE LAYOUT FOR MOBILE DEVICES */
+        
         @media (max-width: 768px) {
             body { padding: 0 1rem; }
             .navbar { padding: 1.5rem 0; }

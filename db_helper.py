@@ -19,7 +19,7 @@ def get_db_connection():
         except Exception as e:
             print(f"Error reading db_config.json: {e}. Falling back to local database.")
             
-    # Fallback to local development DB
+
     return mysql.connector.connect(
         host='localhost',
         user='root',

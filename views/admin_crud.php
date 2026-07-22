@@ -1,16 +1,16 @@
 <?php
-/** @var int $alert_count */
-/** @var int $total_products_count */
-/** @var int $total_categories */
-/** @var int $total_brands */
-/** @var int $total_visits */
-/** @var string $search_query */
-/** @var array $date_options */
-/** @var string $selected_date */
-/** @var int $total_pages */
-/** @var int $page */
-/** @var array $analytics_result */
-/** @var string $success_msg */
+
+
+
+
+
+
+
+
+
+
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -122,7 +122,7 @@
         .btn-modal-submit { background-color: #231942; color: white; }
         .btn-modal-delete { background-color: #EB5757; color: white; }
 
-        /* Button Press Active Color & Transform States */
+        
         .back-btn, .analytics-trigger-btn, .btn-modal, .btn-tool, .page-arrow-btn {
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
@@ -252,7 +252,7 @@
             .metrics-grid { grid-template-columns: 1fr; }
         }
 
-        /* 🔔 FLOATING TOAST NOTIFICATION */
+        
         .toast-message {
             position: fixed;
             bottom: 2rem;
@@ -639,14 +639,14 @@
 
         function dismissModal(id) { document.getElementById(id).classList.remove('active'); }
 
-        // Auto-dismiss success toast after 5 seconds
+        
         const toast = document.getElementById('successToast');
         if (toast) {
             setTimeout(() => {
                 toast.classList.add('fade-out');
                 setTimeout(() => {
                     toast.remove();
-                }, 500); // Wait for transition to finish
+                }, 500); 
             }, 5000);
         }
 

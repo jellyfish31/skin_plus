@@ -1,5 +1,5 @@
 <?php
-// controllers/AdminController.php
+
 
 require_once __DIR__ . '/../model/Admin.php';
 require_once __DIR__ . '/../model/Product.php';
@@ -11,13 +11,13 @@ class AdminController {
         Database::useLiveDatabase(true);
     }
 
-    /**
-     * Handles admin login page and processing credentials.
-     */
+    
+
+
     public function login() {
         Admin::initSession();
         
-        // Auto-redirect if already logged in
+        
         if (Admin::isLoggedIn()) {
             header("Location: admin_crud.php");
             exit();
@@ -39,20 +39,20 @@ class AdminController {
         include __DIR__ . '/../views/admin_login.php';
     }
 
-    /**
-     * Handles admin logout.
-     */
+    
+
+
     public function logout() {
         Admin::logout();
     }
 
-    /**
-     * Admin dashboard product CRUD.
-     */
+    
+
+
     public function crud() {
         Admin::requireAuth();
 
-        // ─── PROCESS MUTATION ACTIONS ───
+        
         if (isset($_POST['action'])) {
             if ($_POST['action'] === 'delete') {
                 $id = intval($_POST['product_id']);
@@ -68,25 +68,25 @@ class AdminController {
                 $_SESSION['success_msg'] = "Product successfully updated!";
             }
             
-            // Post-Redirect-Get to force clean browser reload and preserve page filters
+            
             $referer = $_SERVER['HTTP_REFERER'] ?? 'admin_crud.php';
             header("Location: " . $referer);
             exit();
         }
 
-        // Retrieve and clear success message from session
+        
         $success_msg = "";
         if (isset($_SESSION['success_msg'])) {
             $success_msg = $_SESSION['success_msg'];
             unset($_SESSION['success_msg']);
         }
 
-        // Fetch filter params
+        
         $search_query = isset($_GET['search']) ? trim($_GET['search']) : '';
         $date_options = Product::getScrapeDates();
         $selected_date = isset($_GET['scrape_date']) ? trim($_GET['scrape_date']) : (!empty($date_options) ? $date_options[0] : '');
 
-        // Pagination setup
+        
         $limit = 20;
         $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
         if ($page < 1) $page = 1;
@@ -97,7 +97,7 @@ class AdminController {
         $total_groups = $results['total_groups'];
         $total_pages = ceil($total_groups / $limit);
 
-        // Fetch portal statistics and visitor analytics
+        
         $db = Database::getMysqli();
         $total_products_count = $db->query("SELECT COUNT(DISTINCT visual_signature) as total FROM products WHERE visual_signature IS NOT NULL AND visual_signature != 'PENDING_ADMIN' AND visual_signature != '' AND product_brand != 'Historical Brand'")->fetch_assoc()['total'];
         $total_categories = $db->query("SELECT COUNT(DISTINCT product_category) as total FROM products WHERE visual_signature IS NOT NULL AND visual_signature != 'PENDING_ADMIN' AND visual_signature != '' AND product_brand != 'Historical Brand'")->fetch_assoc()['total'];
@@ -108,9 +108,9 @@ class AdminController {
         include __DIR__ . '/../views/admin_crud.php';
     }
 
-    /**
-     * Admin discoveries desk for unassigned signatures.
-     */
+    
+
+
     public function notifications() {
         Admin::requireAuth();
         $csv_filename = 'cleaned_signatures.csv';
@@ -123,7 +123,7 @@ class AdminController {
             if (!empty($custom_signature)) {
                 Product::assignSignature($target_name, $custom_signature);
 
-                // Sync and append updates to local spreadsheet records
+                
                 if (file_exists($csv_filename)) {
                     $rows = [];
                     $found = false;
@@ -166,33 +166,33 @@ class AdminController {
             }
         }
 
-        // Fetch pending discoveries
+        
         $pending_discoveries = Notification::getPendingDiscoveries();
         $pending_count = count($pending_discoveries);
 
         include __DIR__ . '/../views/admin_notifications_view.php';
     }
 
-    /**
-     * Scrape sync automation pipeline.
-     */
+    
+
+
     public function syncPipeline() {
-        // Keeps time limit extended
+        
         set_time_limit(600);
         $csv_filename = 'cleaned_signatures.csv';
 
-        // 1. Auto-assign known signatures
+        
         Product::autoAssignKnownSignatures();
 
-        // 2. Discover new items
+        
         $unassigned = Product::getUnassignedProducts();
         $new_discoveries_count = 0;
 
         if (!empty($unassigned)) {
-            // Set status to PENDING_ADMIN temporarily
+            
             Product::markUnassignedAsPending();
 
-            // Append to CSV
+            
             if (file_exists($csv_filename)) {
                 $fp = fopen($csv_filename, 'a');
                 if ($fp !== FALSE) {
@@ -216,7 +216,7 @@ class AdminController {
             }
         }
 
-        // Output formatting matched with presentation layer
+        
         include __DIR__ . '/../views/sync_pipeline.php';
     }
 }

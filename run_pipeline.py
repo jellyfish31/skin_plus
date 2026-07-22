@@ -1,4 +1,4 @@
-# run_pipeline.py
+
 import subprocess
 import sys
 import time
@@ -11,7 +11,7 @@ def execute_worker_script(script_name):
     
     start_time = time.time()
     
-    # Run the worker script under the current system's Python execution environment
+
     process = subprocess.run([sys.executable, script_name], capture_output=False)
     
     elapsed = time.time() - start_time
@@ -27,8 +27,8 @@ def main():
     print("🌟 SKIN+ Automated Processing Pipeline Framework Initialized 🌟")
     pipeline_start = time.time()
 
-    # 1️⃣ STEP 1: Execute your product web scrapers
-    # Change "scraper.py" to match your actual scraping file name!
+
+
     if not execute_worker_script("caring_scraper.py"):
         sys.exit(1)
 
@@ -47,12 +47,12 @@ def main():
     if not execute_worker_script("guardian_scraper.py"):
         sys.exit(1)
 
-    # 3️⃣ STEP 3: Map fresh NULL products to their visual signatures
-    # Change "offline_matching.py" to match your actual matching file name!
+
+
     if not execute_worker_script("offline_matching.py"):
         sys.exit(1)
 
-    # 4️⃣ STEP 4: Compute updated 30-day linear regression price forecasts
+
     if not execute_worker_script("sync_to_live.py"):
         sys.exit(1)
 

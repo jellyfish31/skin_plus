@@ -11,14 +11,14 @@ import datetime
 import traceback
 import sys
 
-# Ensure UTF-8 output encoding to avoid console print crashes on emojis in Windows
+
 if hasattr(sys.stdout, 'reconfigure'):
     sys.stdout.reconfigure(encoding='utf-8')
 if hasattr(sys.stderr, 'reconfigure'):
     sys.stderr.reconfigure(encoding='utf-8')
 
 
-# --- 1. CONFIG ---
+
 brands = ["Skintific", "Cetaphil", "Garnier", "Cosrx", "Medicube", "Glad2Glow", "Eucerin", "Aiken"]
 
 category_map = {
@@ -36,6 +36,7 @@ category_map = {
     "eye": "Eye Care",
     "moisturizer": "Moisturizer",
     "moisturiser": "Moisturizer",
+    "moisture": "Moisturizer",
     "mosituriser": "Moisturizer", 
     "gel cream": "Moisturizer",
     "jelly cream": "Moisturizer",   
@@ -46,7 +47,7 @@ category_map = {
 total_added = 0
 scraped_today = set()
 
-# --- 2. DRIVER SYSTEM INITIALIZATION ---
+
 options = Options()
 options.binary_location = r"C:\Program Files\Google\Chrome\Application\chrome.exe"
 options.add_argument('--start-maximized')
@@ -60,7 +61,7 @@ driver.execute_cdp_cmd('Page.addScriptToEvaluateOnNewDocument', {
     'source': 'Object.defineProperty(navigator, "webdriver", {get: () => undefined})'
 })
 
-# --- 3. DATABASE SETUP CONNECTION ---
+
 from db_helper import get_db_connection, add_history_log
 try:
     db = get_db_connection()
@@ -72,10 +73,10 @@ except Exception as e:
     driver.quit()
     exit()
 
-# --- 4. THE WEB SCRAPING ENGINE (WITH ACCIDENT WRAPPING) ---
+
 try:
     for brand in brands:
-        for cat_search in ["Face Wash", "Toner", "Serum", "Moisturizer", "Sunscreen", "Mask", "Micellar Water"]:
+        for cat_search in ["Face Wash", "Toner", "Serum", "Cream", "Moisturizer","Gel", "Sunscreen", "Mask", "Micellar Water"]:
             search_query = f"{brand} {cat_search}"
             print(f"\n🔎 Searching Watsons: {search_query}...")
             
@@ -83,7 +84,7 @@ try:
                 driver.get(f"https://www.watsons.com.my/search?text={search_query}")
                 time.sleep(4) 
                 
-                # Smooth incremental scrolling down to reveal lazy-loaded items
+
                 last_height = driver.execute_script("return document.body.scrollHeight")
                 current_scroll_position = 0
                 scroll_step = 700  
@@ -98,10 +99,10 @@ try:
                         
                 time.sleep(1.5)
                 
-                # Dynamic Pagination / Load More Grid Canvas Expansion
+
                 for pagination_loop in range(4): 
                     try:
-                        # ✨ FIXED TYPO: Changed By.開X_PATH back to standard By.XPATH
+
                         load_more_btn = driver.find_elements(By.XPATH, "//button[contains(text(), 'Load More') or contains(text(), 'Show More') or @class='btn-load-more']")
                         if load_more_btn and load_more_btn[0].is_displayed():
                             driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", load_more_btn[0])
@@ -114,7 +115,7 @@ try:
                     except Exception:
                         break
 
-                # ✨ UPGRADED GUARDRAIL: Multi-element target wait avoids continuous timeouts on missing items
+
                 try:
                     WebDriverWait(driver, 10).until(
                         lambda d: d.find_elements(By.TAG_NAME, "e2-product-tile") or 
@@ -150,7 +151,7 @@ try:
                         if brand.lower() not in name_lower:
                             continue
 
-                        skip_keywords = ["hand", "shampoo", "conditioner", "hair", "body milk", "heel", "concealer", "foundation", "baby"]
+                        skip_keywords = ["hand", "shampoo", "conditioner", "hair", "body milk", "heel", "concealer", "foundation", "baby", "body"]
                         should_skip = any(word in name_lower for word in skip_keywords)
                         
                         if "body" in name_lower and "face" not in name_lower:
@@ -171,7 +172,7 @@ try:
 
                             clean_name_check = name_lower.strip().replace("moisturiser", "moisturizer")
 
-                            # --- EXACT MATCH PARSING RESTRUCTURE BLOCK ---
+
                             if clean_name_check == "skintific 5x ceramide low ph cleanser":
                                 full_name = "Skintific 5X Ceramide Low pH Cleanser 120ML"
                                 name_lower = full_name.lower()
@@ -194,7 +195,7 @@ try:
                                 full_name = "Aiken Niacidamide Bright Brightening Glow Toner 100 ML"
                                 name_lower = full_name.lower()
 
-                            # --- PREFIX-MATCH PARSING RESTRUCTURE BLOCK ---
+
                             elif clean_name_check.startswith("aiken prebiotic spf25 moisturizer"):
                                 size_suffix = full_name[len("aiken prebiotic spf25 moisturiser"):].strip()
                                 full_name = f"Aiken Prebiotic 8X Premium Biotics Moisturiser Spf25 {size_suffix}".strip()
@@ -246,7 +247,7 @@ try:
                 traceback.print_exc()
 
 finally:
-    # 🧹 SYSTEM CLEANUP BACKUP GUARD: Guarantees background processes clear even on manual crash aborts
+
     print("\n" + "="*40)
     print(f" 📦 Total Unique Watsons Products Added Today: {total_added}")
     print("="*40)

@@ -7,7 +7,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
 
-# --- 1. CONFIGURATION ---
+
 brands = ["Skintific", "Cetaphil", "Garnier", "Cosrx", "Medicube", "Glad2Glow", "Eucerin", "Aiken"]
 
 category_map = {
@@ -49,7 +49,7 @@ driver.execute_cdp_cmd('Page.addScriptToEvaluateOnNewDocument', {
     'source': 'Object.defineProperty(navigator, "webdriver", {get: () => undefined})'
 })
 
-# --- 2. DATABASE CONNECTION ---
+
 from db_helper import get_db_connection, add_history_log
 import sys
 try:
@@ -62,7 +62,7 @@ except Exception as e:
     driver.quit()
     exit()
 
-# --- 3. THE BRAND SEARCH ENGINE ---
+
 try:
     for brand in brands:
         print(f"\n🚀 [GUARDIAN] Searching Brand: {brand}")
@@ -83,7 +83,7 @@ try:
                     print(f"   ⚠️ No products found for {brand}.")
                 break 
 
-            # IMAGE-STABILIZING PROGRESSIVE SCROLL ENGINE
+
             total_height = driver.execute_script("return document.body.scrollHeight")
             current_pos = 0
             step_increment = 500
@@ -102,14 +102,14 @@ try:
             current_prices_elements = driver.find_elements(By.CSS_SELECTOR, ".price-highlightedPrice-34K")
             current_image_elements = driver.find_elements(By.CSS_SELECTOR, ".item-image-sxd")
 
-            # --- DUPLICATE PAGE CHECK ---
+
             current_page_item_names = [item.text for item in current_names_elements]
             if current_page_item_names == last_page_items:
                 print(f"   🛑 Page {page_num} is a duplicate of Page {page_num-1}. Skipping...")
                 break
             last_page_items = current_page_item_names 
 
-            # --- PROCESSING PRODUCTS ---
+
             for i in range(len(current_names_elements)):
                 if i >= len(current_names_elements) or i >= len(current_prices_elements):
                     continue
@@ -121,7 +121,7 @@ try:
 
                     name_lower = full_name.lower()
 
-                    # ✨ UNIFY CODES TO BASE TEXT IMMEDIATELY
+
                     name_lower = name_lower.replace("tto", "tea tree oil").replace("t3", "tea tree")
 
                     if brand.lower() not in name_lower:
@@ -141,7 +141,7 @@ try:
                         print(f"   🚫 [SKIPPED BODY/HAIR ITEM] {full_name}")
                         continue
 
-                    # CATEGORY CHECK & MAPPING
+
                     matched_cat = None
                     for keyword, formal_name in category_map.items():
                         if keyword in name_lower:
@@ -160,10 +160,10 @@ try:
                         except ValueError:
                             continue
 
-                        # Clean string representation for exact matching guardrails
+
                         clean_name_check = name_lower.strip()
 
-                        # ─── ✨ GUARDIAN NAME NORMALIZATION HANDLERS ───
+
                         if clean_name_check == "glad2glow yuzu aha blackhead exfoliating cleanser":
                             full_name = "Glad2glow Yuzu Aha Blackhead Exfoliating Cleanser 70 ML"
                             name_lower = full_name.lower()
@@ -194,7 +194,7 @@ try:
                             name_lower = full_name.lower()
                             print(f"    \t🛠️ [CETAPHIL RE-NAME DEPLOYED] Transformed title: {full_name}")
 
-                        # ✨ FIXED STRING CONTEXT: Changed from "tto" to matched "tea tree oil" words
+
                         elif clean_name_check == "aiken tea tree oil facial cleanser+makeup remover 150 ml":
                             full_name = "Aiken Tea Tree Oil Facial Cleanser& Makeup Remover 150 ML"
                             name_lower = full_name.lower()
@@ -214,7 +214,7 @@ try:
                         if tracking_identity in scraped_today:
                             continue
 
-                        # ─── ✨ REINFORCED LAZY-LOAD IMAGE PROPERTY FALLBACKS ───
+
                         img_url = ""
                         if i < len(current_image_elements):
                             img_url = current_image_elements[i].get_attribute("data-src")
@@ -255,7 +255,7 @@ try:
 except Exception as e:
     print(f"❌ Error during execution: {e}")
 finally:
-    # --- 4. FINAL SUMMARY DASHBOARD ---
+
     print("\n" + "="*50)
     print(f"🏁 GUARDIAN SCRAPE COMPLETE!")
     print(f"📦 Total Products Cleaned & Processed: {total_added}")

@@ -1,5 +1,5 @@
 <?php
-// config/Database.php
+
 
 class Database {
     private static ?string $host = null;
@@ -10,13 +10,13 @@ class Database {
     private static ?PDO $pdo = null;
     private static bool $use_live = false;
 
-    /**
-     * Dynamically enables or disables connection to Hostinger live DB.
-     */
+    
+
+
     public static function useLiveDatabase(bool $enable = true) {
         if (self::$use_live !== $enable) {
             self::$use_live = $enable;
-            // Clear existing connection variables to force reconnection
+            
             self::$host = null;
             self::$user = null;
             self::$pass = null;
@@ -26,14 +26,14 @@ class Database {
         }
     }
 
-    /**
-     * Initializes connection parameters from config/Keys.php or defaults.
-     */
+    
+
+
     private static function init() {
         if (self::$host === null) {
             $keys = file_exists(__DIR__ . '/Keys.php') ? include __DIR__ . '/Keys.php' : [];
             
-            // Detect if running on localhost / development environment
+            
             $is_local = false;
             if (isset($_SERVER['HTTP_HOST'])) {
                 $host_lower = strtolower($_SERVER['HTTP_HOST']);
@@ -41,10 +41,10 @@ class Database {
                     $is_local = true;
                 }
             } else {
-                $is_local = true; // Fallback for PHP CLI / other scripts running locally
+                $is_local = true; 
             }
 
-            // If locally requested admin tasks, use the remote live database credentials
+            
             if ($is_local && self::$use_live && isset($keys['live_db_host']) && !empty($keys['live_db_host'])) {
                 self::$host = $keys['live_db_host'];
                 self::$user = $keys['live_db_user'] ?? '';
@@ -59,10 +59,10 @@ class Database {
         }
     }
 
-    /**
-     * Returns a centralized MySQLi connection.
-     * @return mysqli
-     */
+    
+
+
+
     public static function getMysqli() {
         self::init();
         if (self::$mysqli === null) {
@@ -76,10 +76,10 @@ class Database {
         return self::$mysqli;
     }
 
-    /**
-     * Returns a centralized PDO connection.
-     * @return PDO
-     */
+    
+
+
+
     public static function getPdo() {
         self::init();
         if (self::$pdo === null) {

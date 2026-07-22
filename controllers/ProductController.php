@@ -1,5 +1,5 @@
 <?php
-// controllers/ProductController.php
+
 
 require_once __DIR__ . '/../model/Product.php';
 
@@ -8,9 +8,9 @@ class ProductController {
         $this->trackVisitor();
     }
 
-    /**
-     * Tracks unique visitor sessions anonymously.
-     */
+    
+
+
     private function trackVisitor() {
         $ip = $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
         $ua = $_SERVER['HTTP_USER_AGENT'] ?? '';
@@ -25,24 +25,24 @@ class ProductController {
         }
     }
 
-    /**
-     * Renders the home page.
-     */
+    
+
+
     public function index() {
-        // Loads index.php view
+        
         include __DIR__ . '/../views/home.php';
     }
 
-    /**
-     * Renders product search results.
-     */
+    
+
+
     public function search() {
         $category_filter = isset($_GET['category']) ? $_GET['category'] : '';
         $brand_filter = isset($_GET['brand']) ? $_GET['brand'] : '';
         $search_query = isset($_GET['query']) ? trim($_GET['query']) : '';
         $source_route = isset($_GET['source']) ? $_GET['source'] : '';
 
-        // Fetch products through the Model search engine
+        
         $search_data = Product::searchProducts($category_filter, $brand_filter, $search_query, $source_route);
         
         $view_title = $search_data['view_title'];
@@ -51,9 +51,9 @@ class ProductController {
         include __DIR__ . '/../views/search_results.php';
     }
 
-    /**
-     * Renders detailed product information and stores pricing comparison.
-     */
+    
+
+
     public function details() {
         $product_name_raw = isset($_GET['name']) ? trim($_GET['name']) : '';
         $signature_raw = isset($_GET['signature']) ? trim($_GET['signature']) : '';
@@ -63,7 +63,7 @@ class ProductController {
             exit();
         }
 
-        // Fetch using Model
+        
         $product_info = Product::getProductProfile($product_name_raw, $signature_raw);
         if (!$product_info) {
             die("❌ Product profile not found in database logs.");
@@ -73,7 +73,7 @@ class ProductController {
         $store_prices = Product::getStorePrices($current_signature);
         $total_stores = count($store_prices);
 
-        // Calculate variance stats
+        
         $price_sum = 0;
         $average_price = 0;
         if ($total_stores > 0) {
@@ -86,9 +86,9 @@ class ProductController {
         include __DIR__ . '/../views/item_details.php';
     }
 
-    /**
-     * Renders the price history details.
-     */
+    
+
+
     public function priceHistory() {
         $product_name_raw = isset($_GET['name']) ? trim($_GET['name']) : '';
         $signature_raw = isset($_GET['signature']) ? trim($_GET['signature']) : '';
@@ -97,7 +97,7 @@ class ProductController {
             die("❌ Missing item context parameters.");
         }
 
-        // Fetch profile
+        
         $product_info = Product::getProductProfile($product_name_raw, $signature_raw);
         if (!$product_info) {
             die("❌ Reference item context missing.");
@@ -105,13 +105,13 @@ class ProductController {
 
         $current_signature = $product_info['normalized_sig'];
         
-        // Fetch price history data points
+        
         $history_data = Product::getPriceHistory($current_signature);
         $ordered_labels = $history_data['labels'];
         $stores = $history_data['stores'];
         $raw_history_rows = $history_data['history'];
 
-        // Perform analysis calculations
+        
         $store_analysis_metrics = [];
         $store_raw_prices = [];
         $absolute_best_store = '';
@@ -140,7 +140,7 @@ class ProductController {
                 }
             }
 
-            // Map store tracking details
+            
             $store_analysis_metrics[$store] = [
                 'highest' => $highest_price,
                 'lowest' => $lowest_price,

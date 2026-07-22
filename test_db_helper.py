@@ -14,7 +14,7 @@ def test_add_history_log():
     db = get_db_connection()
     assert db.is_connected() is True
     
-    # Insert a test log entry
+
     result = add_history_log(
         db,
         action_type='TEST_LOG',
@@ -25,14 +25,14 @@ def test_add_history_log():
     )
     assert result is True
     
-    # Query database to confirm the log exists and delete it to clean up
+
     cursor = db.cursor()
     cursor.execute("SELECT log_id FROM history_logs WHERE action_type = 'TEST_LOG' AND target_identifier = 'PyTest Unit Test'")
     row = cursor.fetchone()
     assert row is not None
     log_id = row[0]
     
-    # Delete the test log to keep history clean
+
     cursor.execute("DELETE FROM history_logs WHERE log_id = %s", (log_id,))
     db.commit()
     

@@ -1,13 +1,13 @@
 <?php
-// controllers/ApiController.php
+
 
 require_once __DIR__ . '/../model/Product.php';
 require_once __DIR__ . '/../model/Admin.php';
 
 class ApiController {
-    /**
-     * Retrieves AI description for a product using Gemini.
-     */
+    
+
+
     public function getAiDescription() {
         header('Content-Type: application/json');
 
@@ -17,7 +17,7 @@ class ApiController {
             exit();
         }
 
-        // Gemini API Key credentials - rotate between key 2, key 3, and key 1
+        
         $keys = file_exists(__DIR__ . '/../config/Keys.php') ? include __DIR__ . '/../config/Keys.php' : [];
         $api_key = $keys['gemini_key_2'] ?? $keys['gemini_key_3'] ?? $keys['gemini_key_1'] ?? ''; 
         $endpointUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" . $api_key;
@@ -42,7 +42,7 @@ class ApiController {
         $curl_error = curl_error($ch);
         curl_close($ch);
 
-        // High-fidelity fallbacks
+        
         $output = [
             'success' => true,
             'skin_type' => 'All Skin Types ✨',
@@ -66,9 +66,9 @@ class ApiController {
         exit();
     }
 
-    /**
-     * Retrieves AI detailed breakdown with caching mechanism.
-     */
+    
+
+
     public function getAiDetailedBreakdown() {
         header('Content-Type: application/json');
         header('Access-Control-Allow-Origin: *');
@@ -82,7 +82,7 @@ class ApiController {
             exit();
         }
 
-        // Call Gemini API in real-time - rotate between key 2, key 3, and key 1
+        
         $keys = file_exists(__DIR__ . '/../config/Keys.php') ? include __DIR__ . '/../config/Keys.php' : [];
         $apiKey = $keys['gemini_key_2'] ?? $keys['gemini_key_3'] ?? $keys['gemini_key_1'] ?? '';
         $endpointUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" . $apiKey;
@@ -165,7 +165,7 @@ class ApiController {
         $res_data = json_decode($response, true);
         $ai_raw_text = $res_data['candidates'][0]['content']['parts'][0]['text'] ?? '';
         
-        // Clean out markdown blocks
+        
         $cleaned_json = preg_replace('/^```json|```$/', '', trim($ai_raw_text));
         $parsed = json_decode(trim($cleaned_json), true);
 
@@ -185,9 +185,9 @@ class ApiController {
         exit();
     }
 
-    /**
-     * Resource-heavy vision matcher processing pending signature alignments.
-     */
+    
+
+
     public function aiImageMatcher() {
         Admin::initSession();
         if (!Admin::isLoggedIn()) {
@@ -199,7 +199,7 @@ class ApiController {
         Database::useLiveDatabase(true);
         $db = Database::getMysqli();
 
-        // Fetch up to 10 pending items
+        
         $pending = $db->query("SELECT product_id, product_name, product_brand, product_category, product_image 
                                  FROM products WHERE visual_signature = 'PENDING_ADMIN' LIMIT 10");
 
@@ -212,7 +212,7 @@ class ApiController {
                 $category = $item['product_category'];
                 $new_img_url = $item['product_image'];
 
-                // 1. STAGE ONE: Pre-filter database by size metric numbers (ml / g)
+                
                 preg_match('/(\d+)\s*(ml|g)/i', $item['product_name'], $size_match);
                 $size_query = "";
                 if (!empty($size_match[1])) {
@@ -220,14 +220,14 @@ class ApiController {
                     $size_query = " AND (product_name LIKE '%$numerical_size%g%' OR product_name LIKE '%$numerical_size%ml%')";
                 }
 
-                // Fetch candidates
+                
                 $candidates = Product::fetchVisionCandidates($brand, $category, $size_query);
 
                 if (empty($candidates)) {
                     continue;
                 }
 
-                // 2. STAGE TWO: Call Vision API
+                
                 $matched_signature = $this->callVisionAPI($new_img_url, $candidates);
 
                 if ($matched_signature && $matched_signature !== 'NO_MATCH') {
@@ -241,9 +241,9 @@ class ApiController {
         exit();
     }
 
-    /**
-     * Processes search-by-image camera frames or file uploads.
-     */
+    
+
+
     public function imageSearchProcessor() {
         header('Content-Type: application/json');
 
@@ -279,7 +279,7 @@ class ApiController {
                 ]
             ];
 
-            // Handshake using Gemini Flash API
+            
             $keys = file_exists(__DIR__ . '/../config/Keys.php') ? include __DIR__ . '/../config/Keys.php' : [];
             $apiKey = $keys['gemini_key_2'] ?? '';
             $endpointUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" . $apiKey;
@@ -311,7 +311,7 @@ class ApiController {
 
             $cleanedAIKeyword = $this->cleanProductString($identifiedProductKeyword);
 
-            // Isolate brand
+            
             $brands_array = ['garnier', 'skintific', 'cetaphil', 'cosrx', 'medicube', 'glad2glow', 'eucerin', 'aiken'];
             $detected_brand = '';
             foreach ($brands_array as $b) {
@@ -321,7 +321,7 @@ class ApiController {
                 }
             }
 
-            // Isolate category/type
+            
             $detected_type = '';
             $types_array = ['micellar', 'cleanser', 'wash', 'toner', 'serum', 'moisturizer', 'moisturiser', 'sunscreen', 'mask'];
             foreach ($types_array as $t) {
@@ -331,7 +331,7 @@ class ApiController {
                 }
             }
 
-            // Query brand matches
+            
             $db_items = Product::getLatestProductsByBrand($detected_brand);
 
             $best_match_group = [];
@@ -416,13 +416,13 @@ class ApiController {
         exit();
     }
 
-    /**
-     * Executes Vision API call.
-     * 
-     * @param string $new_image Path or URL to the new image.
-     * @param array $candidates Array of candidate products for visual matching.
-     * @return string The matching signature or 'NO_MATCH'.
-     */
+    
+
+
+
+
+
+
     private function callVisionAPI(string $new_image, array $candidates): string {
         $apiKey = "AIzaSyCYxIUQJuLqBrh8Za1fC_6IBySBCFY14A8"; 
         $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" . $apiKey;
@@ -469,23 +469,23 @@ class ApiController {
         return $this->cleanResponseString($result_text);
     }
 
-    /**
-     * Cleans the response string from the API by removing markdown elements.
-     * 
-     * @param string $str Raw response string.
-     * @return string Cleaned string.
-     */
+    
+
+
+
+
+
     private function cleanResponseString(string $str): string {
         $str = str_replace(['`', 'html', 'json', "\n", "\r", " "], '', $str);
         return trim($str);
     }
 
-    /**
-     * Cleans a product name string by converting to lowercase and stripping common keywords.
-     * 
-     * @param string $str Raw product string.
-     * @return string Cleaned product string.
-     */
+    
+
+
+
+
+
     private function cleanProductString(string $str): string {
         $str = strtolower($str);
         $remove_keywords = [

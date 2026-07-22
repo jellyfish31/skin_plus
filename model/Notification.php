@@ -1,13 +1,13 @@
 <?php
-// model/Notification.php
+
 
 require_once __DIR__ . '/../config/Database.php';
 
 class Notification {
-    /**
-     * Gets all pending products grouped by product name.
-     * @return array
-     */
+    
+
+
+
     public static function getPendingDiscoveries() {
         $db = Database::getMysqli();
         $sql = "SELECT product_name, product_brand, product_category, product_store, product_image 
@@ -25,10 +25,10 @@ class Notification {
         return $items;
     }
 
-    /**
-     * Gets the count of unique pending discoveries.
-     * @return int
-     */
+    
+
+
+
     public static function getPendingDiscoveriesCount() {
         $db = Database::getMysqli();
         $sql = "SELECT COUNT(DISTINCT product_name) as cnt 

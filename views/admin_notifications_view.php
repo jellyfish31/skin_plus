@@ -1,9 +1,9 @@
 <?php
-/** @var int $pending_count */
-/** @var array $pending_discoveries */
-/** @var string $success_msg */
 
-// Safeguard: Redirect to the controller in the root directory if accessed directly
+
+
+
+
 if (!isset($pending_count) || !isset($pending_discoveries)) {
     header("Location: ../admin_notifications.php");
     exit;
@@ -23,11 +23,11 @@ if (!isset($pending_count) || !isset($pending_discoveries)) {
         
         .discovery-group { margin-bottom: 2.5rem; display: flex; flex-direction: column; gap: 0.4rem; }
         
-        /* 🖼️ HIGH-VISIBILITY PRODUCT CARD LAYOUT */
+        
         .card { background: white; border: 1px solid #E6E4ED; border-radius: 16px; padding: 1.5rem; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 12px rgba(0,0,0,0.01); width: 100%; position: relative; z-index: 2; }
         .info { display: flex; align-items: center; gap: 1.5rem; flex: 1; }
         
-        /* Fixed explicit dimension wrapper locks image parameters safely */
+        
         .product-preview-container { width: 90px; height: 90px; min-width: 90px; min-height: 90px; display: flex; align-items: center; justify-content: center; background: #FFFFFF; border: 1px solid #EAE6F5; border-radius: 12px; padding: 6px; box-shadow: inset 0 2px 6px rgba(0,0,0,0.02); }
         .product-preview-container img { max-width: 100%; max-height: 100%; object-fit: contain; display: block; }
         
@@ -40,7 +40,7 @@ if (!isset($pending_count) || !isset($pending_discoveries)) {
         .btn { background: #5D3EBC; color: white; border: none; padding: 0.75rem 1.8rem; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background 0.2s; font-size: 0.95rem; }
         .btn:hover { background: #472BA3; }
  
-        /* 💡 LAYOUT DESIGN MATRICES FOR DROPDOWN ACCORDION CHIPS */
+        
         .suggestions-panel-tray { display: flex; flex-direction: column; gap: 4px; width: calc(100% - 2rem); margin-left: auto; margin-right: auto; margin-top: -6px; }
         
         .suggestion-row-item { background: #F4F1FC; border: 1px dashed #C3B3EE; border-radius: 8px; padding: 0.75rem 1.5rem; display: flex; align-items: center; justify-content: space-between; font-size: 0.88rem; color: #4A2E9F; font-weight: 500; box-shadow: 0 2px 6px rgba(0,0,0,0.01); cursor: pointer; transition: all 0.15s ease-in-out; }
@@ -55,7 +55,7 @@ if (!isset($pending_count) || !isset($pending_discoveries)) {
         .use-sig-btn { background: #5D3EBC; color: white; font-weight: 700; font-size: 0.72rem; padding: 5px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.5px; border: none; cursor: pointer; transition: background 0.15s; }
         .use-sig-btn:hover { background: #472BA3; }
 
-        /* 🔔 FLOATING TOAST NOTIFICATION */
+        
         .toast-message {
             position: fixed;
             bottom: 2rem;
@@ -116,7 +116,7 @@ if (!isset($pending_count) || !isset($pending_discoveries)) {
         <div class="discoveries-stack">
             <?php if ($pending_count > 0): ?>
                 <?php foreach ($pending_discoveries as $row): 
-                    // Retrieve suggestions using Model
+                    
                     $suggestions = Product::getSuggestionsForProduct($row['product_brand'], $row['product_category']);
                 ?>
                     <div class="discovery-group">
@@ -172,14 +172,14 @@ if (!isset($pending_count) || !isset($pending_discoveries)) {
     </div>
  
     <script>
-        // Auto-dismiss success toast after 5 seconds
+        
         const toast = document.getElementById('successToast');
         if (toast) {
             setTimeout(() => {
                 toast.classList.add('fade-out');
                 setTimeout(() => {
                     toast.remove();
-                }, 500); // Wait for transition to finish
+                }, 500); 
             }, 5000);
         }
 
@@ -193,7 +193,7 @@ if (!isset($pending_count) || !isset($pending_discoveries)) {
         }
  
         function runAIAutoMatch() {
-            window.isNavigatingInside = true; // Lock lifecycle unload handler
+            window.isNavigatingInside = true; 
             const btn = document.getElementById('aiScanBtn');
             const icon = document.getElementById('aiRobotIcon');
             const text = document.getElementById('aiScanText');

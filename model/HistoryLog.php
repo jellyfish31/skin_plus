@@ -1,17 +1,17 @@
 <?php
-// model/HistoryLog.php
+
 
 require_once __DIR__ . '/../config/Database.php';
 
 class HistoryLog {
-    /**
-     * Inserts a record into the history_logs table.
-     * @param string $actionType
-     * @param string $targetIdentifier
-     * @param string $oldValue
-     * @param string $newValue
-     * @return bool
-     */
+    
+
+
+
+
+
+
+
     public static function addLog($actionType, $targetIdentifier, $oldValue, $newValue) {
         $db = Database::getMysqli();
         

@@ -1,5 +1,5 @@
 <?php
-// get_ai_description.php
+
 require_once __DIR__ . '/config/Database.php';
 require_once __DIR__ . '/controllers/ApiController.php';
 

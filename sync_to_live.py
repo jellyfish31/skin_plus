@@ -1,4 +1,4 @@
-# sync_to_live.py
+
 import os
 import urllib.request
 import json
@@ -42,10 +42,10 @@ def sync():
         print(f"Error connecting to local database: {e}")
         return
 
-    # 1. Log sync start locally
+
     add_history_log(local_db, 'SYNC_START', 'Live Database Sync', 'Local DB', 'Syncing started')
 
-    # Fetch rows from products locally
+
     cursor.execute("SELECT * FROM products")
     products = cursor.fetchall()
 
@@ -67,7 +67,7 @@ def sync():
     sync_success = True
     error_msg = ""
 
-    # 2. Upload products in batches of 500
+
     batch_size = 500
     if total_products > 0:
         print(f"Uploading {total_products} products in batches of {batch_size}...")
@@ -83,18 +83,18 @@ def sync():
     else:
         print("No new products to upload.")
 
-    # 3. Insert completion/failure status into local DB before fetching logs
+
     if sync_success:
         add_history_log(local_db, 'SYNC_COMPLETE', 'Live Database Sync', 'Syncing', 'Completed successfully')
     else:
         add_history_log(local_db, 'SYNC_FAILED', 'Live Database Sync', 'Syncing', error_msg)
 
-    # 4. Fetch logs (which now includes the SYNC_START and SYNC_COMPLETE/SYNC_FAILED records!)
+
     cursor.execute("SELECT * FROM history_logs")
     history_logs = cursor.fetchall()
     total_logs = len(history_logs)
 
-    # 5. Upload logs in one batch to live server
+
     if total_logs > 0:
         print(f"Uploading {total_logs} log entries...")
         res = send_request(url, {"action": "sync", "history_logs": history_logs}, token)
@@ -105,7 +105,7 @@ def sync():
             return
         print("  Uploaded logs.")
 
-    # 6. Clear local staging tables on successful sync (DELETE preserves auto-increment counters)
+
     if sync_success:
         print("Sync successful. Clearing local staging tables...")
         try:

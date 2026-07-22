@@ -7,7 +7,7 @@ try:
     if connection.is_connected():
         print("Success! Python is connected to MySQL database.")
         
-        # Displaying server info
+
         db_info = connection.server_info
         print(f"MySQL Server version: {db_info}")
 

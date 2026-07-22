@@ -1,18 +1,18 @@
 <?php
-// model/Product.php
+
 
 require_once __DIR__ . '/../config/Database.php';
 
 class Product {
 
-    /**
-     * Search products based on filter options, with spellcheck fallback if search query returns no results.
-     */
+    
+
+
     public static function searchProducts($category = '', $brand = '', $query = '', $source = '') {
         $db = Database::getMysqli();
 
-        // 🚀 CORE FIXED QUERY: Locks down calculations to ONLY rows matching the latest live scrape date, skipping historical dummies
-        // 🚀 UPGRADED CORE QUERY: Locks down the latest scrape date for EACH unique store individually
+        
+        
         $base_sql = "SELECT MAX(p.product_name) as display_name, 
                             MAX(p.product_brand) as display_brand, 
                             MAX(p.product_category) as display_category, 
@@ -65,7 +65,7 @@ class Product {
         $final_sql = $base_sql . $sql_clauses . " GROUP BY normalized_signature ORDER BY display_name ASC";
         $result = $db->query($final_sql);
 
-        // Spellcheck Fallback engine loop
+        
         if ((!$result || $result->num_rows === 0) && !empty($query) && $source !== 'image') {
             $valid_brands = ['skintific', 'cetaphil', 'garnier', 'cosrx', 'medicube', 'glad2glow', 'eucerin', 'aiken'];
             $category_map = [
@@ -140,9 +140,9 @@ class Product {
         ];
     }
 
-    /**
-     * Gets base profile info of a product by signature or name.
-     */
+    
+
+
     public static function getProductProfile(string $name, string $signature) {
         $db = Database::getMysqli();
         $escaped_name = $db->real_escape_string($name);
@@ -164,9 +164,9 @@ class Product {
         return $result ? $result->fetch_assoc() : null;
     }
 
-    /**
-     * Gets store prices for a normalized signature.
-     */
+    
+
+
     public static function getStorePrices(string $signature) {
         $db = Database::getMysqli();
         $escaped_sig = $db->real_escape_string($signature);
@@ -205,9 +205,9 @@ class Product {
         return $store_prices;
     }
 
-    /**
-     * Fetch historical timelines for line charts.
-     */
+    
+
+
     public static function getPriceHistory(string $signature) {
         $db = Database::getMysqli();
         $escaped_sig = $db->real_escape_string($signature);
@@ -248,9 +248,9 @@ class Product {
         ];
     }
 
-    /**
-     * Delete product by ID.
-     */
+    
+
+
     public static function deleteProduct(int $id) {
         $db = Database::getMysqli();
         $id = intval($id);
@@ -264,9 +264,9 @@ class Product {
         return $db->query("DELETE FROM products WHERE product_id = $id");
     }
 
-    /**
-     * Updates properties for an entire visual signature group and individual store prices.
-     */
+    
+
+
     public static function updateProductGroup(int $id, string $category, string $brand, string $new_sig) {
         $db = Database::getMysqli();
         $id = intval($id);
@@ -274,7 +274,7 @@ class Product {
         $escaped_brand = $db->real_escape_string($brand);
         $escaped_new_sig = strtolower(trim($db->real_escape_string($new_sig)));
 
-        // Isolate visual_signature map pointer for mass update execution
+        
         $sig_res = $db->query("SELECT visual_signature, product_name FROM products WHERE product_id = $id");
         $sig_row = $sig_res ? $sig_res->fetch_assoc() : null;
 
@@ -288,7 +288,7 @@ class Product {
             $target_sig = $db->real_escape_string($sig_row['visual_signature']);
             $master_name = $sig_row['product_name'];
 
-            // Fetch previous data snapshot for logging
+            
             $prev = $db->query("SELECT product_category, visual_signature FROM products WHERE product_id = $id")->fetch_assoc();
             if (!$prev) {
                 file_put_contents(__DIR__ . '/../debug_log.txt', "updateProductGroup Debug: No previous details found for product_id = $id\n", FILE_APPEND);
@@ -311,7 +311,7 @@ class Product {
                 }
             }
 
-            // Find all signatures in this normalized group to update them all together (handles 'ml' vs 'g' differences in the group)
+            
             $target_normalized_sig = strtolower(str_replace('ml', 'g', $target_sig));
             $sig_list_res = $db->query("SELECT DISTINCT visual_signature FROM products WHERE visual_signature IS NOT NULL AND visual_signature != ''");
             $matching_sigs = [];
@@ -336,9 +336,9 @@ class Product {
         return false;
     }
 
-    /**
-     * Get distinct scrape dates.
-     */
+    
+
+
     public static function getScrapeDates() {
         $db = Database::getMysqli();
         $res = $db->query("SELECT DISTINCT DATE(created_at) as scrape_date FROM products ORDER BY scrape_date DESC");
@@ -351,9 +351,9 @@ class Product {
         return $dates;
     }
 
-    /**
-     * Get products for admin CRUD panel.
-     */
+    
+
+
     public static function getAdminProducts($search = '', $date = '', $offset = 0, $limit = 20) {
         $db = Database::getMysqli();
         $escaped_search = $db->real_escape_string(strtolower($search));
@@ -367,7 +367,7 @@ class Product {
             $where_clause .= " AND (LOWER(p.product_name) LIKE '%$escaped_search%' OR LOWER(p.product_brand) LIKE '%$escaped_search%' OR LOWER(p.visual_signature) LIKE '%$escaped_search%') ";
         }
 
-        // Count total unique groups for pagination
+        
         $count_sql = "SELECT COUNT(DISTINCT LOWER(REPLACE(p.visual_signature, 'ml', 'g'))) as total_groups
                       FROM products p 
                       $where_clause 
@@ -382,7 +382,7 @@ class Product {
             $total_groups = (int)$c_row['total_groups'];
         }
 
-        // Fetch grouped products with pagination
+        
         $sql = "SELECT LOWER(REPLACE(p.visual_signature, 'ml', 'g')) as normalized_signature,
                        MAX(p.product_id) as product_id,
                        MAX(p.product_name) as master_product_name,
@@ -431,9 +431,9 @@ class Product {
         ];
     }
 
-    /**
-     * Auto-assign known signatures during scraper post-processing.
-     */
+    
+
+
     public static function autoAssignKnownSignatures() {
         $db = Database::getMysqli();
         $sql = "UPDATE products p
@@ -450,9 +450,9 @@ class Product {
         return $db->query($sql);
     }
 
-    /**
-     * Retrieves products with unassigned signatures (NULL).
-     */
+    
+
+
     public static function getUnassignedProducts() {
         $db = Database::getMysqli();
         $sql = "SELECT product_name, product_brand, product_category, product_image, product_price, product_store 
@@ -468,17 +468,17 @@ class Product {
         return $items;
     }
 
-    /**
-     * Updates unassigned signatures to 'PENDING_ADMIN'.
-     */
+    
+
+
     public static function markUnassignedAsPending() {
         $db = Database::getMysqli();
         return $db->query("UPDATE products SET visual_signature = 'PENDING_ADMIN' WHERE visual_signature IS NULL");
     }
 
-    /**
-     * Assigns a signature to a specific product name.
-     */
+    
+
+
     public static function assignSignature(string $product_name, string $signature) {
         $db = Database::getMysqli();
         $escaped_name = $db->real_escape_string($product_name);
@@ -489,9 +489,9 @@ class Product {
         return true;
     }
 
-    /**
-     * Fetches candidates for Vision API matching.
-     */
+    
+
+
     public static function fetchVisionCandidates(string $brand, string $category, string $size_query) {
         $db = Database::getMysqli();
         $escaped_brand = $db->real_escape_string($brand);
@@ -517,9 +517,9 @@ class Product {
         return $candidates;
     }
 
-    /**
-     * Updates signature and logs AI auto match.
-     */
+    
+
+
     public static function updateAiMatchedSignature(string $product_name, string $signature) {
         $db = Database::getMysqli();
         $escaped_sig = $db->real_escape_string($signature);
@@ -529,9 +529,9 @@ class Product {
         HistoryLog::addLog('AI_AUTO_MATCH', $escaped_name, 'PENDING_ADMIN', $escaped_sig);
     }
 
-    /**
-     * Fetches details of all products for similarity matching.
-     */
+    
+
+
     public static function fetchAllProductsForMatching() {
         $db = Database::getMysqli();
         $sql = "SELECT product_name, visual_signature, product_price, product_store, product_brand, product_category, product_image 
@@ -551,9 +551,9 @@ class Product {
 
 
 
-    /**
-     * Gets the latest products for a brand, filtering out Shopee/Lazada and ignoring old history.
-     */
+    
+
+
     public static function getLatestProductsByBrand(string $brand) {
         $db = Database::getMysqli();
         $escaped_brand = $db->real_escape_string(strtolower($brand));
@@ -586,9 +586,9 @@ class Product {
         return $items;
     }
 
-    /**
-     * Retrieves existing signature suggestions for a brand/category combination.
-     */
+    
+
+
     public static function getSuggestionsForProduct(string $brand, string $category) {
         $db = Database::getMysqli();
         $escaped_brand = $db->real_escape_string($brand);
