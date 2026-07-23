@@ -100,11 +100,13 @@ if (!isset($pending_count) || !isset($pending_discoveries)) {
                 <i class="fa-solid fa-rotate"></i> Refresh
             </button>
             
+            <!--
             <?php if ($pending_count > 0): ?>
                 <button onclick="runAIAutoMatch()" class="back-btn" id="aiScanBtn" style="background-color: #231942; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; color: white; padding: 0.6rem 1.8rem; border-radius: 8px; font-weight: 600; font-size: 0.9rem;">
                     <i class="fa-solid fa-robot" id="aiRobotIcon"></i> <span id="aiScanText">Run AI Auto-Match Scan</span>
                 </button>
             <?php endif; ?>
+            -->
             
             <h2 style="color: #2D2543; font-size: 2rem; font-weight: 700; margin: 0; padding-left: 0.5rem;">Unassigned Discoveries Desk</h2>
         </div>
