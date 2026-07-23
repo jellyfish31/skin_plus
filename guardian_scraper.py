@@ -25,6 +25,7 @@ category_map = {
     "eye": "Eye Care",
     "moisturizer": "Moisturizer",
     "moisturiser": "Moisturizer",
+    "moisture": "Moisturizer",
     "mosituriser": "Moisturizer", 
     "gel cream": "Moisturizer",
     "jelly cream": "Moisturizer",   
@@ -141,7 +142,7 @@ try:
                         print(f"   🚫 [SKIPPED BODY/HAIR ITEM] {full_name}")
                         continue
 
-
+ 
                     matched_cat = None
                     for keyword, formal_name in category_map.items():
                         if keyword in name_lower:
@@ -160,9 +161,7 @@ try:
                         except ValueError:
                             continue
 
-
                         clean_name_check = name_lower.strip()
-
 
                         if clean_name_check == "glad2glow yuzu aha blackhead exfoliating cleanser":
                             full_name = "Glad2glow Yuzu Aha Blackhead Exfoliating Cleanser 70 ML"
@@ -194,7 +193,6 @@ try:
                             name_lower = full_name.lower()
                             print(f"    \t🛠️ [CETAPHIL RE-NAME DEPLOYED] Transformed title: {full_name}")
 
-
                         elif clean_name_check == "aiken tea tree oil facial cleanser+makeup remover 150 ml":
                             full_name = "Aiken Tea Tree Oil Facial Cleanser& Makeup Remover 150 ML"
                             name_lower = full_name.lower()
@@ -213,7 +211,6 @@ try:
                         tracking_identity = f"{name_lower}_{price_val}"
                         if tracking_identity in scraped_today:
                             continue
-
 
                         img_url = ""
                         if i < len(current_image_elements):

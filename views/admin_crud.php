@@ -1,16 +1,16 @@
 <?php
-
-
-
-
-
-
-
-
-
-
-
-
+/**
+ * @var int $alert_count
+ * @var int $total_products_count
+ * @var int $total_categories
+ * @var int $total_brands
+ * @var int $total_visits
+ * @var string $search_query
+ * @var array $date_options
+ * @var string $selected_date
+ * @var int $total_pages
+ * @var int $page
+ */
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -379,15 +379,15 @@
     <div class="modal-overlay" id="viewModal">
         <div class="modal-window">
             <button class="btn-close-modal" onclick="dismissModal('viewModal')">×</button>
-            <h3>Group Overview Mappings</h3>
+            <h3>View Product Details</h3>
             <div class="modal-form-grid">
                 <div class="modal-form-row"><label>Brand:</label><span class="modal-value-text" id="v_brand"></span></div>
                 <div class="modal-form-row"><label>Category:</label><span class="modal-value-text" id="v_category"></span></div>
                 <div class="modal-form-row"><label>Signature:</label><span class="modal-value-text" id="v_sig" style="font-family:monospace; color:#D35400; font-weight:700;"></span></div>
             </div>
-            <div class="prices-label-header">Live Store Individual Title Splits</div>
+            <div class="prices-label-header">Product Listings</div>
             <table class="matrix-table">
-                <thead><tr><th>Store Target</th><th>Scraped Item Title Listing</th><th>Current Price</th></tr></thead>
+                <thead><tr><th>Store Target</th><th>Item Title</th><th>Current Price</th></tr></thead>
                 <tbody id="v_tb"></tbody>
             </table>
             <div class="modal-summary-lbl">Group Price Average: <span id="v_avg"></span></div>
@@ -397,7 +397,7 @@
     <div class="modal-overlay" id="editModal">
         <div class="modal-window">
             <button class="btn-close-modal" onclick="dismissModal('editModal')">×</button>
-            <h3>Modify Unified Product Group</h3>
+            <h3>Update Product Details</h3>
             <form method="POST" action="admin_crud.php">
                 <input type="hidden" name="action" value="update">
                 <input type="hidden" name="product_id" id="e_id">
@@ -406,9 +406,9 @@
                     <div class="modal-form-row align-center"><label>Brand (Read-Only):</label><span id="e_brand_label" style="font-weight:700; color:var(--text-muted); background:#f4f4f6; padding:6px 12px; border-radius:6px; display:inline-block; border:1px solid #ddd; min-width: 150px;"></span><input type="hidden" name="product_brand" id="e_brand"></div>
                     <div class="modal-form-row align-center"><label>Visual Signature:</label><input type="text" name="visual_signature" id="e_signature" class="modal-input-field" required style="font-family:monospace; font-weight:700; color:#d35400;"></div>
                 </div>
-                <div class="prices-label-header">Individual Store Mappings (Read-Only)</div>
+                <div class="prices-label-header">Product Listings (Read-Only)</div>
                 <table class="matrix-table">
-                    <thead><tr><th>Store Channel</th><th>Real Scraped Store Item Title</th><th>Store Price (RM)</th></tr></thead>
+                    <thead><tr><th>Store Channel</th><th>Item Title</th><th>Store Price (RM)</th></tr></thead>
                     <tbody id="e_tb"></tbody>
                 </table>
                 <div class="modal-summary-lbl">Calculated Average: <span id="e_avg"></span></div>
@@ -440,7 +440,7 @@
     <div class="modal-overlay" id="historyModal">
         <div class="modal-window" style="max-width: 920px;">
             <button class="btn-close-modal" onclick="dismissModal('historyModal')">×</button>
-            <h3><i class="fa-solid fa-clock-rotate-left"></i> Administrative Mutation History</h3>
+            <h3><i class="fa-solid fa-clock-rotate-left"></i> Administrative Action History</h3>
             <div class="prices-label-header">Audit Tracking Logs</div>
             <div class="analytics-scroll-box" style="max-height: 450px;">
                 <table class="matrix-table" style="margin-bottom:0;">

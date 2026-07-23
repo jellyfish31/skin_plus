@@ -11,12 +11,8 @@ class AdminController {
         Database::useLiveDatabase(true);
     }
 
-    
-
-
     public function login() {
         Admin::initSession();
-        
         
         if (Admin::isLoggedIn()) {
             header("Location: admin_crud.php");
@@ -39,20 +35,13 @@ class AdminController {
         include __DIR__ . '/../views/admin_login.php';
     }
 
-    
-
-
     public function logout() {
         Admin::logout();
     }
 
-    
-
-
     public function crud() {
         Admin::requireAuth();
-
-        
+  
         if (isset($_POST['action'])) {
             if ($_POST['action'] === 'delete') {
                 $id = intval($_POST['product_id']);
@@ -67,25 +56,21 @@ class AdminController {
                 Product::updateProductGroup($id, $category, $brand, $new_sig);
                 $_SESSION['success_msg'] = "Product successfully updated!";
             }
-            
-            
+                 
             $referer = $_SERVER['HTTP_REFERER'] ?? 'admin_crud.php';
             header("Location: " . $referer);
             exit();
         }
-
-        
+     
         $success_msg = "";
         if (isset($_SESSION['success_msg'])) {
             $success_msg = $_SESSION['success_msg'];
             unset($_SESSION['success_msg']);
         }
-
-        
+  
         $search_query = isset($_GET['search']) ? trim($_GET['search']) : '';
         $date_options = Product::getScrapeDates();
         $selected_date = isset($_GET['scrape_date']) ? trim($_GET['scrape_date']) : (!empty($date_options) ? $date_options[0] : '');
-
         
         $limit = 20;
         $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
@@ -96,8 +81,7 @@ class AdminController {
         $items = $results['items'];
         $total_groups = $results['total_groups'];
         $total_pages = ceil($total_groups / $limit);
-
-        
+ 
         $db = Database::getMysqli();
         $total_products_count = $db->query("SELECT COUNT(DISTINCT visual_signature) as total FROM products WHERE visual_signature IS NOT NULL AND visual_signature != 'PENDING_ADMIN' AND visual_signature != '' AND product_brand != 'Historical Brand'")->fetch_assoc()['total'];
         $total_categories = $db->query("SELECT COUNT(DISTINCT product_category) as total FROM products WHERE visual_signature IS NOT NULL AND visual_signature != 'PENDING_ADMIN' AND visual_signature != '' AND product_brand != 'Historical Brand'")->fetch_assoc()['total'];
@@ -108,12 +92,9 @@ class AdminController {
         include __DIR__ . '/../views/admin_crud.php';
     }
 
-    
-
-
     public function notifications() {
         Admin::requireAuth();
-        $csv_filename = 'cleaned_signatures.csv';
+        $csv_filename = 'visual_signature_list.csv';
         $success_msg = "";
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['assign_sig'])) {
@@ -123,7 +104,6 @@ class AdminController {
             if (!empty($custom_signature)) {
                 Product::assignSignature($target_name, $custom_signature);
 
-                
                 if (file_exists($csv_filename)) {
                     $rows = [];
                     $found = false;
@@ -166,25 +146,19 @@ class AdminController {
             }
         }
 
-        
         $pending_discoveries = Notification::getPendingDiscoveries();
         $pending_count = count($pending_discoveries);
 
         include __DIR__ . '/../views/admin_notifications_view.php';
     }
 
-    
-
-
     public function syncPipeline() {
         
         set_time_limit(600);
-        $csv_filename = 'cleaned_signatures.csv';
-
+        $csv_filename = 'visual_signature_list.csv';
         
         Product::autoAssignKnownSignatures();
-
-        
+   
         $unassigned = Product::getUnassignedProducts();
         $new_discoveries_count = 0;
 
