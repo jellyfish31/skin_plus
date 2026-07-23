@@ -25,9 +25,19 @@ class Admin {
 
 
     public static function validateLogin($username, $password) {
-        if ($username === 'admin' && $password === 'admin123') {
-            $_SESSION['admin_logged_in'] = true;
-            return true;
+        $db = Database::getMysqli();
+        $escaped_username = $db->real_escape_string($username);
+        
+        $sql = "SELECT * FROM admins WHERE admin_username = '$escaped_username' LIMIT 1";
+        $res = $db->query($sql);
+        
+        if ($res && $res->num_rows > 0) {
+            $user = $res->fetch_assoc();
+            // Supports both plain text and secure bcrypt password hashes
+            if ($password === $user['admin_password'] || password_verify($password, $user['admin_password'])) {
+                $_SESSION['admin_logged_in'] = true;
+                return true;
+            }
         }
         return false;
     }

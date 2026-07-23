@@ -517,9 +517,6 @@ class Product {
         return $candidates;
     }
 
-    
-
-
     public static function updateAiMatchedSignature(string $product_name, string $signature) {
         $db = Database::getMysqli();
         $escaped_sig = $db->real_escape_string($signature);
@@ -528,9 +525,6 @@ class Product {
         $db->query("UPDATE products SET visual_signature = '$escaped_sig' WHERE product_name = '$escaped_name'");
         HistoryLog::addLog('AI_AUTO_MATCH', $escaped_name, 'PENDING_ADMIN', $escaped_sig);
     }
-
-    
-
 
     public static function fetchAllProductsForMatching() {
         $db = Database::getMysqli();
@@ -548,11 +542,6 @@ class Product {
         }
         return $products;
     }
-
-
-
-    
-
 
     public static function getLatestProductsByBrand(string $brand) {
         $db = Database::getMysqli();
@@ -585,9 +574,6 @@ class Product {
         }
         return $items;
     }
-
-    
-
 
     public static function getSuggestionsForProduct(string $brand, string $category) {
         $db = Database::getMysqli();
